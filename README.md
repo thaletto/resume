@@ -20,8 +20,6 @@ You can get a direct link to the generated PDF which you can use on your website
 
 NOTE: For the direct link to work, after editing your copy of `cv.tex` and pushing changes to your repo, under Settings -> Pages set your Github Pages source to the `build` directory
 
-![](https://i.imgur.com/lwATw1o.png)
-
 ## This template on Overleaf
 
 <a href="https://www.overleaf.com/latex/templates/autocv/scfvqfpxncwb"><img alt="Overleaf" src="https://img.shields.io/badge/Overleaf-47A141.svg?style=for-the-badge&logo=Overleaf&logoColor=white"/></a>
