@@ -1,35 +1,35 @@
 %-----------------------------------------------------------------------------------------------------------------------------------------------%
-%	The MIT License (MIT)
+%  The MIT License (MIT)
 %
-%	Copyright (c) 2021 Jitin Nair
+%  Copyright (c) 2021 Jitin Nair
 %
-%	Permission is hereby granted, free of charge, to any person obtaining a copy
-%	of this software and associated documentation files (the "Software"), to deal
-%	in the Software without restriction, including without limitation the rights
-%	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-%	copies of the Software, and to permit persons to whom the Software is
-%	furnished to do so, subject to the following conditions:
-%	
-%	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-%	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-%	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-%	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-%	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-%	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-%	THE SOFTWARE.
-%	
+%  Permission is hereby granted, free of charge, to any person obtaining a copy
+%  of this software and associated documentation files (the "Software"), to deal
+%  in the Software without restriction, including without limitation the rights
+%  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+%  copies of the Software, and to permit persons to whom the Software is
+%  furnished to do so, subject to the following conditions:
+%
+%  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+%  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+%  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+%  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+%  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+%  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+%  THE SOFTWARE.
+%
 %
 %-----------------------------------------------------------------------------------------------------------------------------------------------%
 
 %----------------------------------------------------------------------------------------
-%	DOCUMENT DEFINITION
+%  DOCUMENT DEFINITION
 %----------------------------------------------------------------------------------------
 
 % article class because we want to fully customize the page and not use a cv template
 \documentclass[a4paper,12pt]{article}
 
 %----------------------------------------------------------------------------------------
-%	FONT
+%  FONT
 %----------------------------------------------------------------------------------------
 
 % % fontspec allows you to use TTF/OTF fonts directly
@@ -45,16 +45,16 @@
 % {Fontin.otf}
 
 %----------------------------------------------------------------------------------------
-%	PACKAGES
+%  PACKAGES
 %----------------------------------------------------------------------------------------
 \usepackage{url}
-\usepackage{parskip} 	
+\usepackage{parskip}
 
 %other packages for formatting
 \RequirePackage{color}
 \RequirePackage{graphicx}
 \usepackage[usenames,dvipsnames]{xcolor}
-\usepackage[scale=0.9]{geometry}
+\usepackage[scale=0.97]{geometry}
 
 %tabularx environment
 \usepackage{tabularx}
@@ -63,7 +63,7 @@
 \usepackage{enumitem}
 
 % centered version of 'X' col. type
-\newcolumntype{C}{>{\centering\arraybackslash}X} 
+\newcolumntype{C}{>{\centering\arraybackslash}X}
 
 %to prevent spillover of tabular into next pages
 \usepackage{supertabular}
@@ -72,14 +72,14 @@
 \setlength{\fullcollw}{0.47\textwidth}
 
 %custom \section
-\usepackage{titlesec}				
+\usepackage{titlesec}
 \usepackage{multicol}
 \usepackage{multirow}
 
-%CV Sections inspired by: 
+%CV Sections inspired by:
 %http://stefano.italians.nl/archives/26
 \titleformat{\section}{\Large\scshape\raggedright}{}{0em}{}[\titlerule]
-\titlespacing{\section}{0pt}{10pt}{10pt}
+\titlespacing{\section}{0pt}{6pt}{6pt}
 
 %for publications
 \usepackage[style=authoryear,sorting=ynt, maxbibnames=2]{biblatex}
@@ -99,121 +99,133 @@
 
 
 % job listing environments
-\newenvironment{jobshort}[2]
-    {
-    \begin{tabularx}{\linewidth}{@{}l X r@{}}
-    \textbf{#1} & \hfill &  #2 \\[3.75pt]
-    \end{tabularx}
+% Replace joblong and jobshort with these three environments:
+
+\newenvironment{jobcontainer}[2]
+{
+  \begin{tabularx}{\linewidth}{@{}l X r@{}}
+    \textbf{#1} & \hfill & #2 \\[2pt]
+  \end{tabularx}
+  \vspace{-16pt}
+}
+
+\newenvironment{jobshort}[1]
+{
+  \vspace{4pt}
+  \hspace{0.5em}\textbf{#1} \\[-8pt]
+  \begin{itemize}[nosep,after=\strut, leftmargin=2em, itemsep=0pt, topsep=0pt, label=--]
     }
     {
-    }
+  \end{itemize}
+}
 
 \newenvironment{joblong}[2]
-    {
-    \begin{tabularx}{\linewidth}{@{}l X r@{}}
-    \textbf{#1} & \hfill &  #2 \\[3.75pt]
-    \end{tabularx}
-    \begin{minipage}[t]{\linewidth}
-    \begin{itemize}[nosep,after=\strut, leftmargin=1em, itemsep=3pt,label=--]
+{
+  \begin{tabularx}{\linewidth}{@{}l X r@{}}
+    \textbf{#1} & \hfill & #2 \\[2pt]
+  \end{tabularx}
+  \begin{itemize}[nosep,after=\strut, leftmargin=1em, itemsep=2pt, label=--]
     }
     {
-    \end{itemize}
-    \end{minipage}    
-    }
+  \end{itemize}
+  \vspace{4pt}
+}
 
 
 
 %----------------------------------------------------------------------------------------
-%	BEGIN DOCUMENT
+%  BEGIN DOCUMENT
 %----------------------------------------------------------------------------------------
 \begin{document}
+\setlength{\parskip}{0pt}
+\setlength{\parindent}{0pt}
 
 % non-numbered pages
-\pagestyle{empty} 
+\pagestyle{empty}
 
 %----------------------------------------------------------------------------------------
-%	TITLE
+%  TITLE
 %----------------------------------------------------------------------------------------
-
-% \begin{tabularx}{\linewidth}{ @{}X X@{} }
-% \huge{Your Name}\vspace{2pt} & \hfill \emoji{incoming-envelope} email@email.com \\
-% \raisebox{-0.05\height}\faGithub\ username \ | \
-% \raisebox{-0.00\height}\faLinkedin\ username \ | \ \raisebox{-0.05\height}\faGlobe \ mysite.com  & \hfill \emoji{calling} number
-% \end{tabularx}
-
 \begin{tabularx}{\linewidth}{@{} C @{}}
-\Huge{Laxman K R} \\[7.5pt]
-AI Engineer $|$ Full-Stack Developer \\[4pt]
-\href{https://github.com/thaletto}{\raisebox{-0.05\height}\faGithub\ thaletto} \ $|$ \ 
-\href{https://linkedin.com/in/laxmanramesh}{\raisebox{-0.05\height}\faLinkedin\ laxmanramesh} \ $|$ \ 
-\href{https://thaletto.vercel.app}{\raisebox{-0.05\height}\faGlobe \ portfolio} \ $|$ \ 
-\href{mailto:krlaxman03@gmail.com}{\raisebox{-0.05\height}\faEnvelope \ krlaxman03@gmail.com} \ $|$ \ 
-\href{tel:+917448657412}{\raisebox{-0.05\height}\faMobile \ +91 7448657412} \\
+  \Huge{Laxman K R} \\[7.5pt]
+  Full-Stack AI Developer \\[4pt]
+  \href{https://github.com/thaletto}{\raisebox{-0.05\height}\faGithub\ thaletto} \ $|$ \
+  \href{https://linkedin.com/in/laxmanramesh}{\raisebox{-0.05\height}\faLinkedin\ laxmanramesh} \ $|$ \
+  \href{https://thaletto.vercel.app}{\raisebox{-0.05\height}\faGlobe \ portfolio} \ $|$ \
+  \href{mailto:krlaxman03@gmail.com}{\raisebox{-0.05\height}\faEnvelope \ krlaxman03@gmail.com} \ $|$ \
+  \href{tel:+917448657412}{\raisebox{-0.05\height}\faMobile \ +91 7448657412} \\
 \end{tabularx}
 
 %----------------------------------------------------------------------------------------
-% EXPERIENCE SECTIONS
+% SUMMARY
 %----------------------------------------------------------------------------------------
-
-%Interests/ Keywords/ Summary
 \section{Summary}
+
 AI Engineer and Full-Stack Developer with experience building scalable products and agentic AI systems. Strong in TypeScript-led architecture, modern UI engineering, and Python-based AI workflows across production platforms.
 
-%Work Experience
-\section{Work Experience}
-
-
-\begin{joblong}{Tata Consultancy Services (AI Engineer)}{Nov 2024 - Present}
-\item \textbf{Agentic AMS Framework}: Engineered a self-healing system integrating Grafana and ServiceNow; built AI agents to diagnose incidents and execute SOP-driven remediations, reducing MTTR.
-\item \textbf{Microfrontend Migration}: Drove migration of the TCS CBG AI platform to microfrontends, enabling independent release cycles and removing deployment bottlenecks.
-\item \textbf{Google Cloud AI Offerings}: Led the development of a unified catalog platform to showcase AI offerings built across TCS using the Google Cloud stack, standardizing discovery and adoption.
-\item \textbf{Team Leadership}: Owned release management and production stability as Deployment Lead; coordinated platform and frontend teams for reliable, high-performance delivery.
-\end{joblong}
-  
-%Projects
-\section{Projects}
-
-\begin{joblong}{Agentic AMS Framework}{\href{https://thaletto.vercel.app/projects/ams}{[Blog]}}
-\item Engineered a self-healing incident management platform using multi-agent workflows for triage, root-cause analysis, and automated remediation.
-\item Integrated Grafana and ServiceNow to streamline incident detection, context enrichment, and SOP-driven resolution workflows.
-\item Tech: Microsoft AutoGen, LangChain, FastAPI, Qdrant, MongoDB, Redis, Next.js, Docker.
-\end{joblong}
-
-\begin{joblong}{Google Cloud AI Offerings}{}
-\item Developed a centralized platform to catalog and present enterprise AI solutions built across teams.
-\item Improved internal discoverability and adoption by standardizing solution metadata, workflows, and access patterns.
-\item Tech: Next.js, TypeScript, Python, FastAPI, Google Cloud Platform, Google Cloud Storage, PostgreSQL.
-\end{joblong}
-
-
-\begin{joblong}{Ascendant}{\href{https://pypi.org/project/astro-ascendant/}{[PyPI]}}
-\item Developed and published \texttt{astro-ascendant}, a Python package for astrological chart and planetary position calculations.
-\item Implemented high-accuracy ephemeris computation workflows using Swiss Ephemeris data for transit and natal chart use cases.
-\item Built maintainable packaging and release automation to streamline publishing and version updates.
-\item Tech: Python, Swiss Ephemeris, PyPI packaging, GitHub Actions.
-\end{joblong}
+%----------------------------------------------------------------------------------------
+%  SKILLS
+%----------------------------------------------------------------------------------------
+\section{Skills}
+% \begin{tabularx}{\linewidth}{@{}l X@{}}
+%   Languages &  \normalsize{Python, TypeScript, JavaScript, Effect TS, Java, Kotlin}\\
+%   AI/LLM &  \normalsize{AI SDK, Google ADK, Microsoft AutoGen, LangChain, Azure OpenAI}\\
+%   Frontend &  \normalsize{Next.js, React, Tailwind CSS, Material UI}\\
+%   Backend &  \normalsize{Node.js, Bun, Express, FastAPI, PostgreSQL, MongoDB, Redis, Qdrant}
+% \end{tabularx}
+Python, TypeScript, JavaScript, Effect TS, Java, Next.js, React, Node.js, Bun, FastAPI, PostgreSQL, MongoDB, Google Cloud
 
 %----------------------------------------------------------------------------------------
-%	EDUCATION
+% EXPERIENCE
+%----------------------------------------------------------------------------------------
+\section{Work Experience}
+\begin{jobcontainer}{Tata Consultancy Services (AI Engineer)}{Nov 2024 - Present}
+
+  \begin{jobshort}{Agentic AMS Framework}
+  \item Built the frontend interface for a multi-agent incident remediation system powered by AutoGen, surfacing real-time agent activity, Planning, Validation, Executor, and Human-in-the-Loop over a FastAPI WebSocket connection.
+  \item Contributed to backend integration layers connecting the frontend to Qdrant vector DB and MongoDB agent worklogs, enabling live incident traceability and audit trail display within the application.
+  \item \textit{Tech: Next.js, TypeScript, FastAPI, Microsoft AutoGen, Qdrant, MongoDB, ServiceNow.}
+  \end{jobshort}
+
+  \begin{jobshort}{Google Cloud AI Offerings}
+  \item Led the development of a unified catalog platform to showcase AI offerings built across TCS using the Google Cloud stack, standardizing discovery and accelerating internal adoption.
+  \item \textit{Tech: Next.js, TypeScript, Python, FastAPI, Google Cloud Storage.}
+  \end{jobshort}
+
+  \begin{jobshort}{Microfrontend Migration}
+  \item Drove migration of the \textit{TCS Alpha X Labs} platform to a microfrontend architecture, enabling independent release cycles per domain and eliminating cross-team deployment bottlenecks.
+  \item Drastically reduced built time by 75\%, reduced the bundle size and improved the application's FCP.
+  \item \textit{Tech: Next.js, TypeScript, Monorepo, Jenkins.}
+  \end{jobshort}
+
+  \begin{jobshort}{Team Leadership}
+  \item Owned release management and production stability as Deployment Lead, coordinated platform and frontend teams for efficient resource management.
+  \end{jobshort}
+
+\end{jobcontainer}
+
+%----------------------------------------------------------------------------------------
+% PROJECTS
+%----------------------------------------------------------------------------------------
+\section{Projects}
+
+\begin{tabularx}{\linewidth}{@{}l X r@{}}
+  \textbf{Ascendant} & \hfill & \href{https://pypi.org/project/astro-ascendant/}{[PyPI]} \\[2pt]
+\end{tabularx}
+\begin{itemize}[nosep,after=\strut, leftmargin=2em, itemsep=2pt, topsep=0pt, label=--]
+  \item Published \texttt{astro-ascendant}, a Python library for astrological chart generation and planetary position calculations using Swiss Ephemeris data.
+  \item Automated packaging and PyPI releases via GitHub Actions, keeping version updates and publishing repeatable.
+  \item \textit{Tech: Python, Swiss Ephemeris, PyPI packaging, GitHub Actions.}
+\end{itemize}
+
+%----------------------------------------------------------------------------------------
+%  EDUCATION
 %----------------------------------------------------------------------------------------
 \section{Education}
 \begin{tabularx}{\linewidth}{@{}X r@{}}
-\textbf{B.Tech Computer Science and Engineering} & \normalsize Sep 2020 -- May 2024 \\
-Amrita Vishwa Vidyapeetham, Coimbatore & \normalsize CGPA: 7.02/10 \\
-Research: \textit{Complex or Irregular Lung Nodule Detection from CT Scans} & \href{https://thaletto.vercel.app/lung-nodule-detection.pdf}{[Link]}
-\end{tabularx}
-
-%----------------------------------------------------------------------------------------
-%	SKILLS
-%----------------------------------------------------------------------------------------
-\section{Skills}
-\begin{tabularx}{\linewidth}{@{}l X@{}}
-Languages &  \normalsize{Python, TypeScript, JavaScript, Effect TS, Java, Kotlin}\\
-AI/LLM &  \normalsize{AI SDK, Google ADK, Microsoft AutoGen, LangChain, Azure OpenAI}\\
-Frontend &  \normalsize{Next.js, React, Tailwind CSS, Material UI}\\
-Backend &  \normalsize{Node.js, Bun, Express, FastAPI}\\
-Databases &  \normalsize{PostgreSQL, MongoDB, Redis, Qdrant}\\
-Cloud/DevOps &  \normalsize{Google Cloud, Docker, Jenkins, Grafana, ServiceNow}\\
+  \textbf{B.Tech Computer Science and Engineering} & \normalsize Sep 2020 -- May 2024 \\
+  Amrita Vishwa Vidyapeetham, Coimbatore & \normalsize CGPA: 7.02/10 \\
+  Research: \textit{Complex or Irregular Lung Nodule Detection from CT Scans} & \href{https://thaletto.vercel.app/lung-nodule-detection.pdf}{[Link]}
 \end{tabularx}
 
 % \vfill
