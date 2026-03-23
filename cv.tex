@@ -1,234 +1,230 @@
-%-----------------------------------------------------------------------------------------------------------------------------------------------%
-%  The MIT License (MIT)
-%
-%  Copyright (c) 2021 Jitin Nair
-%
-%  Permission is hereby granted, free of charge, to any person obtaining a copy
-%  of this software and associated documentation files (the "Software"), to deal
-%  in the Software without restriction, including without limitation the rights
-%  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-%  copies of the Software, and to permit persons to whom the Software is
-%  furnished to do so, subject to the following conditions:
-%
-%  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-%  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-%  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-%  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-%  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-%  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-%  THE SOFTWARE.
-%
-%
-%-----------------------------------------------------------------------------------------------------------------------------------------------%
+%-------------------------
+% Resume in Latex
+% Author : Harshibar
+% Based off of: https://github.com/jakeryang/resume
+% License : MIT
+%------------------------
 
-%----------------------------------------------------------------------------------------
-%  DOCUMENT DEFINITION
-%----------------------------------------------------------------------------------------
+\documentclass[letterpaper,11pt]{article}
 
-% article class because we want to fully customize the page and not use a cv template
-\documentclass[a4paper,12pt]{article}
-
-%----------------------------------------------------------------------------------------
-%  FONT
-%----------------------------------------------------------------------------------------
-
-% % fontspec allows you to use TTF/OTF fonts directly
-% \usepackage{fontspec}
-% \defaultfontfeatures{Ligatures=TeX}
-
-% % modified for ShareLaTeX use
-% \setmainfont[
-% SmallCapsFont = Fontin-SmallCaps.otf,
-% BoldFont = Fontin-Bold.otf,
-% ItalicFont = Fontin-Italic.otf
-% ]
-% {Fontin.otf}
-
-%----------------------------------------------------------------------------------------
-%  PACKAGES
-%----------------------------------------------------------------------------------------
-\usepackage{url}
-\usepackage{parskip}
-
-%other packages for formatting
-\RequirePackage{color}
-\RequirePackage{graphicx}
-\usepackage[usenames,dvipsnames]{xcolor}
-\usepackage[scale=0.97]{geometry}
-
-%tabularx environment
-\usepackage{tabularx}
-
-%for lists within experience section
-\usepackage{enumitem}
-
-% centered version of 'X' col. type
-\newcolumntype{C}{>{\centering\arraybackslash}X}
-
-%to prevent spillover of tabular into next pages
-\usepackage{supertabular}
-\usepackage{tabularx}
-\newlength{\fullcollw}
-\setlength{\fullcollw}{0.47\textwidth}
-
-%custom \section
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
 \usepackage{titlesec}
-\usepackage{multicol}
-\usepackage{multirow}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+% only for pdflatex
+% \input{glyphtounicode}
 
-%CV Sections inspired by:
-%http://stefano.italians.nl/archives/26
-\titleformat{\section}{\Large\scshape\raggedright}{}{0em}{}[\titlerule]
-\titlespacing{\section}{0pt}{6pt}{6pt}
-
-%for publications
-\usepackage[style=authoryear,sorting=ynt, maxbibnames=2]{biblatex}
-
-%Setup hyperref package, and colours for links
-\usepackage[unicode, draft=false]{hyperref}
-\definecolor{linkcolour}{rgb}{0,0.2,0.6}
-\hypersetup{colorlinks,breaklinks,urlcolor=linkcolour,linkcolor=linkcolour}
-\addbibresource{citations.bib}
-\setlength\bibitemsep{1em}
-
-%for social icons
+% fontawesome
 \usepackage{fontawesome5}
 
-%debug page outer frames
-%\usepackage{showframe}
+% fixed width
+\usepackage[scale=0.90,lf]{FiraMono}
 
+% light-grey
+\definecolor{light-grey}{gray}{0.83}
+\definecolor{dark-grey}{gray}{0.3}
+\definecolor{text-grey}{gray}{.08}
 
-% job listing environments
-% Replace joblong and jobshort with these three environments:
+\DeclareRobustCommand{\ebseries}{\fontseries{eb}\selectfont}
+\DeclareTextFontCommand{\texteb}{\ebseries}
 
-\newenvironment{jobcontainer}[2]
-{
-  \begin{tabularx}{\linewidth}{@{}l X r@{}}
-    \textbf{#1} & \hfill & #2 \\[2pt]
-  \end{tabularx}
-  \vspace{-16pt}
-}
-
-\newenvironment{jobshort}[1]
-{
-  \vspace{4pt}
-  \hspace{0.5em}\textbf{#1} \\[-8pt]
-  \begin{itemize}[nosep,after=\strut, leftmargin=2em, itemsep=0pt, topsep=0pt, label=--]
-    }
-    {
-  \end{itemize}
-}
-
-\newenvironment{joblong}[2]
-{
-  \begin{tabularx}{\linewidth}{@{}l X r@{}}
-    \textbf{#1} & \hfill & #2 \\[2pt]
-  \end{tabularx}
-  \begin{itemize}[nosep,after=\strut, leftmargin=1em, itemsep=2pt, label=--]
-    }
-    {
-  \end{itemize}
-  \vspace{4pt}
+% custom underilne
+\usepackage{contour}
+\usepackage[normalem]{ulem}
+\renewcommand{\ULdepth}{1.8pt}
+\contourlength{0.8pt}
+\newcommand{\myuline}[1]{%
+  \uline{\phantom{#1}}%
+  \llap{\contour{white}{#1}}%
 }
 
 
+% custom font: helvetica-style
+\usepackage{tgheros}
+\renewcommand*\familydefault{\sfdefault}
+%% Only if the base font of the document is to be sans serif
+\usepackage[T1]{fontenc}
 
-%----------------------------------------------------------------------------------------
-%  BEGIN DOCUMENT
-%----------------------------------------------------------------------------------------
+
+\pagestyle{fancy}
+\fancyhf{} % clear all header and footer fields
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Adjust margins
+\addtolength{\oddsidemargin}{-0.5in}
+\addtolength{\evensidemargin}{0in}
+\addtolength{\textwidth}{1in}
+\addtolength{\topmargin}{-.5in}
+\addtolength{\textheight}{1.0in}
+
+\urlstyle{same}
+
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+% Sections formatting - serif
+% \titleformat{\section}{
+%   \vspace{2pt} \scshape \raggedright\large % header section
+% }{}{0em}{}[\color{black} \titlerule \vspace{-5pt}]
+
+% TODO EBSERIES
+% sans serif sections
+\titleformat {\section}{
+  \bfseries \vspace{2pt} \raggedright \large % header section
+}{}{0em}{}[\color{light-grey} {\titlerule[2pt]} \vspace{-4pt}]
+
+% only for pdflatex
+% Ensure that generate pdf is machine readable/ATS parsable
+% \pdfgentounicode=1
+
+%-------------------------
+% Custom commands
+\newcommand{\resumeItem}[1]{
+\item\small{
+    {#1 \vspace{-1pt}}
+  }
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-1pt}
+\item
+  \begin{tabular*}{\textwidth}[t]{l@{\extracolsep{\fill}}r}
+    \textbf{#1} & {\color{dark-grey}\small #2}\vspace{1pt}\\ % top row of resume entry
+    \textit{#3} & {\color{dark-grey} \small #4}\\ % second row of resume entry
+  \end{tabular*}\vspace{-4pt}
+}
+
+\newcommand{\resumeSubSubheading}[2]{
+\item
+  \begin{tabular*}{\textwidth}{l@{\extracolsep{\fill}}r}
+    \textit{\small#1} & \textit{\small #2} \\
+  \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+\item
+  \begin{tabular*}{\textwidth}{l@{\extracolsep{\fill}}r}
+    #1 & {\color{dark-grey}} \\
+  \end{tabular*}\vspace{-4pt}
+}
+
+\newcommand{\resumeSubItem}[1]{\resumeItem{#1}\vspace{-4pt}}
+
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+
+% CHANGED default leftmargin  0.15 in
+\newcommand{\resumeSubHeadingListStart}{
+\begin{itemize}[leftmargin=0in, label={}]}
+    \newcommand{\resumeSubHeadingListEnd}{
+  \end{itemize}}
+\newcommand{\resumeItemListStart}{
+\begin{itemize}}
+    \newcommand{\resumeItemListEnd}{
+  \end{itemize}\vspace{0pt}}
+
+\color{text-grey}
+
+%-------------------------------------------
+%%%%%%  RESUME STARTS HERE  %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 \begin{document}
-\setlength{\parskip}{0pt}
-\setlength{\parindent}{0pt}
 
-% non-numbered pages
-\pagestyle{empty}
+%----------HEADING----------
+\begin{center}
+  \textbf{\Huge Laxman K R} \\ \vspace{5pt}
+  \small \faPhone* \texttt{+91 74486 57412} \hspace{1pt} $|$
+  \hspace{1pt} \faEnvelope \hspace{2pt} \texttt{krlaxman03@gmail.com} \hspace{1pt} $|$
+  \hspace{1pt} \faLinkedin \hspace{2pt} \texttt{\href{https://linkedin.com/in/laxmanramesh}{laxmanramesh}} \hspace{1pt} $|$
+  \hspace{1pt} \faGithub \hspace{2pt} \texttt{\href{https://github.com/thaletto}{thaletto}} \hspace{1pt} $|$
+  \hspace{1pt} \faGlobe \hspace{2pt}\texttt{\href{https://laxmankr.vercel.app}{laxmankr.vercel.app}}
+  \\ \vspace{-3pt}
+\end{center}
 
-%----------------------------------------------------------------------------------------
-%  TITLE
-%----------------------------------------------------------------------------------------
-\begin{tabularx}{\linewidth}{@{} C @{}}
-  \Huge{Laxman K R} \\[7.5pt]
-  Full-Stack AI Developer \\[4pt]
-  \href{https://github.com/thaletto}{\raisebox{-0.05\height}\faGithub\ thaletto} \ $|$ \
-  \href{https://linkedin.com/in/laxmanramesh}{\raisebox{-0.05\height}\faLinkedin\ laxmanramesh} \ $|$ \
-  \href{https://thaletto.vercel.app}{\raisebox{-0.05\height}\faGlobe \ portfolio} \ $|$ \
-  \href{mailto:krlaxman03@gmail.com}{\raisebox{-0.05\height}\faEnvelope \ krlaxman03@gmail.com} \ $|$ \
-  \href{tel:+917448657412}{\raisebox{-0.05\height}\faMobile \ +91 7448657412} \\
-\end{tabularx}
+%-----------EXPERIENCE-----------
+\section{EXPERIENCE}
+\resumeSubHeadingListStart
 
-%----------------------------------------------------------------------------------------
-% SUMMARY
-%----------------------------------------------------------------------------------------
-\section{Summary}
+\resumeSubheading
+{Tata Consultancy Services}{Nov. 2024 -- Present}
+{AI Engineer}{Chennai, TN}
+\resumeItemListStart
+\resumeItem{Engineered an agentic incident remediation system integrating AutoGen multi-agent orchestration with Grafana alerting and ServiceNow ticketing, enabling autonomous SOP-driven remediations and reducing Mean Time to Recovery (MTTR) by 60\%.}
+\resumeItem{Led development of a unified internal catalog platform for Google Cloud AI offerings across TCS, standardizing discovery of AI assets and accelerating adoption across business units.}
+\resumeItem{Drove migration of the TCS Alpha X Labs platform to a microfrontend architecture using a monorepo setup, reducing build time by 75\%, improving First Contentful Paint (FCP), and eliminating cross-team deployment bottlenecks.}
+\resumeItem{Served as Deployment Lead for the TCS CBG AI platform, owning release management and production stability while coordinating platform and frontend engineering teams.}
+\resumeItemListEnd
 
-AI Engineer and Full-Stack Developer with experience building scalable products and agentic AI systems. Strong in TypeScript-led architecture, modern UI engineering, and Python-based AI workflows across production platforms.
+\resumeSubHeadingListEnd
 
-%----------------------------------------------------------------------------------------
-%  SKILLS
-%----------------------------------------------------------------------------------------
-\section{Skills}
-% \begin{tabularx}{\linewidth}{@{}l X@{}}
-%   Languages &  \normalsize{Python, TypeScript, JavaScript, Effect TS, Java, Kotlin}\\
-%   AI/LLM &  \normalsize{AI SDK, Google ADK, Microsoft AutoGen, LangChain, Azure OpenAI}\\
-%   Frontend &  \normalsize{Next.js, React, Tailwind CSS, Material UI}\\
-%   Backend &  \normalsize{Node.js, Bun, Express, FastAPI, PostgreSQL, MongoDB, Redis, Qdrant}
-% \end{tabularx}
-Python, TypeScript, JavaScript, Effect TS, Java, Next.js, React, Node.js, Bun, FastAPI, PostgreSQL, MongoDB, Google Cloud
 
-%----------------------------------------------------------------------------------------
-% EXPERIENCE
-%----------------------------------------------------------------------------------------
-\section{Work Experience}
-\begin{jobcontainer}{Tata Consultancy Services (AI Engineer)}{Nov 2024 - Present}
-
-  \begin{jobshort}{Agentic AMS Framework}
-  \item Built the frontend interface for a multi-agent incident remediation system powered by AutoGen, surfacing real-time agent activity, Planning, Validation, Executor, and Human-in-the-Loop over a FastAPI WebSocket connection.
-  \item Contributed to backend integration layers connecting the frontend to Qdrant vector DB and MongoDB agent worklogs, enabling live incident traceability and audit trail display within the application.
-  \item \textit{Tech: Next.js, TypeScript, FastAPI, Microsoft AutoGen, Qdrant, MongoDB, ServiceNow.}
-  \end{jobshort}
-
-  \begin{jobshort}{Google Cloud AI Offerings}
-  \item Led the development of a unified catalog platform to showcase AI offerings built across TCS using the Google Cloud stack, standardizing discovery and accelerating internal adoption.
-  \item \textit{Tech: Next.js, TypeScript, Python, FastAPI, Google Cloud Storage.}
-  \end{jobshort}
-
-  \begin{jobshort}{Microfrontend Migration}
-  \item Drove migration of the \textit{TCS Alpha X Labs} platform to a microfrontend architecture, enabling independent release cycles per domain and eliminating cross-team deployment bottlenecks.
-  \item Drastically reduced built time by 75\%, reduced the bundle size and improved the application's FCP.
-  \item \textit{Tech: Next.js, TypeScript, Monorepo, Jenkins.}
-  \end{jobshort}
-
-  \begin{jobshort}{Team Leadership}
-  \item Owned release management and production stability as Deployment Lead, coordinated platform and frontend teams for efficient resource management.
-  \end{jobshort}
-
-\end{jobcontainer}
-
-%----------------------------------------------------------------------------------------
-% PROJECTS
-%----------------------------------------------------------------------------------------
+%-----------PROJECTS-----------
 \section{Projects}
+\resumeSubHeadingListStart
 
-\begin{tabularx}{\linewidth}{@{}l X r@{}}
-  \textbf{Ascendant} & \hfill & \href{https://pypi.org/project/astro-ascendant/}{[PyPI]} \\[2pt]
-\end{tabularx}
-\begin{itemize}[nosep,after=\strut, leftmargin=2em, itemsep=2pt, topsep=0pt, label=--]
-  \item Published \texttt{astro-ascendant}, a Python library for astrological chart generation and planetary position calculations using Swiss Ephemeris data.
-  \item Automated packaging and PyPI releases via GitHub Actions, keeping version updates and publishing repeatable.
-  \item \textit{Tech: Python, Swiss Ephemeris, PyPI packaging, GitHub Actions.}
+\resumeSubheading
+{Kite}{Feb. 2026 -- Mar. 2026}
+{AG-UI, A2UI Protocol demonstration app}{\href{https://kite-agui.netlify.app}{\textbf{Link}}}
+\resumeItemListStart
+\resumeItem{Built a reference implementation of the AG-UI protocol and A2UI specification, rendering typed agent events, text deltas, tool calls, and state transitions in-place as they arrive, making agent-UI communication fully observable.}
+\resumeItem{Implemented A2UI component descriptor rendering, enabling agents to emit structured UI components directly to the frontend and eliminating bespoke conditional rendering logic.}
+\resumeItemListEnd
+
+\resumeSubheading
+{Ascendant}{Sep. 2025 -- Jan. 2026}
+{Python Package}{\href{https://pypi.org/project/astro-ascendant}{\textbf{Link}}}\resumeItemListStart
+\resumeItem{Developed a Python library implementing core astrology computations including planetary positions, house system derivations and much more using swiss ephemeris dataset.}
+\resumeItem{Designed a clean, documented public API enabling developers, and practitioners to access structured chart data programmatically.}
+\resumeItemListEnd
+
+\resumeSubheading
+{Complex or Irregular Lung Nodule Detection from CT Scans}{Sep. 2023 -- May. 2024}
+{YoloV5, DETR, V-Net}{\href{https://thaletto.vercel.app/lung-nodule-detection.pdf}{\textbf{Link}}}
+\resumeItemListStart
+\resumeItem{Engineered a deep learning pipeline for automated detection and classification of pulmonary nodules in CT imagery, training on annotated radiological datasets with a segmentation and classification head.}
+\resumeItem{Designed the system as a second-reader tool for radiology workflows, surfacing high-probability malignant findings to clinicians for review.}
+\resumeItemListEnd
+
+\resumeSubHeadingListEnd
+
+
+
+%-----------EDUCATION-----------
+\section {EDUCATION}
+\resumeSubHeadingListStart
+\resumeSubheading
+{Amrita Vishwa Vidyapeetham}{Sep. 2020 -- May 2024}
+{B.Tech in Computer Science and Engineering}{Coimbatore, TN}
+\resumeItemListStart
+\resumeItem
+{\textbf{Research}: Complex or Irregular Lung Nodule Detection from CT Scans}
+\resumeItemListEnd
+\resumeSubHeadingListEnd
+
+
+%
+%-----------PROGRAMMING SKILLS-----------
+\section{SKILLS}
+\begin{itemize}[leftmargin=0in, label={}]
+    \small{
+    \item{
+        \textbf{Languages}{: Python, TypeScript/JavaScript, Effect TS, Java, Kotlin, SQL}\vspace{2pt} \\
+        \textbf{Framework \& Tools}{: React, Next.js, FastAPI, Node.js, Bun, Express, MongoDB, Redis, PostgreSQL, SQLite}
+        \vspace{2pt} \\
+        \textbf{AI Tools}{: Microsoft Autogen, Google ADK, Langchain, Langgraph, AI SDK, Azure OpenAI, LiteLLM}
+    }}
 \end{itemize}
 
-%----------------------------------------------------------------------------------------
-%  EDUCATION
-%----------------------------------------------------------------------------------------
-\section{Education}
-\begin{tabularx}{\linewidth}{@{}X r@{}}
-  \textbf{B.Tech Computer Science and Engineering} & \normalsize Sep 2020 -- May 2024 \\
-  Amrita Vishwa Vidyapeetham, Coimbatore & \normalsize CGPA: 7.02/10 \\
-  Research: \textit{Complex or Irregular Lung Nodule Detection from CT Scans} & \href{https://thaletto.vercel.app/lung-nodule-detection.pdf}{[Link]}
-\end{tabularx}
 
-% \vfill
-% \center{\footnotesize Last updated: \today}
-
+%-------------------------------------------
 \end{document}
