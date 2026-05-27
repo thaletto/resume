@@ -18,6 +18,7 @@
 \usepackage{fancyhdr}
 \usepackage[english]{babel}
 \usepackage{tabularx}
+\usepackage{ragged2e}
 % only for pdflatex
 % \input{glyphtounicode}
 
@@ -69,19 +70,19 @@
 \urlstyle{same}
 
 \raggedbottom
-\raggedright
+\RaggedRight
 \setlength{\tabcolsep}{0in}
 
 % Sections formatting - serif
 % \titleformat{\section}{
-%   \vspace{2pt} \scshape \raggedright\large % header section
+%   \vspace{2pt} \scshape \RaggedRight\large % header section
 % }{}{0em}{}[\color{black} \titlerule \vspace{-5pt}]
 
 % TODO EBSERIES
 % sans serif sections
 \titleformat {\section}{
-  \bfseries \vspace{2pt} \raggedright \large % header section
-}{}{0em}{}[\color{light-grey} {\titlerule[2pt]} \vspace{-4pt}]
+  \bfseries \vspace{0pt} \RaggedRight \large % header section
+}{}{0em}{}[\color{light-grey} {\titlerule[2pt]} \vspace{-6pt}]
 
 % only for pdflatex
 % Ensure that generate pdf is machine readable/ATS parsable
@@ -91,7 +92,7 @@
 % Custom commands
 \newcommand{\resumeItem}[1]{
 \item\small{
-    {#1 \vspace{-1pt}}
+    {#1 \vspace{-2pt}}
   }
 }
 
@@ -103,6 +104,7 @@
     \textit{#3} & {\color{dark-grey} \small #4}\\ % second row of resume entry
   \end{tabular*}\vspace{-4pt}
 }
+
 
 \newcommand{\resumeSubSubheading}[2]{
 \item
@@ -143,11 +145,11 @@
 %----------HEADING----------
 \begin{center}
   \textbf{\Huge Laxman K R} \\ \vspace{5pt}
-  \small \faPhone* \texttt{+91 74486 57412} \hspace{1pt} $|$
-  \hspace{1pt} \faEnvelope \hspace{2pt} \texttt{krlaxman03@gmail.com} \hspace{1pt} $|$
-  \hspace{1pt} \faLinkedin \hspace{2pt} \texttt{\href{https://linkedin.com/in/laxmanramesh}{laxmanramesh}} \hspace{1pt} $|$
-  \hspace{1pt} \faGithub \hspace{2pt} \texttt{\href{https://github.com/thaletto}{thaletto}} \hspace{1pt} $|$
-  \hspace{1pt} \faGlobe \hspace{2pt}\texttt{\href{https://laxmankr.vercel.app}{laxmankr.vercel.app}}
+  \small \texttt{+91 7448657412} \hspace{1pt} $|$
+  \hspace{1pt} \texttt{krlaxman03@gmail.com} \hspace{1pt} $|$
+  \hspace{1pt} \texttt{\href{https://linkedin.com/in/laxmanramesh}{linkedin.com/in/laxmanramesh}} \hspace{1pt} $|$
+  \hspace{1pt}
+  \hspace{1pt} \texttt{\href{https://laxmankr.vercel.app}{laxmankr.vercel.app}}
   \\ \vspace{-3pt}
 \end{center}
 
@@ -156,13 +158,11 @@
 \resumeSubHeadingListStart
 
 \resumeSubheading
-{Tata Consultancy Services}{Nov. 2024 -- Present}
+{Tata Consultancy Services}{November 2024 -- Present}
 {AI Engineer}{Chennai, TN}
 \resumeItemListStart
-\resumeItem{Engineered an agentic incident remediation system integrating AutoGen multi-agent orchestration with Grafana alerting and ServiceNow ticketing, enabling autonomous SOP-driven remediations and reducing Mean Time to Recovery (MTTR) by 60\%.}
-\resumeItem{Led development of a unified internal catalog platform for Google Cloud AI offerings across TCS, standardizing discovery of AI assets and accelerating adoption across business units.}
-\resumeItem{Drove migration of the TCS Alpha X Labs platform to a microfrontend architecture using a monorepo setup, reducing build time by 75\%, improving First Contentful Paint (FCP), and eliminating cross-team deployment bottlenecks.}
-\resumeItem{Served as Deployment Lead for the TCS CBG AI platform, owning release management and production stability while coordinating platform and frontend engineering teams.}
+\resumeItem{Drove migration of the TCS Alpha X Labs platform to a microfrontend architecture using a monorepo setup, reducing build time by 75\%, improving FCP, and eliminating deployment bottlenecks.}
+\resumeItem{Led release management for the TCS CBG AI platform, coordinating cross-functional engineering teams to ensure 99.9\% production uptime across high-stakes deployments with zero critical rollbacks.}
 \resumeItemListEnd
 
 \resumeSubHeadingListEnd
@@ -173,26 +173,33 @@
 \resumeSubHeadingListStart
 
 \resumeSubheading
-{Kite}{Feb. 2026 -- Mar. 2026}
-{AG-UI, A2UI Protocol demonstration app}{\href{https://kite-agui.netlify.app}{\textbf{Link}}}
+{Agentic AMS Platform}{February 2025 -- January 2026}
+{Microsoft AutoGen, FastAPI, RAG, Qdrant, Confluence}{\href{https://thaletto.vercel.app/projects/ams}{\textbf{Link}}}
 \resumeItemListStart
-\resumeItem{Built a reference implementation of the AG-UI protocol and A2UI specification, rendering typed agent events, text deltas, tool calls, and state transitions in-place as they arrive, making agent-UI communication fully observable.}
-\resumeItem{Implemented A2UI component descriptor rendering, enabling agents to emit structured UI components directly to the frontend and eliminating bespoke conditional rendering logic.}
+\resumeItem{Engineered an autonomous multi-agent AMS that reduced MTTR by 63\% by automating anomaly detection, incident deduplication, and SOP retrieval using a vector-indexed knowledge base.}
+\resumeItem{Orchestrated remediation through a three-agent Planning-Executor-Validator pipeline with human-in-the-loop approval, integrating Jenkins rollback and Kubernetes status checks.}
 \resumeItemListEnd
 
 \resumeSubheading
-{Ascendant}{Sep. 2025 -- Jan. 2026}
-{Python Package}{\href{https://pypi.org/project/astro-ascendant}{\textbf{Link}}}\resumeItemListStart
-\resumeItem{Developed a Python library implementing core astrology computations including planetary positions, house system derivations and much more using swiss ephemeris dataset.}
-\resumeItem{Designed a clean, documented public API enabling developers, and practitioners to access structured chart data programmatically.}
+{Google GTM Portal}{February 2026 -- April 2026}
+{Next.js, TypeScript, FastAPI, Google Cloud Storage}{\href{https://thaletto.vercel.app/projects/google-gtm-portal}{\textbf{Link}}}
+\resumeItemListStart
+\resumeItem{Delivered a unified catalog for Google Cloud Next 2026, consolidating 50+ global AI offerings into a high-performance surface using a FastAPI/GCS backend and Next.js frontend optimized for live event traffic.}
+\resumeItemListEnd
+
+
+\resumeSubheading
+{Cortex}{April 2026 -- May 2026}
+{Effect TS, TypeScript, Vector Databases}{\href{https://cortex-vector.vercel.app/}{\textbf{Link}}}
+\resumeItemListStart
+\resumeItem{Architected an Effect-native ORM for vector databases, achieving 500+ npm downloads and reducing boilerplate by ~40\% via an adapter pattern for Qdrant and Pinecone, enabling portable multi-tenant RAG pipelines.}
 \resumeItemListEnd
 
 \resumeSubheading
-{Complex or Irregular Lung Nodule Detection from CT Scans}{Sep. 2023 -- May. 2024}
-{YoloV5, DETR, V-Net}{\href{https://thaletto.vercel.app/lung-nodule-detection.pdf}{\textbf{Link}}}
+{Kite}{March 2026}
+{AG-UI, TanStack Start, React 19, ToolLoopAgent}{\href{https://kite-agui.netlify.app/}{\textbf{Link}}}
 \resumeItemListStart
-\resumeItem{Engineered a deep learning pipeline for automated detection and classification of pulmonary nodules in CT imagery, training on annotated radiological datasets with a segmentation and classification head.}
-\resumeItem{Designed the system as a second-reader tool for radiology workflows, surfacing high-probability malignant findings to clinicians for review.}
+\resumeItem{Developed a real-time data assistant using React 19 that transforms natural-language queries into interactive dashboards, reducing custom visualization generation time from minutes to seconds.}
 \resumeItemListEnd
 
 \resumeSubHeadingListEnd
@@ -203,7 +210,7 @@
 \section {EDUCATION}
 \resumeSubHeadingListStart
 \resumeSubheading
-{Amrita Vishwa Vidyapeetham}{Sep. 2020 -- May 2024}
+{Amrita Vishwa Vidyapeetham}{September 2020 -- May 2024}
 {B.Tech in Computer Science and Engineering}{Coimbatore, TN}
 \resumeItemListStart
 \resumeItem
@@ -215,13 +222,12 @@
 %
 %-----------PROGRAMMING SKILLS-----------
 \section{SKILLS}
-\begin{itemize}[leftmargin=0in, label={}]
+\begin{itemize}[leftmargin=0in, label={}, itemsep=0pt, parsep=0pt]
     \small{
     \item{
-        \textbf{Languages}{: Python, TypeScript/JavaScript, Effect TS, Java, Kotlin, SQL}\vspace{2pt} \\
-        \textbf{Framework \& Tools}{: React, Next.js, FastAPI, Node.js, Bun, Express, MongoDB, Redis, PostgreSQL, SQLite}
-        \vspace{2pt} \\
-        \textbf{AI Tools}{: Microsoft Autogen, Google ADK, Langchain, Langgraph, AI SDK, Azure OpenAI, LiteLLM}
+        \textbf{Languages}{: Python, TypeScript, JavaScript, SQL, Java, Kotlin}\vspace{1pt} \\
+        \textbf{AI \& Agents}{: Generative AI (GenAI), LLMs, RAG, AI SDK, Microsoft AutoGen, LangChain, LangGraph, Vector Databases (Qdrant, Pinecone), MLOps}\vspace{1pt} \\
+        \textbf{Frameworks \& Tools}{: React, Next.js, FastAPI, Effect TS, Node.js, Express, Bun, MongoDB, PostgreSQL, Redis, Kubernetes, Docker, Jenkins}
     }}
 \end{itemize}
 
