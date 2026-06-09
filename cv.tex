@@ -48,10 +48,8 @@
 }
 
 
-% custom font: helvetica-style
-\usepackage{tgheros}
-\renewcommand*\familydefault{\sfdefault}
-%% Only if the base font of the document is to be sans serif
+% traditional serif font
+\usepackage{lmodern}
 \usepackage[T1]{fontenc}
 
 
@@ -65,8 +63,8 @@
 \addtolength{\oddsidemargin}{-0.5in}
 \addtolength{\evensidemargin}{0in}
 \addtolength{\textwidth}{1in}
-\addtolength{\topmargin}{-.5in}
-\addtolength{\textheight}{1.0in}
+\addtolength{\topmargin}{-.6in}
+\addtolength{\textheight}{1.2in}
 
 \urlstyle{same}
 
@@ -82,8 +80,8 @@
 % TODO EBSERIES
 % sans serif sections
 \titleformat {\section}{
-  \bfseries \vspace{0pt} \RaggedRight \large % header section
-}{}{0em}{}[\color{light-grey} {\titlerule[2pt]} \vspace{-6pt}]
+  \bfseries \vspace{-6pt} \RaggedRight \large % header section
+}{}{0em}{}[\color{light-grey} {\titlerule[2pt]} \vspace{-10pt}]
 
 % only for pdflatex
 % Ensure that generate pdf is machine readable/ATS parsable
@@ -93,17 +91,17 @@
 % Custom commands
 \newcommand{\resumeItem}[1]{
 \item\small{
-    {#1 \vspace{-2pt}}
+    {#1 \vspace{-3pt}}
   }
 }
 
 \newcommand{\resumeSubheading}[4]{
-  \vspace{-1pt}
+  \vspace{-2pt}
 \item
   \begin{tabular*}{\textwidth}[t]{l@{\extracolsep{\fill}}r}
-    \textbf{#1} & {\color{dark-grey}\small #2}\vspace{1pt}\\ % top row of resume entry
+    \textbf{#1} & {\color{dark-grey}\small #2}\vspace{0pt}\\ % top row of resume entry
     \textit{#3} & {\color{dark-grey} \small #4}\\ % second row of resume entry
-  \end{tabular*}\vspace{-4pt}
+  \end{tabular*}\vspace{-5pt}
 }
 
 
@@ -111,17 +109,17 @@
 \item
   \begin{tabular*}{\textwidth}{l@{\extracolsep{\fill}}r}
     \textit{\small#1} & \textit{\small #2} \\
-  \end{tabular*}\vspace{-7pt}
+  \end{tabular*}\vspace{-8pt}
 }
 
 \newcommand{\resumeProjectHeading}[2]{
 \item
   \begin{tabular*}{\textwidth}{l@{\extracolsep{\fill}}r}
     #1 & {\color{dark-grey}} \\
-  \end{tabular*}\vspace{-4pt}
+  \end{tabular*}\vspace{-5pt}
 }
 
-\newcommand{\resumeSubItem}[1]{\resumeItem{#1}\vspace{-4pt}}
+\newcommand{\resumeSubItem}[1]{\resumeItem{#1}\vspace{-5pt}}
 
 \renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
 
@@ -129,11 +127,11 @@
 \newcommand{\resumeSubHeadingListStart}{
 \begin{itemize}[leftmargin=0in, label={}]}
     \newcommand{\resumeSubHeadingListEnd}{
-  \end{itemize}}
+  \end{itemize}\vspace{-6pt}}
 \newcommand{\resumeItemListStart}{
 \begin{itemize}}
     \newcommand{\resumeItemListEnd}{
-  \end{itemize}\vspace{0pt}}
+  \end{itemize}\vspace{-2pt}}
 
 \color{text-grey}
 
@@ -145,70 +143,89 @@
 
 %----------HEADING----------
 \begin{center}
-  \textbf{\Huge Laxman K R} \\ \vspace{5pt}
-  \small \texttt{+91 7448657412} $|$
-  \texttt{krlaxman03@gmail.com} $|$
-  \texttt{\href{https://linkedin.com/in/laxmanramesh}{linkedin.com/in/laxmanramesh}} $|$
-  \texttt{\href{https://github.com/thaletto}{github.com/thaletto}} $|$
+  \textbf{\Huge Laxman K R} \\ \vspace{3pt}
+  \small \texttt{+91 7448657412} {\scriptsize $|$}
+  \texttt{krlaxman03@gmail.com} {\scriptsize $|$}
+  \texttt{\href{https://linkedin.com/in/laxmanramesh}{linkedin/laxmanramesh}} {\scriptsize $|$}
+  \texttt{\href{https://github.com/thaletto}{github/thaletto}} {\scriptsize $|$}
   \texttt{\href{https://laxmankr.vercel.app}{laxmankr.vercel.app}}
-  \\ \vspace{-3pt}
+  \\ \vspace{-4pt}
 \end{center}
 
-%-----------EXPERIENCE-----------
-\section{EXPERIENCE}
+%-----------WORK EXPERIENCE-----------
+\section{WORK EXPERIENCE}\vspace{2pt}
 \resumeSubHeadingListStart
 
 \resumeSubheading
 {Tata Consultancy Services}{November 2024 -- Present}
 {AI Engineer}{Chennai, TN}
 \resumeItemListStart
-\resumeItem{Drove migration of the TCS Alpha X Labs platform to a microfrontend architecture using a monorepo setup, reducing build time by 75\%, improving FCP, and eliminating deployment bottlenecks.}
-\resumeItem{Led release management for the TCS CBG AI platform, coordinating cross-functional engineering teams to ensure 99.9\% production uptime across high-stakes deployments with zero critical rollbacks.}
+\resumeItem{Drove migration of 50+ modules from a single Next.js application into 10 separate microfrontends, serving 20+ developers and reducing build time by 75\% while increasing deployment throughput from 50 to 40 per day.}
+\resumeItem{Led release management for the TCS CBG AI platform, coordinating 3 cross-functional teams (infra, sales, BA) to deliver 25+ monthly deployments with 99.9\% uptime and zero critical rollbacks.}
 \resumeItemListEnd
 
 \resumeSubHeadingListEnd
 
+%-----------TECHNICAL SKILLS-----------
+\section{TECHNICAL SKILLS}\vspace{2pt}
+\begin{itemize}[leftmargin=0in, label={}, itemsep=0pt, parsep=0pt]
+    \small{
+      \item{
+        \textbf{Languages}{: Python, TypeScript, JavaScript, Go, Java, SQL}\vspace{3pt} \\
+        \textbf{AI \& Agents}{: GenAI, LLMs, RAG, AI SDK, Google ADK, AutoGen, LangChain, LangGraph, Qdrant, Pinecone}\vspace{3pt} \\
+        \textbf{Frameworks \& Tools}{: React, Next.js, FastAPI, Effect TS, Node.js, Express, Bun, MongoDB, PostgreSQL, Redis, Kubernetes, Docker, Jenkins}
+      }
+    }
+\end{itemize}
 
 %-----------PROJECTS-----------
-\section{Projects}
+\section{PROJECTS}\vspace{2pt}
 \resumeSubHeadingListStart
 
 \resumeSubheading
 {Agentic AMS Platform}{February 2025 -- January 2026}
-{Microsoft AutoGen, FastAPI, RAG, Qdrant, Confluence}{\href{https://thaletto.vercel.app/projects/ams}{\textbf{Link}}}
+{Python, Microsoft AutoGen, FastAPI, RAG, Vector Database, Next.js}{\href{https://thaletto.vercel.app/projects/ams}{\textbf{Live}}}
 \resumeItemListStart
-\resumeItem{Engineered an autonomous multi-agent AMS that reduced MTTR by 63\% by automating anomaly detection, incident deduplication, and SOP retrieval using a vector-indexed knowledge base.}
-\resumeItem{Orchestrated remediation through a three-agent Planning-Executor-Validator pipeline with human-in-the-loop approval, integrating Jenkins rollback and Kubernetes status checks.}
+\resumeItem{Engineered an autonomous multi-agent AMS in Python that reduced MTTR by 63\% by automating anomaly detection, incident deduplication, and SOP retrieval using a vector-indexed knowledge base.}
+\resumeItem{Orchestrated remediation for 4+ weekly incidents through a three-agent Planning-Executor-Validator pipeline with 10 SOPs, achieving 6-minute average response time.}
 \resumeItemListEnd
 
 \resumeSubheading
 {Google GTM Portal}{February 2026 -- April 2026}
-{Next.js, TypeScript, FastAPI, Google Cloud Storage}{\href{https://thaletto.vercel.app/projects/google-gtm-portal}{\textbf{Link}}}
+{Python, Next.js, TypeScript, FastAPI, Google Cloud Storage}{\href{https://thaletto.vercel.app/projects/google-gtm-portal}{\textbf{Live}}}
 \resumeItemListStart
-\resumeItem{Delivered a unified catalog for Google Cloud Next 2026, consolidating 120+ global AI offerings into a high-performance surface using a FastAPI/Google Cloud Storage backend and Next.js frontend optimized for live event traffic.}
+\resumeItem{Built a Python/FastAPI backend with Google Cloud Storage to serve 120+ global AI offerings as a unified catalog for Google Cloud Next 2026.}
+\resumeItem{Developed a Next.js frontend with 96\% Lighthouse score and sub-1-second page load times.}
 \resumeItemListEnd
 
+\resumeSubheading
+{Retail Platform}{July 2024 -- June 2026}
+{Next.js, TypeScript, Go, SQLite, AWS Lambda, Cloudflare}{\href{https://kr-crackers.vercel.app}{\textbf{Live}}}
+\resumeItemListStart
+\resumeItem{Built a high-performance frontend with Next.js and Tailwind CSS serving 200+ products with 100\% Lighthouse performance.}
+\resumeItem{Designed a decoupled microservices backend in Go with 5 services deployed via AWS Lambda, utilizing event-driven architecture for inventory tracking, order management, and secure admin control.}
+\resumeItemListEnd
 
 \resumeSubheading
 {Cortex}{April 2026 -- May 2026}
-{Effect TS, TypeScript, Vector Databases}{\href{https://cortex-vector.vercel.app/}{\textbf{Link}}}
+{Effect TS, TypeScript, Vector Databases}{\href{https://cortex-vector.vercel.app/}{\textbf{Live}}}
 \resumeItemListStart
-\resumeItem{Architected an Effect-native ORM for vector databases, achieving 500+ npm downloads and reducing boilerplate by ~40\% via an adapter pattern for Zvec and PageIndex, enabling portable multi-tenant RAG pipelines.}
+\resumeItem{Architected an Effect-native ORM for vector databases, achieving 500+ npm downloads and reducing boilerplate by ~40\%.}
+\resumeItem{Implemented an adapter pattern for Zvec and PageIndex, enabling portable multi-tenant RAG pipelines across different vector database providers.}
 \resumeItemListEnd
 
 \resumeSubheading
 {Kite}{March 2026}
-{AG-UI, TanStack Start, React 19}{\href{https://kite-agui.netlify.app/}{\textbf{Link}}}
+{AG-UI, TanStack Start, React 19}{\href{https://kite-agui.netlify.app/}{\textbf{Live}}}
 \resumeItemListStart
-\resumeItem{Developed a real-time data assistant using React 19 that transforms natural-language queries into interactive dashboards, reducing custom visualization generation time from minutes to seconds.}
+\resumeItem{Developed a real-time data assistant using React 19 supporting 10+ query types with sub-3-second response times.}
+\resumeItem{Reduced custom visualization generation time from minutes to seconds through automated chart selection and rendering.}
 \resumeItemListEnd
 
 \resumeSubHeadingListEnd
 
-
-
 %-----------EDUCATION-----------
-\section {EDUCATION}
+\section {EDUCATION}\vspace{2pt}
 \resumeSubHeadingListStart
 \resumeSubheading
 {Amrita Vishwa Vidyapeetham}{September 2020 -- May 2024}
@@ -218,21 +235,6 @@
 {\textbf{Research}: Complex or Irregular Lung Nodule Detection from CT Scans}
 \resumeItemListEnd
 \resumeSubHeadingListEnd
-
-
-%
-%-----------PROGRAMMING SKILLS-----------
-\vspace{4pt}
-\section{SKILLS}
-\begin{itemize}[leftmargin=0in, label={}, itemsep=0pt, parsep=0pt]
-    \small{
-      \item{
-        \textbf{Languages}{: Python, TypeScript, JavaScript, Go, Java, SQL}\vspace{4pt} \\
-        \textbf{AI \& Agents}{: Generative AI (GenAI), LLMs, RAG, AI SDK, Google ADK, Microsoft AutoGen, LangChain, LangGraph, Vector Databases (Qdrant, Pinecone)}\vspace{4pt} \\
-        \textbf{Frameworks \& Tools}{: React, Next.js, FastAPI, Effect TS, Node.js, Express, Bun, MongoDB, PostgreSQL, Redis, Kubernetes, Docker, Jenkins}
-      }
-    }
-\end{itemize}
 
 
 %-------------------------------------------
