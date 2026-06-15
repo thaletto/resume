@@ -91,7 +91,7 @@
 % Custom commands
 \newcommand{\resumeItem}[1]{
 \item\small{
-    {#1 \vspace{-3pt}}
+    {#1 \vspace{0pt}}
   }
 }
 
@@ -149,7 +149,8 @@
   \texttt{\href{https://linkedin.com/in/laxmanramesh}{linkedin/laxmanramesh}} {\scriptsize $|$}
   \texttt{\href{https://github.com/thaletto}{github/thaletto}} {\scriptsize $|$}
   \texttt{\href{https://laxmankr.vercel.app}{laxmankr.vercel.app}}
-  \\ \vspace{-4pt}
+  \\ \vspace{6pt}
+  \small AI Engineer specializing in autonomous multi-agent systems and microfrontend architecture.
 \end{center}
 
 %-----------WORK EXPERIENCE-----------
@@ -160,8 +161,11 @@
 {Tata Consultancy Services}{November 2024 -- Present}
 {AI Engineer}{Chennai, TN}
 \resumeItemListStart
-\resumeItem{Drove migration of 50+ modules from a single Next.js application into 10 separate microfrontends, serving 20+ developers and reducing build time by 75\% while increasing deployment throughput from 50 to 40 per day.}
-\resumeItem{Led release management for the TCS CBG AI platform, coordinating 3 cross-functional teams (infra, sales, BA) to deliver 25+ monthly deployments with 99.9\% uptime and zero critical rollbacks.}
+\resumeItem{Engineered an autonomous multi-agent AMS in Python that reduced MTTR by 63\% through automated anomaly detection, incident deduplication, and SOP-assisted resolution using a vector-indexed knowledge base.}
+\resumeItem{Designed a Next.js dashboard with progressive autonomy from human-resolved to human-in-the-loop approval to fully autonomous operation, achieving 6-minute average response time via a Planning-Executor-Validator pipeline.}
+\resumeItem{Drove migration of 50+ modules from a monolithic Next.js app into 10 separate microfrontends, serving 20+ developers and reducing build time from 10 to 5 minutes while increasing deployment throughput by 2.5 times.}
+\resumeItem{Shipped a Python/FastAPI backend with Google Cloud Storage to serve 120+ global AI offerings as a unified catalog for Google Cloud Next 2026, with a Next.js frontend achieving 96\% Lighthouse score and sub-second page loads.}
+\resumeItem{Managed CI/CD pipelines across 3 cross-functional teams (infra, sales, BA), delivering 25+ monthly deployments to production with zero critical rollbacks.}
 \resumeItemListEnd
 
 \resumeSubHeadingListEnd
@@ -173,7 +177,8 @@
       \item{
         \textbf{Languages}{: Python, TypeScript, JavaScript, Go, Java, SQL}\vspace{3pt} \\
         \textbf{AI \& Agents}{: GenAI, LLMs, RAG, AI SDK, Google ADK, AutoGen, LangChain, LangGraph, Qdrant, Pinecone}\vspace{3pt} \\
-        \textbf{Frameworks \& Tools}{: React, Next.js, FastAPI, Effect TS, Node.js, Express, Bun, MongoDB, PostgreSQL, Redis, Kubernetes, Docker, Jenkins}
+        \textbf{Frameworks}{: React, Next.js, FastAPI, Node.js, Express, Effect TS, Bun}\vspace{3pt} \\
+        \textbf{Databases \& Infra}{: MongoDB, PostgreSQL, Redis, SQLite, AWS Lambda, Cloudflare, Kubernetes, Docker, Jenkins}
       }
     }
 \end{itemize}
@@ -183,43 +188,27 @@
 \resumeSubHeadingListStart
 
 \resumeSubheading
-{Agentic AMS Platform}{February 2025 -- January 2026}
-{Python, Microsoft AutoGen, FastAPI, RAG, Vector Database, Next.js}{\href{https://thaletto.vercel.app/projects/ams}{\textbf{Live}}}
-\resumeItemListStart
-\resumeItem{Engineered an autonomous multi-agent AMS in Python that reduced MTTR by 63\% by automating anomaly detection, incident deduplication, and SOP retrieval using a vector-indexed knowledge base.}
-\resumeItem{Orchestrated remediation for 4+ weekly incidents through a three-agent Planning-Executor-Validator pipeline with 10 SOPs, achieving 6-minute average response time.}
-\resumeItemListEnd
-
-\resumeSubheading
-{Google GTM Portal}{February 2026 -- April 2026}
-{Python, Next.js, TypeScript, FastAPI, Google Cloud Storage}{\href{https://thaletto.vercel.app/projects/google-gtm-portal}{\textbf{Live}}}
-\resumeItemListStart
-\resumeItem{Built a Python/FastAPI backend with Google Cloud Storage to serve 120+ global AI offerings as a unified catalog for Google Cloud Next 2026.}
-\resumeItem{Developed a Next.js frontend with 96\% Lighthouse score and sub-1-second page load times.}
-\resumeItemListEnd
-
-\resumeSubheading
 {Retail Platform}{July 2024 -- June 2026}
-{Next.js, TypeScript, Go, SQLite, AWS Lambda, Cloudflare}{\href{https://kr-crackers.vercel.app}{\textbf{Live}}}
+{Go, Next.js, TypeScript, SQLite, AWS Lambda, Cloudflare}{\href{https://github.com/thaletto/krcrackers-go}{\textbf{GitHub}}}
 \resumeItemListStart
-\resumeItem{Built a high-performance frontend with Next.js and Tailwind CSS serving 200+ products with 100\% Lighthouse performance.}
-\resumeItem{Designed a decoupled microservices backend in Go with 5 services deployed via AWS Lambda, utilizing event-driven architecture for inventory tracking, order management, and secure admin control.}
+\resumeItem{Built the frontend with Next.js, delivering an admin dashboard, CMS, and interfaces for search and product recommendations serving 200+ products.}
+\resumeItem{Designed a decoupled microservices backend in Go with 7 services deployed via AWS Lambda, powering the search engine, recommendation engine, notification service, and order management through event-driven architecture.}
+\resumeItemListEnd
+
+\resumeSubheading
+{Kite}{March 2026 -- April 2026}
+{AG-UI, TanStack Start, React 19}{\href{https://kite-agui.netlify.app/}{\textbf{Demo}}}
+\resumeItemListStart
+\resumeItem{Built an AI assistant that renders UI components via AG-UI protocol, with an AI SDK agent orchestrating dynamic UI generation in a TanStack Start app.}
+\resumeItem{Streamed agent responses with structured UI rendering over the AG-UI protocol, built on a TanStack Start application following React composition patterns and the Async React standard.}
 \resumeItemListEnd
 
 \resumeSubheading
 {Cortex}{April 2026 -- May 2026}
-{Effect TS, TypeScript, Vector Databases}{\href{https://cortex-vector.vercel.app/}{\textbf{Live}}}
+{Effect TS, TypeScript, Vector Databases}{\href{https://cortex-vector.vercel.app/}{\textbf{Demo}}}
 \resumeItemListStart
-\resumeItem{Architected an Effect-native ORM for vector databases, achieving 500+ npm downloads and reducing boilerplate by ~40\%.}
+\resumeItem{Architected an Effect-native ORM for vector databases with structured concurrency, compositional error handling, and type-safe dependency injection; includes a query builder, schema migrations, and scheduling, achieving 500+ npm downloads.}
 \resumeItem{Implemented an adapter pattern for Zvec and PageIndex, enabling portable multi-tenant RAG pipelines across different vector database providers.}
-\resumeItemListEnd
-
-\resumeSubheading
-{Kite}{March 2026}
-{AG-UI, TanStack Start, React 19}{\href{https://kite-agui.netlify.app/}{\textbf{Live}}}
-\resumeItemListStart
-\resumeItem{Developed a real-time data assistant using React 19 supporting 10+ query types with sub-3-second response times.}
-\resumeItem{Reduced custom visualization generation time from minutes to seconds through automated chart selection and rendering.}
 \resumeItemListEnd
 
 \resumeSubHeadingListEnd
