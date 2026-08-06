@@ -19,17 +19,16 @@
 \usepackage[english]{babel}
 \usepackage{tabularx}
 \usepackage{ragged2e}
-% only for pdflatex
-% Ensure that generate pdf is machine readable/ATS parsable
-\pdfgentounicode=1
 
-% fontawesome
-\usepackage{fontawesome5}
+% pdfTeX only (ignored on XeTeX/Tectonic/LuaTeX)
+\ifdefined\pdfgentounicode
+  \pdfgentounicode=1
+\fi
 
-% fixed width
-\usepackage[scale=0.90,lf]{FiraMono}
+% Optional icon/mono fonts — skip if unavailable (keeps local tectonic builds simple)
+\IfFileExists{fontawesome5.sty}{\usepackage{fontawesome5}}{}
+\IfFileExists{FiraMono.sty}{\usepackage[scale=0.90,lf]{FiraMono}}{}
 
-% light-grey
 \definecolor{light-grey}{gray}{0.83}
 \definecolor{dark-grey}{gray}{0.3}
 \definecolor{text-grey}{gray}{.08}
@@ -37,7 +36,6 @@
 \DeclareRobustCommand{\ebseries}{\fontseries{eb}\selectfont}
 \DeclareTextFontCommand{\texteb}{\ebseries}
 
-% custom underilne
 \usepackage{contour}
 \usepackage[normalem]{ulem}
 \renewcommand{\ULdepth}{1.8pt}
@@ -47,24 +45,21 @@
   \llap{\contour{white}{#1}}%
 }
 
-
-% traditional serif font
 \usepackage{lmodern}
 \usepackage[T1]{fontenc}
 
-
 \pagestyle{fancy}
-\fancyhf{} % clear all header and footer fields
+\fancyhf{}
 \fancyfoot{}
 \renewcommand{\headrulewidth}{0pt}
 \renewcommand{\footrulewidth}{0pt}
 
-% Adjust margins
+% Margins: readable one-page fit without extreme compression
 \addtolength{\oddsidemargin}{-0.5in}
 \addtolength{\evensidemargin}{0in}
 \addtolength{\textwidth}{1in}
-\addtolength{\topmargin}{-.6in}
-\addtolength{\textheight}{1.2in}
+\addtolength{\topmargin}{-0.7in}
+\addtolength{\textheight}{1.4in}
 
 \urlstyle{same}
 
@@ -72,20 +67,9 @@
 \RaggedRight
 \setlength{\tabcolsep}{0in}
 
-% Sections formatting - serif
-% \titleformat{\section}{
-%   \vspace{2pt} \scshape \RaggedRight\large % header section
-% }{}{0em}{}[\color{black} \titlerule \vspace{-5pt}]
-
-% TODO EBSERIES
-% sans serif sections
-\titleformat {\section}{
-  \bfseries \vspace{-6pt} \RaggedRight \large % header section
-}{}{0em}{}[\color{light-grey} {\titlerule[2pt]} \vspace{-10pt}]
-
-% only for pdflatex
-% Ensure that generate pdf is machine readable/ATS parsable
-% \pdfgentounicode=1
+\titleformat{\section}{
+  \bfseries \vspace{-3pt} \RaggedRight \large
+}{}{0em}{}[\color{light-grey} {\titlerule[1.5pt]} \vspace{-5pt}]
 
 %-------------------------
 % Custom commands
@@ -96,136 +80,174 @@
 }
 
 \newcommand{\resumeSubheading}[4]{
-  \vspace{-2pt}
+  \vspace{2pt}
 \item
   \begin{tabular*}{\textwidth}[t]{l@{\extracolsep{\fill}}r}
-    \textbf{#1} & {\color{dark-grey}\small #2}\vspace{0pt}\\ % top row of resume entry
-    \textit{#3} & {\color{dark-grey} \small #4}\\ % second row of resume entry
-  \end{tabular*}\vspace{-5pt}
+    \textbf{#1} & {\color{dark-grey}\small #2}\vspace{0pt}\\
+    \textit{#3} & {\color{dark-grey} \small #4}\\
+  \end{tabular*}\vspace{-2pt}
 }
-
 
 \newcommand{\resumeSubSubheading}[2]{
 \item
   \begin{tabular*}{\textwidth}{l@{\extracolsep{\fill}}r}
     \textit{\small#1} & \textit{\small #2} \\
-  \end{tabular*}\vspace{-8pt}
+  \end{tabular*}\vspace{-3pt}
 }
 
 \newcommand{\resumeProjectHeading}[2]{
 \item
   \begin{tabular*}{\textwidth}{l@{\extracolsep{\fill}}r}
     #1 & {\color{dark-grey}} \\
-  \end{tabular*}\vspace{-5pt}
+  \end{tabular*}\vspace{-1pt}
 }
 
-\newcommand{\resumeSubItem}[1]{\resumeItem{#1}\vspace{-5pt}}
+\newcommand{\resumeSubItem}[1]{\resumeItem{#1}\vspace{-1pt}}
 
 \renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
 
-% CHANGED default leftmargin  0.15 in
 \newcommand{\resumeSubHeadingListStart}{
 \begin{itemize}[leftmargin=0in, label={}]}
-    \newcommand{\resumeSubHeadingListEnd}{
-  \end{itemize}\vspace{-6pt}}
-\newcommand{\resumeItemListStart}{
-\begin{itemize}}
-    \newcommand{\resumeItemListEnd}{
+\newcommand{\resumeSubHeadingListEnd}{
   \end{itemize}\vspace{-2pt}}
+\newcommand{\resumeItemListStart}{
+\begin{itemize}[leftmargin=0.15in, itemsep=2pt, parsep=0pt, topsep=1pt]}
+\newcommand{\resumeItemListEnd}{
+  \end{itemize}\vspace{-1pt}}
 
 \color{text-grey}
 
 %-------------------------------------------
 %%%%%%  RESUME STARTS HERE  %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
 \begin{document}
 
 %----------HEADING----------
 \begin{center}
-  \textbf{\Huge Laxman K R} \\ \vspace{3pt}
-  \small \texttt{+91 7448657412} {\scriptsize $|$}
-  \texttt{krlaxman03@gmail.com} {\scriptsize $|$}
-  \texttt{\href{https://linkedin.com/in/laxmanramesh}{linkedin/laxmanramesh}} {\scriptsize $|$}
-  \texttt{\href{https://github.com/thaletto}{github/thaletto}} {\scriptsize $|$}
+  \textbf{\huge Laxman K R} \\ \vspace{3pt}
+  \small \texttt{Chennai, India} {\scriptsize $|$}
+  \texttt{+91 7448657412} {\scriptsize $|$}
+  \texttt{krlaxman03@gmail.com} \\ \vspace{2pt}
+  \texttt{\href{https://linkedin.com/in/laxmanramesh}{linkedin.com/in/laxmanramesh}} {\scriptsize $|$}
+  \texttt{\href{https://github.com/thaletto}{github.com/thaletto}} {\scriptsize $|$}
   \texttt{\href{https://laxmankr.vercel.app}{laxmankr.vercel.app}}
-  \\ \vspace{6pt}
-  \small AI Engineer specializing in autonomous multi-agent systems, microfrontend architecture, and system design.
 \end{center}
 
-%-----------WORK EXPERIENCE-----------
-\section{WORK EXPERIENCE}\vspace{2pt}
-\resumeSubHeadingListStart
-
-\resumeSubheading
-{Tata Consultancy Services}{November 2024 -- Present}
-{AI Engineer}{Chennai, TN}
-\resumeItemListStart
-\resumeItem{Engineered an autonomous multi-agent AMS in Python that reduced MTTR by 63\% through automated anomaly detection, incident deduplication, and SOP-assisted resolution using a vector-indexed knowledge base.}
-\resumeItem{Designed a Next.js dashboard with progressive autonomy from human-resolved to human-in-the-loop approval to fully autonomous operation, achieving 6-minute average response time via a Planning-Executor-Validator pipeline.}
-\resumeItem{Drove migration of 50+ modules from a monolithic Next.js app into 10 separate microfrontends, serving 20+ developers and reducing build time from 10 to 5 minutes while increasing deployment throughput by 2.5 times.}
-\resumeItem{Shipped a Python/FastAPI backend with Google Cloud Storage to serve 120+ global AI offerings as a unified catalog for Google Cloud Next 2026, with a Next.js frontend achieving 96\% Lighthouse score and sub-second page loads.}
-\resumeItem{Managed CI/CD pipelines across 3 cross-functional teams (infra, sales, BA), delivering 25+ monthly deployments to production with zero critical rollbacks.}
-\resumeItemListEnd
-
-\resumeSubHeadingListEnd
+%-----------SUMMARY-----------
+\section{SUMMARY}
+\small{
+AI Engineer specializing in Generative AI, multi-agent systems, RAG, and full-stack development. Builds scalable, production grade platforms in Python and TypeScript across system architecture, microservices, and cloud infrastructure. Active open-source author, publishing Effect TS and Python packages to npm and PyPI, with contributions to \textbf{Vercel}'s AI Elements.
+}
 
 %-----------TECHNICAL SKILLS-----------
-\section{TECHNICAL SKILLS}\vspace{2pt}
+\section{TECHNICAL SKILLS}
 \begin{itemize}[leftmargin=0in, label={}, itemsep=0pt, parsep=0pt]
     \small{
       \item{
-        \textbf{Languages}{: Python, TypeScript, JavaScript, Go, Java, SQL}\vspace{3pt} \\
-        \textbf{AI \& Agents}{: Machine Learning, Artificial Intelligence, GenAI, LLMs, RAG, AI SDK, Google ADK, AutoGen, LangChain, LangGraph, Qdrant, Pinecone}\vspace{3pt} \\
-        \textbf{Frameworks}{: React, Next.js, FastAPI, Node.js, Express, Effect TS, Bun}\vspace{3pt} \\
-        \textbf{Databases \& Infra}{: MongoDB, PostgreSQL, Redis, SQLite, AWS Lambda, Cloudflare, Kubernetes, Docker, Jenkins}\vspace{3pt} \\
-        \textbf{Tools}{: Git, REST APIs}
+        \textbf{Languages}{: Python, TypeScript, Go, JavaScript, SQL}\vspace{2pt} \\
+        \textbf{Frameworks}{: Next.js, React, FastAPI, Effect TS, TanStack Start, Node.js, Express}\vspace{2pt} \\
+        \textbf{AI \& Agents}{: AutoGen, LangGraph, LangChain, Google ADK, AI SDK, MCP, RAG, LLMs, Qdrant, Pinecone}\vspace{2pt} \\
+        \textbf{Databases}{: PostgreSQL, Redis, MongoDB, SQLite}\vspace{2pt} \\
+        \textbf{Cloud \& DevOps}{: AWS Lambda, Cloudflare, Docker, Kubernetes, GCP, Grafana}
       }
     }
 \end{itemize}
 
-%-----------PROJECTS-----------
-\section{PROJECTS}\vspace{2pt}
+%-----------WORK EXPERIENCE-----------
+\section{WORK EXPERIENCE}
 \resumeSubHeadingListStart
 
 \resumeSubheading
-{Retail Platform}{July 2024 -- June 2026}
-{Go, Next.js, TypeScript, SQLite, AWS Lambda, Cloudflare}{\href{https://github.com/thaletto/krcrackers-go}{\textbf{GitHub}}}
+{Tata Consultancy Services}{Nov 2024 -- Present}
+{AI Engineer}{Chennai, TN}
 \resumeItemListStart
-\resumeItem{Built the frontend with Next.js, delivering an admin dashboard, CMS, and interfaces for search and product recommendations serving 200+ products.}
-\resumeItem{Designed a decoupled microservices backend in Go with 7 services deployed via AWS Lambda, powering the search engine, recommendation engine, notification service, and order management through event-driven architecture.}
-\resumeItemListEnd
-
-\resumeSubheading
-{Kite}{March 2026 -- April 2026}
-{AG-UI, TanStack Start, React 19}{\href{https://kite-agui.netlify.app/}{\textbf{Demo}}}
-\resumeItemListStart
-\resumeItem{Built an AI assistant that renders UI components via AG-UI protocol, with an AI SDK agent orchestrating dynamic UI generation in a TanStack Start app.}
-\resumeItem{Streamed agent responses with structured UI rendering over the AG-UI protocol, built on a TanStack Start application following React composition patterns and the Async React standard.}
-\resumeItemListEnd
-
-\resumeSubheading
-{Cortex}{April 2026 -- May 2026}
-{Effect TS, TypeScript, Vector Databases}{\href{https://cortex-vector.vercel.app/}{\textbf{Demo}}}
-\resumeItemListStart
-\resumeItem{Architected an Effect-native ORM for vector databases with structured concurrency, compositional error handling, and type-safe dependency injection; includes a query builder, schema migrations, and scheduling, achieving 500+ npm downloads.}
-\resumeItem{Implemented an adapter pattern for Zvec and PageIndex, enabling portable multi-tenant RAG pipelines across different vector database providers.}
+\resumeItem{Built an autonomous \textbf{multi-agent AMS} in Python that cut operational MTTR by 63\%. Agents ingest logs from Grafana Loki, detect anomalies, and create ServiceNow incidents automatically.}
+\resumeItem{Resolved incidents autonomously by retrieving SOPs from a Qdrant vector database via RAG, orchestrated by a \textbf{Planning--Executor--Validator} pattern.}
+\resumeItem{Shipped a Next.js operations dashboard with progressive autonomy (human-resolved to HITL to full auto).}
+\resumeItem{Led a \textbf{microfrontend migration} of 50+ modules from a monolithic Next.js app, halving build time and raising deploy throughput 2.5x.}
+\resumeItem{Delivered a FastAPI + GCS catalog backend and Next.js frontend for Google Cloud Next 2026, unifying 120+ TCS AI offerings with sub-second loads and a 96\% Lighthouse score.}
+\resumeItem{Owned CI/CD across infra, sales, and BA teams (25+ production deploys/month with zero critical rollbacks).}
 \resumeItemListEnd
 
 \resumeSubHeadingListEnd
+
+%-----------PROJECTS-----------
+% Experience owns business outcomes for AMS/GTM.
+% Projects own architecture depth + public proof links (no metric double-counting).
+\section{PROJECTS}
+\resumeSubHeadingListStart
+
+\resumeSubheading
+{Agentic AMS Platform}{Feb 2025 -- Jan 2026}
+{AutoGen, FastAPI, MCP, Qdrant, Grafana Loki, ServiceNow}{\href{https://laxmankr.vercel.app/projects/ams}{Case Study}}
+\resumeItemListStart
+\resumeItem{Designed a \textbf{multi-agent incident loop} on Microsoft AutoGen + FastAPI: detect, diagnose, and remediate production failures end-to-end with MCP tool access.}
+\resumeItem{Built an observability agent that ingests Grafana Loki alerts over WebSockets, deduplicates ServiceNow tickets, and retrieves Confluence SOPs through a Qdrant RAG index.}
+\resumeItem{Implemented a three-agent Planning-Executor-Validator flow with a human-in-the-loop gate for infrastructure rollbacks and automated pod health checks.}
+\resumeItemListEnd
+
+\resumeSubheading
+{Google GTM Portal}{Jan 2026 -- Apr 2026}
+{Next.js, FastAPI, GCS, Google Cloud}{\href{https://thaletto.vercel.app/projects/google-gtm-portal}{Case Study}}
+\resumeItemListStart
+\resumeItem{Built a go-to-market portal for TCS AI offerings targeting both Google and TCS sales teams, with a Next.js frontend and a FastAPI catalog backend on Google Cloud Storage, launched at \textbf{Google Cloud Next 2026}.}
+\resumeItem{Developed alongside \textbf{Google teams} in a \textbf{cross-company effort}, architecting a typed catalog schema powering search and discovery across 120+ AI offerings with sub-second loads.}
+\resumeItem{Implemented hybrid search combining keyword and vector retrieval for fast, relevant discovery across the AI offering catalog.}
+\resumeItemListEnd
+
+\newpage
+\resumeSubheading
+{Cortex}{Apr 2026 -- May 2026}
+{Effect TS, TypeScript, Pinecone, Qdrant}{\href{https://cortex-vector.vercel.app/}{Docs}}
+\resumeItemListStart
+\resumeItem{Authored an \textbf{Effect-native} vector database ORM with \textbf{structured concurrency}, typed dependency injection, and compositional error handling.}
+\resumeItem{Shipped provider adapters (Zvec, PageIndex) so multi-tenant RAG pipelines stay portable across vector backends.}
+\resumeItem{Raised batch insert throughput 3.2x vs baseline drivers using \textbf{non-blocking batch stream} pipelines on Pinecone and Qdrant.}
+\resumeItemListEnd
+
+\resumeSubheading
+{Kite}{Mar 2026 -- Apr 2026}
+{AG-UI, AI SDK, TanStack Start, React 19}{\href{https://kite-agui.netlify.app/}{Demo}}
+\resumeItemListStart
+\resumeItem{Built an AI assistant that \textbf{streams UI} over the \textbf{AG-UI protocol}, orchestrated by an AI SDK agent in TanStack Start, rendering interactive components alongside text responses.}
+\resumeItem{Defined server-driven UI schemas with graceful fallbacks, delivering flicker-free dynamic widgets on interactive analytics views.}
+\resumeItemListEnd
+
+\resumeSubheading
+{Ascendant}{Sep 2025 -- Apr 2026}
+{Python, PyPI, Ephemeris}{\href{https://ascendant-docs.vercel.app/}{Docs}}
+\resumeItemListStart
+\resumeItem{Published astro-ascendant on \textbf{PyPI}: open-source astronomical calculation software for high-precision ephemeris and planetary positioning.}
+\resumeItem{Exposed typed Python SDK APIs and AI agent skill toolkits (\texttt{npx skills}) for 16 divisional coordinate charts and planetary period timelines.}
+\resumeItemListEnd
+
+\resumeSubheading
+{Retail Platform}{Jul 2024 -- Jun 2026}
+{Go, Next.js, AWS Lambda, Cloudflare D1, Workers}{\href{https://github.com/thaletto/krcrackers-go}{GitHub}}
+\resumeItemListStart
+\resumeItem{Designed 7 event-driven Go microservices on AWS Lambda (search, recommendations, notifications, orders) behind a Next.js admin/CMS for 200+ products.}
+\resumeItem{Used Cloudflare Edge caching, \textbf{D1 databases}, and Workers to absorb 10k req/min spikes, cutting p99 API latency from 450ms to 85ms.}
+\resumeItemListEnd
+
+\resumeSubHeadingListEnd
+
+%-----------ACHIEVEMENTS-----------
+\section{ACHIEVEMENTS}
+\resumeItemListStart
+\resumeItem{\textbf{Vercel OSS Contributor} (contributed to \textbf{ai-elements}, a repo of UI components for building AI web apps).}
+\resumeItem{\textbf{Open Source Impact} (Cortex, an Effect TS vector ORM, reached 480 \textbf{npm} downloads; \texttt{astro-ascendant} ephemeris software on \textbf{PyPI}).}
+\resumeItem{\textbf{TCS Special Recognition Award (2025)} for standout performance in the company-wide \textbf{AI Ignite Hackathon}.}
+\resumeItemListEnd
 
 %-----------EDUCATION-----------
-\section {EDUCATION}\vspace{2pt}
+\section{EDUCATION}
 \resumeSubHeadingListStart
 \resumeSubheading
-{Amrita Vishwa Vidyapeetham}{September 2020 -- May 2024}
-{B.Tech in Computer Science and Engineering}{Coimbatore, TN}
+{Amrita Vishwa Vidyapeetham}{Sep 2020 -- May 2024}
+{B.Tech, Computer Science and Engineering}{Coimbatore, TN}
 \resumeItemListStart
-\resumeItem
-{\textbf{Research}: Complex or Irregular Lung Nodule Detection from CT Scans}
+\resumeItem{Research: complex/irregular lung nodule detection from CT scans (medical image processing).}
 \resumeItemListEnd
 \resumeSubHeadingListEnd
 
-
-%-------------------------------------------
 \end{document}
