@@ -7,11 +7,23 @@
       "skillPath": "skills/academic-cv-builder/SKILL.md",
       "computedHash": "10dfddb1d7d01fdbec8e965841c1de42b193e5af67d2570f24d3469ece4ded3b"
     },
+    "application-form-filler": {
+      "source": "paramchoudhary/resumeskills",
+      "sourceType": "github",
+      "skillPath": "skills/application-form-filler/SKILL.md",
+      "computedHash": "65d16042daefd3c84b6ea02a7a689e6889289902af5b6b3cd1a5d120d78911a5"
+    },
     "career-changer-translator": {
       "source": "paramchoudhary/resumeskills",
       "sourceType": "github",
       "skillPath": "skills/career-changer-translator/SKILL.md",
       "computedHash": "3ee269bf946090ef6c88fd516e1e0d76a5f47ff4379a9163bb409d7210f6753f"
+    },
+    "cold-email-writer": {
+      "source": "paramchoudhary/resumeskills",
+      "sourceType": "github",
+      "skillPath": "skills/cold-email-writer/SKILL.md",
+      "computedHash": "719e80c87fdf3a5c063bf99f534ce02fc56474f04d7d176adbe242d350e3a729"
     },
     "cover-letter-generator": {
       "source": "paramchoudhary/resumeskills",
