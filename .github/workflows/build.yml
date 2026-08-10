@@ -8,24 +8,29 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      # Edit here with the names of your latex file and directory (can use ".")
-      DIR: .
-      FILE: cv
+    strategy:
+      matrix:
+        include:
+          - source: cv.tex
+            output: cv.pdf
+            artifact: Laxman_KR_Resume.pdf
+          - source: cv_lwd.tex
+            output: cv_lwd.pdf
+            artifact: Laxman_KR_Job_Resume_LWD.pdf
     steps:
       - name: Set up Git repository
         uses: actions/checkout@v4
-      - name: cv
+      - name: Build ${{ matrix.artifact }}
         uses: dante-ev/latex-action@latest
         with:
-          root_file: ${{ env.FILE }}
-          working_directory: ${{ env.DIR }}
-      - name: move
-        run: mkdir -p github_artifacts && mv ${{ env.DIR }}/${{ env.FILE }}.pdf ./github_artifacts/
-      - name: Upload pdf as artifact
+          root_file: ${{ matrix.source }}
+          working_directory: .
+      - name: Package PDF
+        run: mkdir -p github_artifacts && mv ${{ matrix.output }} github_artifacts/${{ matrix.artifact }}
+      - name: Upload PDF artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.FILE }}.pdf
+          name: ${{ matrix.artifact }}
           path: ./github_artifacts
   deploy:
     needs: [build]
@@ -36,8 +41,8 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           path: github_artifacts
-      - name: move
-        run: mkdir -p github_deploy && mv github_artifacts/*/* github_deploy && mv github_deploy/cv.pdf github_deploy/Laxman_KR_Resume.pdf
+      - name: Prepare published PDFs
+        run: mkdir -p github_deploy && mv github_artifacts/*/* github_deploy/
       - name: deploy on orphan branch
         uses: peaceiris/actions-gh-pages@v4
         with:

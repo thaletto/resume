@@ -1,0 +1,18 @@
+# LaTeX build artifacts
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.run.xml
+*.synctex.gz
+*.toc
+
+# Generated resume PDF
+Laxman_KR_Resume.pdf
+Laxman_KR_Job_Resume_LWD.pdf
+cv.pdf
+cv_lwd.pdf
