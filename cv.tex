@@ -25,7 +25,7 @@
   \pdfgentounicode=1
 \fi
 
-% Optional icon/mono fonts — skip if unavailable (keeps local tectonic builds simple)
+% Optional icon/mono fonts - skip if unavailable (keeps local tectonic builds simple)
 \IfFileExists{fontawesome5.sty}{\usepackage{fontawesome5}}{}
 \IfFileExists{FiraMono.sty}{\usepackage[scale=0.90,lf]{FiraMono}}{}
 
@@ -147,7 +147,7 @@
 %-----------SUMMARY-----------
 \section{SUMMARY}
 \small{
-AI Engineer specializing in Generative AI, multi-agent systems, RAG, and full-stack AI products. Builds production AI systems and developer tooling in Python and TypeScript, including agent workflows, retrieval pipelines, and open-source packages for npm and PyPI. Contributed to Vercel's AI Elements.
+Generative AI Engineer with production experience building Python-based RAG, AI-agent, and intelligent-automation systems. Delivers end-to-end retrieval pipelines covering document ingestion, embeddings, vector search, tool calling, and REST integrations with FastAPI, Qdrant, and cloud-native services. Also builds full-stack AI products and open-source developer tooling in TypeScript and Python; contributor to Vercel AI Elements.
 }
 
 %-----------TECHNICAL SKILLS-----------
@@ -155,11 +155,11 @@ AI Engineer specializing in Generative AI, multi-agent systems, RAG, and full-st
 \begin{itemize}[leftmargin=0in, label={}, itemsep=0pt, parsep=0pt]
     \small{
       \item{
-        \textbf{Languages}{: Python, TypeScript, Go, JavaScript, SQL}\vspace{2pt} \\
-        \textbf{Frameworks}{: Next.js, React, FastAPI, Effect TS, TanStack Start, Node.js, Express}\vspace{2pt} \\
-        \textbf{AI \& Agents}{: AutoGen, LangGraph, LangChain, Google ADK, AI SDK, MCP, RAG, agent orchestration, tool calling, Qdrant, Pinecone}\vspace{2pt} \\
-        \textbf{Databases}{: PostgreSQL, Redis, MongoDB, SQLite}\vspace{2pt} \\
-        \textbf{Cloud \& DevOps}{: AWS Lambda, Cloudflare, Docker, Kubernetes, Google Cloud, Grafana Loki, CI/CD}
+        \textbf{Languages}{: Python, TypeScript, SQL, Go, JavaScript}\vspace{2pt} \\
+        \textbf{Generative AI}{: RAG, embeddings, vector search, agent orchestration, tool calling, MCP}\vspace{2pt} \\
+        \textbf{AI Frameworks \& Stores}{: AutoGen, LangGraph, LangChain, Google ADK, AI SDK, Qdrant, Pinecone}\vspace{2pt} \\
+        \textbf{Backend \& Data}{: FastAPI, REST APIs, PostgreSQL, Redis, MongoDB, SQLite, Node.js, Express}\vspace{2pt} \\
+        \textbf{Frontend \& Platform}{: Next.js, React, TanStack Start, Effect TS, AWS Lambda, Google Cloud, Docker, Kubernetes, Cloudflare, Grafana Loki, CI/CD}
       }
     }
 \end{itemize}
@@ -172,12 +172,12 @@ AI Engineer specializing in Generative AI, multi-agent systems, RAG, and full-st
 {Tata Consultancy Services}{Nov 2024 -- Present}
 {AI Engineer}{Chennai, TN}
 \resumeItemListStart
-\resumeItem{Owned production incident automation in Python, integrating Grafana Loki anomaly signals with ServiceNow ticket creation and cutting operational \textbf{MTTR by 63\%}.}
-\resumeItem{Automated SOP-assisted incident resolution through semantic retrieval over Qdrant, reducing manual investigation across operations workflows.}
-\resumeItem{Shipped a Next.js operations dashboard with progressive autonomy, coordinating human-resolved, approval-gated, and fully automated incident paths.}
+\resumeItem{Built Python-based production incident automation that integrates Grafana Loki anomaly signals with ServiceNow REST APIs, cutting operational \textbf{MTTR by 63\%}.}
+\resumeItem{Developed an SOP-assisted RAG workflow using Qdrant semantic retrieval, reducing manual investigation across operations workflows.}
+\resumeItem{Shipped a Next.js operations dashboard for human-resolved, approval-gated, and fully automated AI-agent incident paths.}
 \resumeItem{Led a migration of \textbf{50+ modules} from a monolithic Next.js app, halving build time and raising deployment throughput 2.5x.}
 \resumeItem{Partnered with the Google Cloud team to ship a platform representing TCS at \textbf{Google Cloud Next 2026}, showcasing \textbf{120+ AI offerings} to Google and TCS sales teams.}
-\resumeItem{Owned CI/CD across infrastructure, sales, and business analysis teams, supporting \textbf{25+ production deploys/month} with zero critical rollbacks.}
+\resumeItem{Owned CI/CD across infrastructure, sales, and business-analysis teams, supporting \textbf{25+ production deploys/month} with zero critical rollbacks.}
 \resumeItemListEnd
 
 \resumeSubHeadingListEnd
@@ -193,17 +193,17 @@ AI Engineer specializing in Generative AI, multi-agent systems, RAG, and full-st
 {Agentic AMS Platform}{Feb 2025 -- Jan 2026}
 {AutoGen, FastAPI, MCP, Qdrant, Grafana Loki, ServiceNow}{\href{https://laxmankr.vercel.app/projects/ams}{Case Study}}
 \resumeItemListStart
-\resumeItem{Designed a multi-agent incident loop on Microsoft AutoGen + FastAPI that detects, diagnoses, and remediates production failures end-to-end through MCP tool access.}
-\resumeItem{Built an observability agent that ingests Grafana Loki alerts over WebSockets, deduplicates ServiceNow tickets, and drives document ingestion, chunking, embeddings, and semantic retrieval through a Qdrant RAG index.}
-\resumeItem{Implemented a three-agent Planning-Executor-Validator flow with a \textbf{human-in-the-loop} gate for infrastructure rollbacks, structured validation, and automated pod health checks.}
+\resumeItem{Designed a FastAPI and Microsoft AutoGen multi-agent system that detects, diagnoses, and remediates production failures through MCP-enabled tool calling.}
+\resumeItem{Built an observability agent that ingests Grafana Loki alerts over WebSockets, deduplicates ServiceNow tickets, and runs document ingestion, chunking, embeddings, and semantic retrieval through a Qdrant RAG index.}
+\resumeItem{Implemented a Planning--Executor--Validator agent workflow with \textbf{human-in-the-loop} approval for infrastructure rollbacks, structured validation, and automated pod health checks.}
 \resumeItemListEnd
 
 \resumeSubheading
 {Google GTM Portal}{Jan 2026 -- Apr 2026}
 {Next.js, FastAPI, GCS, Google Cloud}{\href{https://thaletto.vercel.app/projects/google-gtm-portal}{Case Study}}
 \resumeItemListStart
-\resumeItem{Architected and built the platform with a typed FastAPI + GCS catalog backend and Next.js frontend, delivering sub-second loads and a 96\% Lighthouse score.}
-\resumeItem{Implemented hybrid search combining keyword and vector retrieval for fast, relevant discovery across the AI offering catalog.}
+\resumeItem{Architected a typed FastAPI and Google Cloud Storage catalog backend with a Next.js frontend, delivering sub-second loads and a 96\% Lighthouse score.}
+\resumeItem{Implemented hybrid keyword and vector retrieval for fast, relevant discovery across an AI offering catalog of 120+ entries.}
 \resumeItemListEnd
 
 \newpage
