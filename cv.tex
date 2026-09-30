@@ -19,6 +19,7 @@
 \usepackage[english]{babel}
 \usepackage{tabularx}
 \usepackage{ragged2e}
+\usepackage{setspace}
 
 % pdfTeX only (ignored on XeTeX/Tectonic/LuaTeX)
 \ifdefined\pdfgentounicode
@@ -59,8 +60,8 @@
 \addtolength{\oddsidemargin}{-0.5in}
 \addtolength{\evensidemargin}{0in}
 \addtolength{\textwidth}{1in}
-\addtolength{\topmargin}{-0.7in}
-\addtolength{\textheight}{1.4in}
+\addtolength{\topmargin}{-0.8in}
+\addtolength{\textheight}{1.6in}
 
 \urlstyle{same}
 
@@ -128,6 +129,7 @@
 %%%%%%  RESUME STARTS HERE  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{document}
+\setstretch{1.3}
 
 %----------HEADING----------
 \begin{center}
@@ -146,18 +148,19 @@
 
 %-----------SUMMARY-----------
 \section{SUMMARY}
+\begin{justify}
 \small{
-Generative AI Engineer with production experience building Python and FastAPI systems for agentic incident automation, RAG, and intelligent workflows. Experienced in designing end-to-end retrieval pipelines spanning document ingestion, embeddings, hybrid and vector search, MCP-enabled tool calling, and REST integrations with Qdrant and cloud-native services. Builds full-stack AI products and open-source developer tooling using TypeScript and Python, while leveraging Claude Code, OpenAI Codex, and GitHub Copilot for AI-assisted implementation, debugging, refactoring, and development workflows.
+Generative AI Engineer with experience building and shipping AI-powered systems and products. I work mainly with Python, FastAPI, and TypeScript, with a focus on agentic workflows, RAG, automation, and backend systems. My experience includes building production systems for incident automation, developing full-stack AI applications, and creating open-source developer tools.
 }
+\end{justify}
 
 %-----------TECHNICAL SKILLS-----------
 \section{TECHNICAL SKILLS}
 \begin{itemize}[leftmargin=0in, label={}, itemsep=0pt, parsep=0pt]
     \small{
       \item{
-        \textbf{Languages}{: Python, TypeScript, SQL, Go, JavaScript}\vspace{2pt} \\
-        \textbf{Generative AI}{: LLMs, Prompt Engineering, RAG, Text-to-SQL, Embeddings, Vector Search, Agent Orchestration, Tool Calling, MCP}\vspace{2pt} \\
-        \textbf{AI Frameworks \& Tools}{: Claude Code, OpenAI Codex, Gemini, AutoGen, LangGraph, LangChain, Google ADK, AI SDK, Qdrant, Pinecone}\vspace{2pt} \\
+        \textbf{Languages}{: Python, TypeScript, JavaScript, Go, SQL}\vspace{2pt} \\
+        \textbf{AI Frameworks \& Tools}{: AutoGen, LangGraph, LangChain, Google ADK, AI SDK, Qdrant, Pinecone, Prompt Engineering, MCP, RAG, LLMs, Claude Code, OpenAI Codex}\vspace{2pt} \\
         \textbf{Backend \& Data}{: FastAPI, Flask, REST APIs, PostgreSQL, MSSQL, Redis, MongoDB, SQLite, Node.js, Express}\vspace{2pt} \\
         \textbf{Frontend \& Platform}{: Next.js, React, TanStack Start, Effect TS, AWS Lambda, Google Cloud, Docker, Kubernetes, Cloudflare, Grafana Loki, GitLab CI/CD, CI/CD}
       }
@@ -166,89 +169,85 @@ Generative AI Engineer with production experience building Python and FastAPI sy
 
 %-----------WORK EXPERIENCE-----------
 \section{WORK EXPERIENCE}
+\begin{spacing}{1.15}
 \resumeSubHeadingListStart
 
 \resumeSubheading
 {Tata Consultancy Services}{Nov 2024 -- Present}
 {AI Engineer}{Chennai, TN}
 \resumeItemListStart
-\resumeItem{Built Python-based production incident automation that integrates Grafana Loki anomaly signals with ServiceNow REST APIs, cutting operational \textbf{MTTR by 63\%}.}
-\resumeItem{Reduced average incident resolution time from 25-30 minutes to 6-8 minutes by integrating a Qdrant-backed RAG context-engineering process into a multi-agent incident-resolution workflow.}
-\resumeItem{Reduced manually resolved incidents from 20 to 3-4 per month by shipping a Next.js dashboard with human-resolved, approval-gated, and automated AI-agent paths.}
-\resumeItem{Led a migration of \textbf{50+ modules} from a monolithic Next.js app, halving build time and raising deployment throughput 2.5x.}
-\resumeItem{Partnered with the Google Cloud team to ship a platform representing TCS at \textbf{Google Cloud Next 2026}, showcasing \textbf{120+ AI offerings} to Google and TCS sales teams.}
-\resumeItem{Owned CI/CD across infrastructure, sales, and business-analysis teams, supporting \textbf{25+ production deploys/month} with zero critical rollbacks.}
+\resumeItem{Built Python-based production incident automation that integrates \textbf{Grafana Loki} anomaly signals with ServiceNow REST APIs, cutting operational MTTR by 63\%.}
+\resumeItem{Reduced average incident resolution time from 25-30 minutes to 6-8 minutes by integrating a \textbf{Qdrant-backed RAG} context-engineering process into a multi-agent incident-resolution workflow.}
+\resumeItem{Led migration of a monolithic Next.js frontend (50+ modules) to a micro-frontend architecture, halving build time and raising deployment throughput 2.5x.}
+\resumeItem{Partnered with the Google Cloud team to ship a platform representing TCS at \textbf{Google Cloud Next 2026}, showcasing 120+ AI offerings to Google and TCS sales teams.}
+\resumeItem{Owned CI/CD across infrastructure, sales, and business-analysis teams, supporting 25+ production deploys/month with zero critical rollbacks.}
 \resumeItemListEnd
 
 \resumeSubHeadingListEnd
+\end{spacing}
 
 %-----------PROJECTS-----------
 % Experience owns business outcomes for AMS/GTM.
 % Projects own architecture depth + public proof links (no metric double-counting).
+\vspace{-8pt}
 \section{PROJECTS}
+\begin{spacing}{1.15}
 \resumeSubHeadingListStart
 
 \resumeProjectCategory{PROFESSIONAL}
 \resumeSubheading
-{Agentic AMS Platform}{Feb 2025 -- Jan 2026}
-{AutoGen, FastAPI, MCP, Qdrant, Grafana Loki, ServiceNow}{\href{https://laxmankr.vercel.app/projects/ams}{Case Study}}
+{Agentic AMS Platform}{Feb 2025 -- Sep 2026}
+{Python, AutoGen, FastAPI, MCP, Qdrant, Grafana Loki, ServiceNow}{\href{https://laxmankr.vercel.app/projects/ams}{Case Study}}
 \resumeItemListStart
-\resumeItem{Designed a FastAPI and Microsoft AutoGen multi-agent system that detects, diagnoses, and remediates production failures through MCP-enabled tool calling.}
-\resumeItem{Built an observability agent that ingests Grafana Loki alerts over WebSockets, deduplicates ServiceNow tickets, and runs document ingestion, chunking, embeddings, and semantic retrieval through a Qdrant RAG index.}
-\resumeItem{Implemented a Planning--Executor--Validator agent workflow with \textbf{human-in-the-loop} approval for infrastructure rollbacks, structured validation, and automated pod health checks.}
-\resumeItemListEnd
-
-\resumeSubheading
-{Google GTM Portal}{Jan 2026 -- Apr 2026}
-{Next.js, FastAPI, GCS, Google Cloud}{\href{https://thaletto.vercel.app/projects/google-gtm-portal}{Case Study}}
-\resumeItemListStart
-\resumeItem{Architected a typed FastAPI and Google Cloud Storage catalog backend with a Next.js frontend, delivering sub-second loads and a 96\% Lighthouse score.}
-\resumeItem{Implemented hybrid keyword and vector retrieval to improve discovery across a catalog of 120+ AI offerings.}
+\resumeItem{Designed a \textbf{FastAPI and Microsoft AutoGen} multi-agent system that detects, diagnoses, and remediates production failures through MCP-enabled tool calling.}
+\resumeItem{Built an observability agent that ingests \textbf{Grafana Loki} alerts over WebSockets, deduplicates ServiceNow tickets, and runs document ingestion, chunking, embeddings, and semantic retrieval through a Qdrant RAG index.}
+\resumeItem{Implemented a \textbf{Planning-Executor-Validator} agent workflow with human-in-the-loop approval for infrastructure rollbacks, structured validation, and automated pod health checks.}
 \resumeItemListEnd
 
 \newpage
+\resumeSubheading
+{Google GTM Portal}{Jan 2026 -- Apr 2026}
+{Python, Next.js, FastAPI, GCS, Google Cloud}{\href{https://thaletto.vercel.app/projects/google-gtm-portal}{Case Study}}
+\resumeItemListStart
+\resumeItem{Architected a typed FastAPI and Google Cloud Storage catalog backend with a Next.js frontend, delivering sub-second loads and a 96\% Lighthouse score.}
+\resumeItem{Implemented \textbf{hybrid keyword and vector retrieval} to improve discovery across a catalog of 120+ AI offerings.}
+\resumeItemListEnd
+
 \resumeProjectCategory{OPEN SOURCE}
 \resumeSubheading
 {Cortex}{Apr 2026 -- May 2026}
 {Effect TS, TypeScript, Pinecone, Qdrant}{\href{https://cortex-vector.vercel.app/}{Docs}}
 \resumeItemListStart
-\resumeItem{Authored an Effect-native vector database ORM with structured concurrency, typed dependency injection, and compositional error handling.}
+\resumeItem{Authored an Effect-native \textbf{vector database ORM} with structured concurrency, typed dependency injection, and compositional error handling.}
 \resumeItem{Shipped provider adapters (Zvec, PageIndex) so multi-tenant RAG pipelines stay portable across vector backends.}
-\resumeItem{Raised batch insert throughput to \textbf{3.2x baseline} using non-blocking batch stream pipelines on Pinecone and Qdrant.}
+\resumeItem{Raised batch insert throughput to 3.2x baseline using non-blocking batch stream pipelines on Pinecone and Qdrant.}
 \resumeItemListEnd
 
 \resumeSubheading
-{Ascendant}{Sep 2025 -- Apr 2026}
-{Python, Effect TS, PyPI, npm, AI Skills, AI Tools}{\href{https://ascendant-docs.vercel.app/}{Docs}}
+{Ascendant}{Sep 2025 -- Present}
+{Python, TypeScript, Effect, Agent Skills}{\href{https://ascendant-docs.vercel.app/}{Docs}}
 \resumeItemListStart
-\resumeItem{Built Ascendant, an astrology product delivered as dependency-free core libraries: a Python package on PyPI and an Effect TS-native npm package, providing high-precision ephemeris and planetary-positioning calculations.}
-\resumeItem{Published typed SDK APIs, AI agent skills, and a tools plugin (\texttt{npx skills}) for 16 divisional coordinate charts and planetary period timelines.}
-\resumeItemListEnd
-
-\resumeProjectCategory{PERSONAL}
-\resumeSubheading
-{Kite}{Mar 2026 -- Apr 2026}
-{AG-UI, AI SDK, TanStack Start, React 19}{\href{https://kite-agui.netlify.app/}{Demo}}
-\resumeItemListStart
-\resumeItem{Built an AI assistant that streams UI over the AG-UI protocol, orchestrated by an AI SDK agent in TanStack Start, rendering interactive components alongside text responses.}
-\resumeItem{Defined server-driven UI schemas with graceful fallbacks, delivering flicker-free dynamic widgets on interactive analytics views.}
+\resumeItem{Built local-first astrology SDKs: \textbf{Effect TS} (\texttt{astro-ascendant}, 600/week peak) with composable \textbf{Services/Layers}, typed \textbf{Dependency injections}, typed errors, and concurrent pipelines, plus Python on PyPI covering 16 charts, Dasha, 360-cell Ashtakavarga, and transits.}
+\resumeItem{Shipped \textbf{Agent Skill} (18 installs via skills.sh) with init/setup/analysis for 6+ hosts and 5-module calculator for KP-first grounded readings from computed charts.}
 \resumeItemListEnd
 
 \resumeSubheading
 {Retail Platform}{Jul 2024 -- Jun 2026}
 {Go, Next.js, AWS Lambda, Cloudflare D1, Workers}{\href{https://github.com/thaletto/krcrackers-go}{GitHub}}
 \resumeItemListStart
-\resumeItem{Designed 7 event-driven Go microservices on AWS Lambda (search, recommendations, notifications, orders) behind a Next.js admin/CMS for 200+ products.}
+\resumeItem{Designed 7 event-driven \textbf{Go microservices} on AWS Lambda (search, recommendations, notifications, orders) behind a Next.js admin/CMS for 200+ products.}
 \resumeItem{Used Cloudflare Edge caching, D1 databases, and Workers to absorb \textbf{10k req/min spikes}, cutting \textbf{p99 API latency from 450ms to 85ms}.}
 \resumeItemListEnd
 
 \resumeSubHeadingListEnd
+\end{spacing}
 
 %-----------ACHIEVEMENTS-----------
+\vspace{-8pt}
 \section{ACHIEVEMENTS}
 \resumeItemListStart
 \resumeItem{Vercel OSS Contributor (contributed to ai-elements, a repo of UI components for building AI web apps).}
-\resumeItem{Open Source Impact: Cortex, an Effect TS vector ORM, reached \textbf{480 npm downloads}; astro-ascendant ephemeris software is published on PyPI.}
+\resumeItem{Open Source Impact: \texttt{astro-ascendant} reached \textbf{600 npm downloads} with a mirrored Python package on PyPI; Cortex is an \textbf{Effect TS} vector database ORM.}
 \resumeItem{TCS Special Recognition Award (2025) for standout performance in the company-wide AI Ignite Hackathon.}
 \resumeItemListEnd
 
