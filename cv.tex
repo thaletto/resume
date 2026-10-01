@@ -14,7 +14,7 @@
 \usepackage[usenames,dvipsnames]{color}
 \usepackage{verbatim}
 \usepackage{enumitem}
-\usepackage[hidelinks]{hyperref}
+\usepackage[colorlinks=true]{hyperref}
 \usepackage{fancyhdr}
 \usepackage[english]{babel}
 \usepackage{tabularx}
@@ -26,13 +26,14 @@
   \pdfgentounicode=1
 \fi
 
-% Optional icon/mono fonts - skip if unavailable (keeps local tectonic builds simple)
+% Optional icons - skip if unavailable (keeps local tectonic builds simple)
 \IfFileExists{fontawesome5.sty}{\usepackage{fontawesome5}}{}
-\IfFileExists{FiraMono.sty}{\usepackage[scale=0.90,lf]{FiraMono}}{}
 
 \definecolor{light-grey}{gray}{0.83}
 \definecolor{dark-grey}{gray}{0.3}
 \definecolor{text-grey}{gray}{.08}
+\definecolor{accent}{rgb}{0.12,0.31,0.47}
+\hypersetup{urlcolor=accent,linkcolor=accent,citecolor=accent}
 
 \DeclareRobustCommand{\ebseries}{\fontseries{eb}\selectfont}
 \DeclareTextFontCommand{\texteb}{\ebseries}
@@ -46,8 +47,23 @@
   \llap{\contour{white}{#1}}%
 }
 
-\usepackage{lmodern}
-\usepackage[T1]{fontenc}
+\usepackage{fontspec}
+\setmainfont{Inter-Regular.otf}[
+  BoldFont=Inter-SemiBold.otf,
+  ItalicFont=Inter-Italic.otf,
+  BoldItalicFont=Inter-SemiBoldItalic.otf,
+  Numbers={Tabular,Lining}
+]
+\newfontfamily\headerfont{Inter-Regular.otf}[
+  BoldFont=Inter-SemiBold.otf,
+  ItalicFont=Inter-Italic.otf,
+  BoldItalicFont=Inter-SemiBoldItalic.otf
+]
+\setmonofont{Inter-Regular.otf}[
+  BoldFont=Inter-SemiBold.otf,
+  ItalicFont=Inter-Italic.otf,
+  BoldItalicFont=Inter-SemiBoldItalic.otf
+]
 
 \pagestyle{fancy}
 \fancyhf{}
@@ -69,6 +85,8 @@
 \RaggedRight
 \hbadness=10001
 \setlength{\emergencystretch}{3em}
+\hyphenpenalty=10000
+\exhyphenpenalty=10000
 \setlength{\tabcolsep}{0in}
 
 \titleformat{\section}{
@@ -134,12 +152,12 @@
 %----------HEADING----------
 \begin{center}
   \textbf{\huge Laxman K R} \\ \vspace{3pt}
-  \small \texttt{Chennai, India} {\scriptsize $|$}
-  \texttt{+91 7448657412} {\scriptsize $|$}
-  \texttt{krlaxman03@gmail.com} \\ \vspace{2pt}
-  \texttt{\href{https://linkedin.com/in/laxmanramesh}{linkedin.com/in/laxmanramesh}} {\scriptsize $|$}
-  \texttt{\href{https://github.com/thaletto}{github.com/thaletto}} {\scriptsize $|$}
-  \texttt{\href{https://laxmankr.vercel.app}{laxmankr.vercel.app}}
+  \small {\headerfont Chennai, India} {\scriptsize $|$}
+  {\headerfont +91 7448657412} {\scriptsize $|$}
+  {\headerfont krlaxman03@gmail.com} \\ \vspace{2pt}
+  {\headerfont \href{https://linkedin.com/in/laxmanramesh}{linkedin.com/in/laxmanramesh}} {\scriptsize $|$}
+  {\headerfont \href{https://github.com/thaletto}{github.com/thaletto}} {\scriptsize $|$}
+  {\headerfont \href{https://laxmankr.vercel.app}{laxmankr.vercel.app}}
   \ifdefined\LWDResume
     \\ \vspace{2pt}
     \small \texttt{Serving notice period} {\scriptsize $|$} \texttt{Available from 22 October 2026}
@@ -246,8 +264,8 @@ Generative AI Engineer with experience building and shipping AI-powered systems 
 \vspace{-8pt}
 \section{ACHIEVEMENTS}
 \resumeItemListStart
-\resumeItem{Vercel OSS Contributor (contributed to ai-elements, a repo of UI components for building AI web apps).}
-\resumeItem{Open Source Impact: \texttt{astro-ascendant} reached \textbf{600 npm downloads} with a mirrored Python package on PyPI; Cortex is an \textbf{Effect TS} vector database ORM.}
+\resumeItem{OSS Contributor to Vercel (ai-elements), OpenCode, and mattpocock/skills.}
+\resumeItem{Open Source Impact: \texttt{astro-ascendant} reached \textbf{600 npm downloads} with a mirrored Python package on PyPI.}
 \resumeItem{TCS Special Recognition Award (2025) for standout performance in the company-wide AI Ignite Hackathon.}
 \resumeItemListEnd
 
@@ -256,9 +274,9 @@ Generative AI Engineer with experience building and shipping AI-powered systems 
 \resumeSubHeadingListStart
 \resumeSubheading
 {Amrita Vishwa Vidyapeetham}{Sep 2020 -- May 2024}
-{B.Tech, Computer Science and Engineering}{Coimbatore, TN}
+{B.Tech, Computer Science and Engineering}{\href{https://doi.org/10.1007/978-3-031-99939-0_4}{Paper}}
 \resumeItemListStart
-\resumeItem{Research: complex/irregular lung nodule detection from CT scans (medical image processing).}
+\resumeItem{Research: Complex or Irregular Lung Nodule Detection from Computed Tomography Scans.}
 \resumeItemListEnd
 \resumeSubHeadingListEnd
 
