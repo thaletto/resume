@@ -25,6 +25,7 @@ jobs:
         with:
           root_file: ${{ matrix.source }}
           working_directory: .
+          args: -xelatex -latexoption=-file-line-error -latexoption=-interaction=nonstopmode
       - name: Package PDF
         run: mkdir -p github_artifacts && mv ${{ matrix.output }} github_artifacts/${{ matrix.artifact }}
       - name: Upload PDF artifact
