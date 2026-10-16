@@ -44,6 +44,8 @@ jobs:
           path: github_artifacts
       - name: Prepare published PDFs
         run: mkdir -p github_deploy && mv github_artifacts/*/* github_deploy/
+      - name: Include prebuilt Sraya resume and redirect page
+        run: mkdir -p github_deploy/sraya && cp Sraya_Rajan_Resume.pdf github_deploy/ && cp sraya/index.html github_deploy/sraya/index.html
       - name: deploy on orphan branch
         uses: peaceiris/actions-gh-pages@v4
         with:
