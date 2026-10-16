@@ -1,0 +1,273 @@
+%-------------------------
+% Resume in Latex - Sraya Rajan
+% Cloned from cv.tex (Author: Harshibar, based on https://github.com/jakeryang/resume)
+% License : MIT
+%------------------------
+
+\documentclass[letterpaper,11pt]{article}
+
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[colorlinks=true]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\usepackage{ragged2e}
+\usepackage{setspace}
+
+% pdfTeX only (ignored on XeTeX/Tectonic/LuaTeX)
+\ifdefined\pdfgentounicode
+  \pdfgentounicode=1
+\fi
+
+% Optional icons - skip if unavailable (keeps local tectonic builds simple)
+\IfFileExists{fontawesome5.sty}{\usepackage{fontawesome5}}{}
+
+\definecolor{light-grey}{gray}{0.83}
+\definecolor{dark-grey}{gray}{0.3}
+\definecolor{text-grey}{gray}{.08}
+\definecolor{accent}{rgb}{0.12,0.31,0.47}
+\hypersetup{urlcolor=accent,linkcolor=accent,citecolor=accent}
+
+\DeclareRobustCommand{\ebseries}{\fontseries{eb}\selectfont}
+\DeclareTextFontCommand{\texteb}{\ebseries}
+
+\usepackage{contour}
+\usepackage[normalem]{ulem}
+\renewcommand{\ULdepth}{1.8pt}
+\contourlength{0.8pt}
+\newcommand{\myuline}[1]{%
+  \uline{\phantom{#1}}%
+  \llap{\contour{white}{#1}}%
+}
+
+\usepackage{fontspec}
+\setmainfont{Inter-Regular.otf}[
+  BoldFont=Inter-SemiBold.otf,
+  ItalicFont=Inter-Italic.otf,
+  BoldItalicFont=Inter-SemiBoldItalic.otf,
+  Numbers={Tabular,Lining}
+]
+\newfontfamily\headerfont{Inter-Regular.otf}[
+  BoldFont=Inter-SemiBold.otf,
+  ItalicFont=Inter-Italic.otf,
+  BoldItalicFont=Inter-SemiBoldItalic.otf
+]
+\setmonofont{Inter-Regular.otf}[
+  BoldFont=Inter-SemiBold.otf,
+  ItalicFont=Inter-Italic.otf,
+  BoldItalicFont=Inter-SemiBoldItalic.otf
+]
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\setlength{\footskip}{4.1pt}
+
+% Margins: readable one-page fit without extreme compression
+\addtolength{\oddsidemargin}{-0.5in}
+\addtolength{\evensidemargin}{0in}
+\addtolength{\textwidth}{1in}
+\addtolength{\topmargin}{-0.8in}
+\addtolength{\textheight}{1.6in}
+
+\urlstyle{same}
+
+\raggedbottom
+\RaggedRight
+\hbadness=10001
+\setlength{\emergencystretch}{3em}
+\hyphenpenalty=10000
+\exhyphenpenalty=10000
+\setlength{\tabcolsep}{0in}
+
+\titleformat{\section}{
+  \bfseries \vspace{-3pt} \RaggedRight \large
+}{}{0em}{}[\color{light-grey} {\titlerule[1.5pt]} \vspace{-5pt}]
+
+%-------------------------
+% Custom commands
+\newcommand{\resumeItem}[1]{
+\item\small{
+    {#1 \vspace{0pt}}
+  }
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{2pt}
+\item
+  \begin{tabular*}{\textwidth}[t]{l@{\extracolsep{\fill}}r}
+    \textbf{#1} & {\color{dark-grey}\small #2}\vspace{0pt}\\
+    \textit{#3} & {\color{dark-grey} \small #4}\\
+  \end{tabular*}\vspace{-2pt}
+}
+
+\newcommand{\resumeSubSubheading}[2]{
+\item
+  \begin{tabular*}{\textwidth}{l@{\extracolsep{\fill}}r}
+    \textit{\small#1} & \textit{\small #2} \\
+  \end{tabular*}\vspace{-3pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+\item
+  \begin{tabular*}{\textwidth}{l@{\extracolsep{\fill}}r}
+    #1 & {\color{dark-grey}\small #2} \\
+  \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeSubItem}[1]{\resumeItem{#1}\vspace{-1pt}}
+
+\newcommand{\resumeProjectCategory}[1]{
+\item[]\vspace{2pt}\textbf{\small #1}\vspace{-4pt}
+}
+
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+
+\newcommand{\resumeSubHeadingListStart}{
+\begin{itemize}[leftmargin=0in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{
+  \end{itemize}\vspace{-2pt}}
+\newcommand{\resumeItemListStart}{
+\begin{itemize}[leftmargin=0.15in, itemsep=2pt, parsep=0pt, topsep=1pt]}
+\newcommand{\resumeItemListEnd}{
+  \end{itemize}\vspace{-1pt}}
+
+\color{text-grey}
+
+%-------------------------------------------
+%%%%%%  RESUME STARTS HERE  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\setstretch{1.15}
+
+%----------HEADING----------
+\begin{center}
+  \textbf{\huge Sraya Rajan} \\ \vspace{3pt}
+  \small {\headerfont +91 7306489129} {\scriptsize $|$}
+  {\headerfont \href{mailto:sraya02rajan@gmail.com}{sraya02rajan@gmail.com}} {\scriptsize $|$}
+  {\headerfont \href{https://www.linkedin.com/in/sraya-rajan-898847241}{linkedin.com/in/sraya-rajan-898847241}}
+\end{center}
+
+%-----------SUMMARY-----------
+\section{SUMMARY}
+\begin{justify}
+\small{
+Full-stack engineer specializing in \textbf{Python} backends and \textbf{Angular/React} front-ends, with \textbf{2+ years} shipping for a regulated financial platform at Bank of America. Delivered REST APIs, workflow-automation logic, and large-scale regulatory issue-management UIs, plus reporting automation that saved a 9-person team $\sim$45 hours/week. Comfortable owning a feature end-to-end, from backend data models and APIs to the UI people use daily.
+}
+\end{justify}
+
+%-----------TECHNICAL SKILLS-----------
+\section{TECHNICAL SKILLS}
+\begin{itemize}[leftmargin=0in, label={}, itemsep=0pt, parsep=0pt]
+    \small{
+      \item{
+        \textbf{Languages}{: Python, TypeScript, JavaScript, SQL}\vspace{2pt} \\
+        \textbf{Backend \& APIs}{: FastAPI, Flask, Django, Node.js, REST API Design, Microservices, Event-Driven Architecture}\vspace{2pt} \\
+        \textbf{Frontend}{: React.js, Next.js, Angular, HTML5, CSS, Progressive Web Apps}\vspace{2pt} \\
+        \textbf{Data \& Analytics}{: MySQL, SQL Server, Power BI, DAX, Data Visualization, Apache Spark, Hadoop}\vspace{2pt} \\
+        \textbf{Cloud \& AI}{: AWS, Google Cloud, Machine Learning, LLMs, Text Embeddings, Retrieval-Augmented Generation (RAG)}\vspace{2pt} \\
+        \textbf{Tools}{: Git, Jira, Unit Testing}
+      }
+    }
+\end{itemize}
+
+%-----------WORK EXPERIENCE-----------
+\section{WORK EXPERIENCE}
+\resumeSubHeadingListStart
+
+\resumeSubheading
+{Bank of America}{Aug 2024 -- Present}
+{Software Engineer}{Chennai, India}
+\resumeItemListStart
+\resumeItem{Cut manual effort for issue batches by 56\% across 5 task types, replacing per-issue handling with one-shot bulk runs.}
+\resumeItem{Extended a core registry framework to add \textbf{bulk actions} for regulatory issue management, letting users clear multiple issues in one batch action instead of one by one, shipped to the live platform with zero breaking changes.}
+\resumeItem{Delivered exception reassignment for the \textbf{PTE} board covering $\sim$20 reassignments per week, replacing three fragmented move flows with one consistent user experience, now in regular use by internal teams.}
+\resumeItem{Automated reporting with \textbf{SQL and Python} for a 9-person team, saving approximately 45 hours per week in manual processing.}
+\resumeItem{Kept releases safe on the legacy platform: coverage from 87\% to 94\%, 6 flaky pipeline failures eliminated, zero breaking changes in production.}
+\resumeItem{De-risked the South Korea (\textbf{KRX}) reporting go-live, validating transactions with a 3-person team for a zero-error launch.}
+\resumeItem{De-risked \textbf{RBI-CCIL} filings with a Python pre-submission validation workflow used daily with zero reported errors.}
+\resumeItemListEnd
+
+\resumeSubheading
+{Almoayyed Computers Middle East}{Jun 2024 -- Aug 2024}
+{Data Analytics Intern}{}
+\resumeItemListStart
+\resumeItem{Gave 10+ sales users self-serve visibility into performance and customer trends with 4 \textbf{Power BI dashboards}, delivered end-to-end from requirements gathering.}
+\resumeItem{Backed all 4 dashboards with reusable \textbf{SQL} extracts over 26 columns of sales and customer data, and answered 50+ ad-hoc business questions per week.}
+\resumeItemListEnd
+
+\resumeSubHeadingListEnd
+
+%-----------PROJECTS-----------
+\newpage
+\section{PROJECTS}
+\resumeSubHeadingListStart
+
+\resumeProjectCategory{PROFESSIONAL}
+\resumeSubheading
+{Bulk Transition-Orchestration APIs}{Apr 2026 -- Oct 2026}
+{Python, Flask, REST APIs}{}
+\resumeItemListStart
+\resumeItem{Built transition-orchestration logic in \textbf{Python/Flask}: a \textbf{dynamic task-to-transition map} routes each bulk job to the right transition across 5 task types, processing multiple issues per batch run.}
+\resumeItem{Extended the registry framework's action model with additive \textbf{bulk operations}, keeping the change backward compatible so the live system shipped with zero breaking changes.}
+\resumeItem{Verified transitions for all 5 task types across mixed-success and failure scenarios, with per-issue error reporting and regression tests on single-issue closure.}
+\resumeItemListEnd
+
+\resumeSubheading
+{RBI-CCIL Transaction-Override Validation}{Jan 2025 -- Mar 2026}
+{Python}{}
+\resumeItemListStart
+\resumeItem{Built a Python pre-submission \textbf{validation workflow} that checks transaction fields against business rules and reference data, flags invalid values, and creates an overriding transaction when the original is valid.}
+\resumeItem{Surfaced ACK/NACK status with rejection messages; on ACK the acknowledged event ID goes to a downstream team, on NACK the workflow stops for correction. Used daily in production with zero reported errors.}
+\resumeItemListEnd
+
+\resumeSubheading
+{PTE Exception Reassignment}{Aug 2024 -- Dec 2024}
+{Python, Flask, Angular, REST APIs}{}
+\resumeItemListStart
+\resumeItem{Collapsed the 3-step closure flow into a single UI action that performs the full sequence in one go.}
+\resumeItem{Built a Flask \textbf{ID-resolution API} fronted by an Angular integration: one reassignment contract serving move-selected, move-filtered, and move-all flows at $\sim$20 reassignments per week.}
+\resumeItem{Tested valid, missing, and invalid IDs across all three flows with regression coverage; deployed with a zero-error release.}
+\resumeItemListEnd
+
+
+
+\resumeProjectCategory{PERSONAL}
+\resumeSubheading
+{SoundBridge}{Sep 2023 -- Jan 2024}
+{React.js, Next.js, TypeScript, Progressive Web App}{\href{https://srayarajan-sampleprotfolio.netlify.app/sound-bridge-demo/}{Demo}}
+\resumeItemListStart
+\resumeItem{Built an accessibility-first PWA delivering real-time alarm detection (30 ms) via the Web Audio API plus speech-to-text/text-to-speech via the Web Speech API for deaf and hard-of-hearing users, across 10 sound categories.}
+\resumeItemListEnd
+
+\resumeSubHeadingListEnd
+
+%-----------EDUCATION-----------
+\vspace{-8pt}
+\section{EDUCATION}
+\resumeSubHeadingListStart
+\resumeSubheading
+{Amrita Vishwa Vidyapeetham}{2020 -- 2024}
+{BTech, Computer Science and Engineering}{Coimbatore, India}
+\resumeItemListStart
+\resumeItem{CGPA: 7.04/10}
+\resumeItemListEnd
+\resumeSubHeadingListEnd
+
+%-----------CERTIFICATIONS-----------
+\vspace{-8pt}
+\section{CERTIFICATIONS}
+\resumeItemListStart
+\resumeItem{\textbf{IBM:} Introduction to Big Data with Spark and Hadoop.}
+\resumeItem{\textbf{Google Cloud Computing Foundations:} Data, ML, and AI in Google Cloud (Credential ID: 6059269).}
+\resumeItemListEnd
+
+\end{document}
