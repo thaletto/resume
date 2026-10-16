@@ -17,6 +17,9 @@ jobs:
           - source: cv_lwd.tex
             output: cv_lwd.pdf
             artifact: Laxman_KR_Job_Resume_LWD.pdf
+          - source: sraya_rajan_cv.tex
+            output: sraya_rajan_cv.pdf
+            artifact: Sraya_Rajan_Resume.pdf
     steps:
       - name: Set up Git repository
         uses: actions/checkout@v4
@@ -44,8 +47,8 @@ jobs:
           path: github_artifacts
       - name: Prepare published PDFs
         run: mkdir -p github_deploy && mv github_artifacts/*/* github_deploy/
-      - name: Include prebuilt Sraya resume and redirect page
-        run: mkdir -p github_deploy/sraya && cp Sraya_Rajan_Resume.pdf github_deploy/ && cp sraya/index.html github_deploy/sraya/index.html
+      - name: Include Sraya redirect page
+        run: mkdir -p github_deploy/sraya && cp sraya/index.html github_deploy/sraya/index.html
       - name: deploy on orphan branch
         uses: peaceiris/actions-gh-pages@v4
         with:

@@ -11,8 +11,5 @@
 *.synctex.gz
 *.toc
 
-# Generated resume PDF
-Laxman_KR_Resume.pdf
-Laxman_KR_Job_Resume_LWD.pdf
-cv.pdf
-cv_lwd.pdf
+# Generated resume PDFs (built locally or by CI, never committed)
+*.pdf
