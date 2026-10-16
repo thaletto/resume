@@ -3,13 +3,15 @@
 # =============================================================================
 # Usage:
 #   make            Show this help (default)
-#   make all / build  Build both published resume PDFs
+#   make all / build  Build all published resume PDFs
 #   make help       Show this help
 #   make base-resume Build Laxman_KR_Resume.pdf
 #   make job-resume Build Laxman_KR_Job_Resume_LWD.pdf
+#   make sraya-resume Build Sraya_Rajan_Resume.pdf
 #   make open       Build and open the base resume
 #   make open-job-resume Build and open the LWD job resume
-#   make check      Verify both PDFs are two pages and non-empty
+#   make open-sraya-resume Build and open the Sraya resume
+#   make check      Verify all PDFs are two pages and non-empty
 #   make doctor     Show detected LaTeX engines and sources
 #   make setup      Install tectonic via Homebrew (macOS)
 #   make clean / distclean  Remove intermediates / PDFs
@@ -37,14 +39,14 @@ PYTHON   := $(shell command -v python3 2>/dev/null)
 
 help:
 	@echo ""
-	@echo "  make build              Build both published resume PDFs"
+	@echo "  make build              Build all published resume PDFs"
 	@echo "  make base-resume / pdf  Build $(BASE_PDF)"
 	@echo "  make job-resume         Build $(LWD_PDF)"
 	@echo "  make sraya-resume       Build $(SRAYA_PDF)"
 	@echo "  make open               Build and open the base resume"
 	@echo "  make open-job-resume    Build and open the LWD job resume"
 	@echo "  make watch              Rebuild the base resume on save"
-	@echo "  make check              Verify both PDFs are two pages and non-empty"
+	@echo "  make check              Verify all PDFs are two pages and non-empty"
 	@echo "  make doctor             Show sources and detected LaTeX engines"
 	@echo "  make setup              Install tectonic via Homebrew (macOS)"
 	@echo "  make clean              Remove intermediate LaTeX files"
@@ -54,6 +56,7 @@ help:
 doctor:
 	@echo "Base source: $(SRC)"
 	@echo "LWD source:  $(LWD_SRC)"
+	@echo "Sraya source: $(SRAYA_SRC)"
 	@echo "Outputs:     $(PDFS)"
 	@echo "tectonic: $(if $(TECTONIC),$(TECTONIC),not found)"
 	@echo "latexmk:  $(if $(LATEXMK),$(LATEXMK),not found)"
@@ -186,6 +189,13 @@ check: $(PDFS)
 				echo "      FAIL: expected 2 pages, got $$PAGES"; \
 				exit 1; \
 			fi; \
+		elif $(PYTHON) -c "import pymupdf" 2>/dev/null; then \
+			PAGES=$$($(PYTHON) -c "import pymupdf; print(len(pymupdf.open('$$pdf')))"); \
+			echo "      Pages: $$PAGES"; \
+			if [ "$$PAGES" != "2" ]; then \
+				echo "      FAIL: expected 2 pages, got $$PAGES"; \
+				exit 1; \
+			fi; \
 		elif [ -n "$(PYTHON)" ]; then \
 			$(PYTHON) -c "import re,sys; d=open('$$pdf','rb').read(); m=re.search(rb'/Type\\s*/Pages.*?/Count\\s+(\\d+)', d, re.S); n=int(m.group(1)) if m else -1; print(f'      Pages (approx): {n}'); sys.exit(0 if n==2 else 1)" \
 				|| { echo "      FAIL: expected 2 pages"; exit 1; }; \
@@ -219,5 +229,5 @@ clean:
 	@echo "==> cleaned intermediates"
 
 distclean: clean
-	@rm -f $(PDFS) cv.pdf cv_lwd.pdf
+	@rm -f $(PDFS) cv.pdf cv_lwd.pdf sraya_rajan_cv.pdf
 	@echo "==> removed generated PDFs"
