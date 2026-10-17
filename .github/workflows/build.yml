@@ -14,9 +14,6 @@ jobs:
           - source: cv.tex
             output: cv.pdf
             artifact: Laxman_KR_Resume.pdf
-          - source: cv_lwd.tex
-            output: cv_lwd.pdf
-            artifact: Laxman_KR_Job_Resume_LWD.pdf
           - source: sraya_rajan_cv.tex
             output: sraya_rajan_cv.pdf
             artifact: Sraya_Rajan_Resume.pdf

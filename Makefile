@@ -6,10 +6,8 @@
 #   make all / build  Build all published resume PDFs
 #   make help       Show this help
 #   make base-resume Build Laxman_KR_Resume.pdf
-#   make job-resume Build Laxman_KR_Job_Resume_LWD.pdf
 #   make sraya-resume Build Sraya_Rajan_Resume.pdf
 #   make open       Build and open the base resume
-#   make open-job-resume Build and open the LWD job resume
 #   make open-sraya-resume Build and open the Sraya resume
 #   make check      Verify all PDFs are two pages and non-empty
 #   make doctor     Show detected LaTeX engines and sources
@@ -18,12 +16,10 @@
 # =============================================================================
 
 SRC       := cv.tex
-LWD_SRC   := cv_lwd.tex
 SRAYA_SRC := sraya_rajan_cv.tex
 BASE_PDF  := Laxman_KR_Resume.pdf
-LWD_PDF   := Laxman_KR_Job_Resume_LWD.pdf
 SRAYA_PDF := Sraya_Rajan_Resume.pdf
-PDFS      := $(BASE_PDF) $(LWD_PDF) $(SRAYA_PDF)
+PDFS      := $(BASE_PDF) $(SRAYA_PDF)
 OUT_DIR   := .
 
 # Detect available engines (tectonic preferred — single binary, auto-fetches packages)
@@ -33,7 +29,7 @@ PDFLATEX := $(shell command -v pdflatex 2>/dev/null)
 PDFINFO  := $(shell command -v pdfinfo 2>/dev/null)
 PYTHON   := $(shell command -v python3 2>/dev/null)
 
-.PHONY: all build pdf base-resume job-resume sraya-resume open open-job-resume open-sraya-resume watch check clean distclean help doctor setup
+.PHONY: all build pdf base-resume sraya-resume open open-sraya-resume watch check clean distclean help doctor setup
 
 .DEFAULT_GOAL := help
 
@@ -41,10 +37,8 @@ help:
 	@echo ""
 	@echo "  make build              Build all published resume PDFs"
 	@echo "  make base-resume / pdf  Build $(BASE_PDF)"
-	@echo "  make job-resume         Build $(LWD_PDF)"
 	@echo "  make sraya-resume       Build $(SRAYA_PDF)"
 	@echo "  make open               Build and open the base resume"
-	@echo "  make open-job-resume    Build and open the LWD job resume"
 	@echo "  make watch              Rebuild the base resume on save"
 	@echo "  make check              Verify all PDFs are two pages and non-empty"
 	@echo "  make doctor             Show sources and detected LaTeX engines"
@@ -55,7 +49,6 @@ help:
 
 doctor:
 	@echo "Base source: $(SRC)"
-	@echo "LWD source:  $(LWD_SRC)"
 	@echo "Sraya source: $(SRAYA_SRC)"
 	@echo "Outputs:     $(PDFS)"
 	@echo "tectonic: $(if $(TECTONIC),$(TECTONIC),not found)"
@@ -82,8 +75,6 @@ build: $(PDFS)
 pdf: $(BASE_PDF)
 
 base-resume: $(BASE_PDF)
-
-job-resume: $(LWD_PDF)
 
 sraya-resume: $(SRAYA_PDF)
 
@@ -128,30 +119,8 @@ $(BASE_PDF): $(SRC)
 	fi
 	@echo "==> Wrote $(BASE_PDF)"
 
-$(LWD_PDF): $(SRC) $(LWD_SRC)
-	@if [ -n "$(TECTONIC)" ]; then \
-		echo "==> Building LWD job resume with tectonic"; \
-		tectonic -o $(OUT_DIR) --keep-logs --keep-intermediates $(LWD_SRC); \
-		mv -f $(OUT_DIR)/cv_lwd.pdf $(LWD_PDF); \
-	elif [ -n "$(LATEXMK)" ]; then \
-		echo "==> Building LWD job resume with latexmk"; \
-		latexmk -pdf -interaction=nonstopmode -jobname=$(basename $(LWD_PDF)) $(LWD_SRC); \
-	elif [ -n "$(PDFLATEX)" ]; then \
-		echo "==> Building LWD job resume with pdflatex (2 passes)"; \
-		pdflatex -interaction=nonstopmode -jobname=$(basename $(LWD_PDF)) $(LWD_SRC); \
-		pdflatex -interaction=nonstopmode -jobname=$(basename $(LWD_PDF)) $(LWD_SRC); \
-	else \
-		echo "No LaTeX engine found."; \
-		echo "  macOS: make setup"; \
-		exit 1; \
-	fi
-	@echo "==> Wrote $(LWD_PDF)"
-
 open: $(BASE_PDF)
 	@open $(BASE_PDF) 2>/dev/null || xdg-open $(BASE_PDF) 2>/dev/null || echo "Open $(BASE_PDF) manually"
-
-open-job-resume: $(LWD_PDF)
-	@open $(LWD_PDF) 2>/dev/null || xdg-open $(LWD_PDF) 2>/dev/null || echo "Open $(LWD_PDF) manually"
 
 # -----------------------------------------------------------------------------
 # Watch
@@ -206,7 +175,7 @@ check: $(PDFS)
 		echo "      Size: $$SIZE bytes"; \
 		if [ "$$SIZE" -lt 1000 ]; then echo "      FAIL: PDF too small"; exit 1; fi; \
 	done
-	@$(PYTHON) -c "import pathlib; t=pathlib.Path('$(SRC)').read_text(); assert r'\\ifdefined\\LWDResume' in t; assert t.count(r'\\textbf{') < 45; print('    PASS: conditional LWD header and bold-span limit')" 2>/dev/null || true
+	@$(PYTHON) -c "import pathlib; t=pathlib.Path('$(SRC)').read_text(); assert t.count(r'\\textbf{') < 45; print('    PASS: bold-span limit')" 2>/dev/null || true
 	@echo "==> check OK"
 
 # -----------------------------------------------------------------------------
@@ -215,19 +184,14 @@ check: $(PDFS)
 
 clean:
 	@rm -f cv.aux cv.bbl cv.bcf cv.fdb_latexmk cv.fls cv.log cv.out cv.run.xml cv.blg cv.toc cv.synctex.gz
-	@rm -f cv_lwd.aux cv_lwd.bbl cv_lwd.bcf cv_lwd.fdb_latexmk cv_lwd.fls cv_lwd.log cv_lwd.out cv_lwd.run.xml cv_lwd.blg cv_lwd.toc cv_lwd.synctex.gz
 	@rm -f sraya_rajan_cv.aux sraya_rajan_cv.bbl sraya_rajan_cv.bcf sraya_rajan_cv.fdb_latexmk sraya_rajan_cv.fls sraya_rajan_cv.log sraya_rajan_cv.out sraya_rajan_cv.run.xml sraya_rajan_cv.blg sraya_rajan_cv.toc sraya_rajan_cv.synctex.gz
 	@rm -f $(basename $(BASE_PDF)).aux $(basename $(BASE_PDF)).bbl $(basename $(BASE_PDF)).bcf \
 		$(basename $(BASE_PDF)).fdb_latexmk $(basename $(BASE_PDF)).fls $(basename $(BASE_PDF)).log \
 		$(basename $(BASE_PDF)).out $(basename $(BASE_PDF)).run.xml $(basename $(BASE_PDF)).blg \
 		$(basename $(BASE_PDF)).toc $(basename $(BASE_PDF)).synctex.gz
-	@rm -f $(basename $(LWD_PDF)).aux $(basename $(LWD_PDF)).bbl $(basename $(LWD_PDF)).bcf \
-		$(basename $(LWD_PDF)).fdb_latexmk $(basename $(LWD_PDF)).fls $(basename $(LWD_PDF)).log \
-		$(basename $(LWD_PDF)).out $(basename $(LWD_PDF)).run.xml $(basename $(LWD_PDF)).blg \
-		$(basename $(LWD_PDF)).toc $(basename $(LWD_PDF)).synctex.gz
 	@rm -f *.fdb_latexmk *.fls *~
 	@echo "==> cleaned intermediates"
 
 distclean: clean
-	@rm -f $(PDFS) cv.pdf cv_lwd.pdf sraya_rajan_cv.pdf
+	@rm -f $(PDFS) cv.pdf sraya_rajan_cv.pdf
 	@echo "==> removed generated PDFs"
