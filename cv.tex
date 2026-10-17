@@ -20,6 +20,13 @@
 \usepackage{tabularx}
 \usepackage{ragged2e}
 \usepackage{setspace}
+\usepackage{graphicx}
+
+% Claude Certified Developer badge (header mark)
+\newcommand{\claudeBadgeSize}{1.8cm}
+\newcommand{\claudeBadge}[1]{%
+  \raisebox{-0.26\height}{\includegraphics[height=#1]{claude-certified-developer-foundations.png}}%
+}
 
 % pdfTeX only (ignored on XeTeX/Tectonic/LuaTeX)
 \ifdefined\pdfgentounicode
@@ -150,19 +157,19 @@
 \setstretch{1.3}
 
 %----------HEADING----------
-\begin{center}
-  \textbf{\huge Laxman K R} \\ \vspace{3pt}
-  \small {\headerfont Chennai, India} {\scriptsize $|$}
+\noindent
+\begin{minipage}[c]{0.8\textwidth}\RaggedRight
+  \textbf{\huge Laxman K R}\par\vspace{3pt}
+  \small {\headerfont \textbf{AI Engineer}} {\scriptsize $|$}
   {\headerfont +91 7448657412} {\scriptsize $|$}
-  {\headerfont krlaxman03@gmail.com} \\ \vspace{2pt}
+  {\headerfont krlaxman03@gmail.com}\par\vspace{2pt}
   {\headerfont \href{https://linkedin.com/in/laxmanramesh}{linkedin.com/in/laxmanramesh}} {\scriptsize $|$}
   {\headerfont \href{https://github.com/thaletto}{github.com/thaletto}} {\scriptsize $|$}
   {\headerfont \href{https://laxmankr.vercel.app}{laxmankr.vercel.app}}
-  \ifdefined\LWDResume
-    \\ \vspace{2pt}
-    \small \texttt{Serving notice period} {\scriptsize $|$} \texttt{Available from 22 October 2026}
-  \fi
-\end{center}
+\end{minipage}\hfill
+\begin{minipage}[c]{\claudeBadgeSize}\RaggedLeft
+  \claudeBadge{\claudeBadgeSize}
+\end{minipage}
 
 %-----------SUMMARY-----------
 \section{SUMMARY}
@@ -214,7 +221,7 @@ Generative AI Engineer with experience building and shipping AI-powered systems 
 
 \resumeProjectCategory{PROFESSIONAL}
 \resumeSubheading
-{Agentic AMS Platform}{Feb 2025 -- Sep 2026}
+{Agentic AMS Platform}{Feb 2025 -- Oct 2026}
 {Python, AutoGen, FastAPI, MCP, Qdrant, Grafana Loki, ServiceNow}{\href{https://laxmankr.vercel.app/projects/ams}{Case Study}}
 \resumeItemListStart
 \resumeItem{Designed a \textbf{FastAPI and Microsoft AutoGen} multi-agent system that detects, diagnoses, and remediates production failures through MCP-enabled tool calling.}
@@ -233,20 +240,20 @@ Generative AI Engineer with experience building and shipping AI-powered systems 
 
 \resumeProjectCategory{OPEN SOURCE}
 \resumeSubheading
+{Ascendant}{Sep 2025 -- Oct 2026}
+{Python, TypeScript, Effect TS, Agent Skills}{\href{https://ascendant-docs.vercel.app/}{Docs}}
+\resumeItemListStart
+\resumeItem{Built local-first astrology SDKs in \textbf{Effect TS} (\texttt{astro-ascendant}, 600/week peak) and Python (PyPI) for deterministic chart computation with typed errors, dependency injection, and concurrent pipelines.}
+\resumeItem{Shipped \textbf{Agent Skill} with \textbf{Claude Code}, \textbf{Codex}, and \textbf{OpenCode} plugins for setup and analysis workflows that ground LLM output in computed data.}
+\resumeItemListEnd
+
+\resumeSubheading
 {Cortex}{Apr 2026 -- May 2026}
 {Effect TS, TypeScript, Pinecone, Qdrant}{\href{https://cortex-vector.vercel.app/}{Docs}}
 \resumeItemListStart
 \resumeItem{Authored an Effect-native \textbf{vector database ORM} with structured concurrency, typed dependency injection, and compositional error handling.}
 \resumeItem{Shipped provider adapters (Zvec, PageIndex) so multi-tenant RAG pipelines stay portable across vector backends.}
 \resumeItem{Raised batch insert throughput to 3.2x baseline using non-blocking batch stream pipelines on Pinecone and Qdrant.}
-\resumeItemListEnd
-
-\resumeSubheading
-{Ascendant}{Sep 2025 -- Present}
-{Python, TypeScript, Effect TS, Agent Skills}{\href{https://ascendant-docs.vercel.app/}{Docs}}
-\resumeItemListStart
-\resumeItem{Built local-first astrology SDKs in \textbf{Effect TS} (\texttt{astro-ascendant}, 600/week peak) and Python (PyPI) for deterministic chart computation with typed errors, dependency injection, and concurrent pipelines.}
-\resumeItem{Shipped \textbf{Agent Skill} with \textbf{Claude Code}, \textbf{Codex}, and \textbf{OpenCode} plugins for setup and analysis workflows that ground LLM output in computed data.}
 \resumeItemListEnd
 
 \resumeSubheading
@@ -269,7 +276,22 @@ Generative AI Engineer with experience building and shipping AI-powered systems 
 \resumeItem{TCS Special Recognition Award (2025) for standout performance in the company-wide AI Ignite Hackathon.}
 \resumeItemListEnd
 
+%-----------CERTIFICATIONS-----------
+\vspace{-8pt}
+\section{CERTIFICATIONS}
+\begin{spacing}{1.15}
+\begin{itemize}[leftmargin=0in, label={}, itemsep=0pt, parsep=0pt, topsep=1pt]
+  \item
+    \begin{tabular*}{\textwidth}[t]{@{}l@{\extracolsep{\fill}}r@{}}
+      \textbf{\small Claude Certified Developer: Foundations} \hspace{4pt}\textit{\small Anthropic} & {\color{dark-grey}\small Oct 2026} \\[3pt]
+      \textbf{\small MCP for Production Automation} \hspace{4pt}\textit{\small HuggingFace} & {\color{dark-grey}\small Jun 2025} \\[3pt]
+      \textbf{\small Advanced React} \hspace{4pt}\textit{\small Meta} & {\color{dark-grey}\small Feb 2024}
+    \end{tabular*}
+\end{itemize}
+\end{spacing}
+
 %-----------EDUCATION-----------
+\vspace{-8pt}
 \section{EDUCATION}
 \resumeSubHeadingListStart
 \resumeSubheading
