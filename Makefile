@@ -2,59 +2,88 @@
 # Resume — local build
 # =============================================================================
 # Usage:
-#   make            Show this help (default)
-#   make all / build  Build all published resume PDFs
-#   make help       Show this help
-#   make base-resume Build Laxman_KR_Resume.pdf
-#   make sraya-resume Build Sraya_Rajan_Resume.pdf
-#   make open       Build and open the base resume
-#   make open-sraya-resume Build and open the Sraya resume
-#   make check      Verify all PDFs are two pages and non-empty
-#   make doctor     Show detected LaTeX engines and sources
+#   make            Show available targets
+#   make build      Build every resume PDF into dist/
+#   make laxman     Build dist/Laxman_KR_Resume.pdf
+#   make sraya      Build dist/Sraya_Rajan_Resume.pdf
+#   make open       Build and open the Laxman resume
+#   make watch      Rebuild the Laxman resume on save
+#   make check      Verify PDFs are non-empty and two pages
+#   make doctor     Show sources and detected LaTeX engines
 #   make setup      Install tectonic via Homebrew (macOS)
-#   make clean / distclean  Remove intermediates / PDFs
+#   make clean      Remove build intermediates (keeps PDFs)
+#   make distclean  Remove intermediates and PDFs
 # =============================================================================
 
-SRC       := cv.tex
-SRAYA_SRC := sraya_rajan_cv.tex
-BASE_PDF  := Laxman_KR_Resume.pdf
-SRAYA_PDF := Sraya_Rajan_Resume.pdf
-PDFS      := $(BASE_PDF) $(SRAYA_PDF)
-OUT_DIR   := .
+SRC_DIR    := resumes
+OUT_DIR    := dist
+
+LAXMAN_SRC := $(SRC_DIR)/laxman-kr/cv.tex
+SRAYA_SRC  := $(SRC_DIR)/sraya-rajan/cv.tex
+LAXMAN_PDF := $(OUT_DIR)/Laxman_KR_Resume.pdf
+SRAYA_PDF  := $(OUT_DIR)/Sraya_Rajan_Resume.pdf
+PDFS       := $(LAXMAN_PDF) $(SRAYA_PDF)
+ASSETS     := assets/claude-certified-developer-foundations.png
 
 # Detect available engines (tectonic preferred — single binary, auto-fetches packages)
 TECTONIC := $(shell command -v tectonic 2>/dev/null)
 LATEXMK  := $(shell command -v latexmk 2>/dev/null)
 PDFLATEX := $(shell command -v pdflatex 2>/dev/null)
-PDFINFO  := $(shell command -v pdfinfo 2>/dev/null)
 PYTHON   := $(shell command -v python3 2>/dev/null)
 
-.PHONY: all build pdf base-resume sraya-resume open open-sraya-resume watch check clean distclean help doctor setup
-
 .DEFAULT_GOAL := help
+.PHONY: all build help laxman sraya open watch check doctor setup clean distclean
+
+# Compile $(1) with whichever engine is installed, then move the result to $(2).
+# $(3) is the label used in progress output.
+define compile
+	@mkdir -p $(OUT_DIR)
+	@if [ -n "$(TECTONIC)" ]; then \
+		echo "==> $(3): tectonic"; \
+		tectonic -o $(OUT_DIR) --keep-logs $(1); \
+		mv -f $(OUT_DIR)/$(basename $(notdir $(1))).pdf $(2); \
+	elif [ -n "$(LATEXMK)" ]; then \
+		echo "==> $(3): latexmk"; \
+		latexmk -pdf -interaction=nonstopmode -outdir=$(OUT_DIR) \
+			-jobname=$(basename $(notdir $(2))) $(1); \
+	elif [ -n "$(PDFLATEX)" ]; then \
+		echo "==> $(3): pdflatex (2 passes)"; \
+		pdflatex -interaction=nonstopmode -output-directory=$(OUT_DIR) \
+			-jobname=$(basename $(notdir $(2))) $(1) >/dev/null; \
+		pdflatex -interaction=nonstopmode -output-directory=$(OUT_DIR) \
+			-jobname=$(basename $(notdir $(2))) $(1) >/dev/null; \
+	else \
+		echo "No LaTeX engine found. macOS: make setup"; \
+		exit 1; \
+	fi
+	@echo "==> Wrote $(2)"
+endef
+
+# -----------------------------------------------------------------------------
+# Help
+# -----------------------------------------------------------------------------
 
 help:
 	@echo ""
-	@echo "  make build              Build all published resume PDFs"
-	@echo "  make base-resume / pdf  Build $(BASE_PDF)"
-	@echo "  make sraya-resume       Build $(SRAYA_PDF)"
-	@echo "  make open               Build and open the base resume"
-	@echo "  make watch              Rebuild the base resume on save"
-	@echo "  make check              Verify all PDFs are two pages and non-empty"
-	@echo "  make doctor             Show sources and detected LaTeX engines"
-	@echo "  make setup              Install tectonic via Homebrew (macOS)"
-	@echo "  make clean              Remove intermediate LaTeX files"
-	@echo "  make distclean          Remove intermediates and generated PDFs"
+	@echo "  make build       Build all resume PDFs into $(OUT_DIR)/"
+	@echo "  make laxman      Build $(LAXMAN_PDF)"
+	@echo "  make sraya       Build $(SRAYA_PDF)"
+	@echo "  make open        Build and open the Laxman resume"
+	@echo "  make watch       Rebuild the Laxman resume on save"
+	@echo "  make check       Verify PDFs are non-empty and two pages"
+	@echo "  make doctor      Show sources and detected LaTeX engines"
+	@echo "  make setup       Install tectonic via Homebrew (macOS)"
+	@echo "  make clean       Remove build intermediates (keeps PDFs)"
+	@echo "  make distclean   Remove intermediates and PDFs"
 	@echo ""
 
 doctor:
-	@echo "Base source: $(SRC)"
-	@echo "Sraya source: $(SRAYA_SRC)"
-	@echo "Outputs:     $(PDFS)"
+	@echo "Laxman source: $(LAXMAN_SRC)"
+	@echo "Sraya source:  $(SRAYA_SRC)"
+	@echo "Outputs:       $(PDFS)"
 	@echo "tectonic: $(if $(TECTONIC),$(TECTONIC),not found)"
 	@echo "latexmk:  $(if $(LATEXMK),$(LATEXMK),not found)"
 	@echo "pdflatex: $(if $(PDFLATEX),$(PDFLATEX),not found)"
-	@echo "pdfinfo:  $(if $(PDFINFO),$(PDFINFO),not found)"
 	@if [ -z "$(TECTONIC)$(LATEXMK)$(PDFLATEX)" ]; then \
 		echo ""; \
 		echo "No LaTeX engine found. Run: make setup"; \
@@ -64,84 +93,36 @@ doctor:
 setup:
 	@command -v brew >/dev/null || { echo "Homebrew required: https://brew.sh"; exit 1; }
 	brew install tectonic
-	@echo "Done. Run: make"
+	@echo "Done. Run: make build"
 
 # -----------------------------------------------------------------------------
 # Build
 # -----------------------------------------------------------------------------
 
+all: build
+
 build: $(PDFS)
 
-pdf: $(BASE_PDF)
+laxman: $(LAXMAN_PDF)
 
-base-resume: $(BASE_PDF)
+sraya: $(SRAYA_PDF)
 
-sraya-resume: $(SRAYA_PDF)
+$(LAXMAN_PDF): $(LAXMAN_SRC) $(ASSETS)
+	$(call compile,$(LAXMAN_SRC),$(LAXMAN_PDF),Laxman resume)
 
 $(SRAYA_PDF): $(SRAYA_SRC)
-	@if [ -n "$(TECTONIC)" ]; then \
-		echo "==> Building Sraya resume with tectonic"; \
-		tectonic -o $(OUT_DIR) --keep-logs --keep-intermediates $(SRAYA_SRC); \
-		mv -f $(OUT_DIR)/sraya_rajan_cv.pdf $(SRAYA_PDF); \
-	elif [ -n "$(LATEXMK)" ]; then \
-		echo "==> Building Sraya resume with latexmk"; \
-		latexmk -pdf -interaction=nonstopmode -jobname=$(basename $(SRAYA_PDF)) $(SRAYA_SRC); \
-	elif [ -n "$(PDFLATEX)" ]; then \
-		echo "==> Building Sraya resume with pdflatex (2 passes)"; \
-		pdflatex -interaction=nonstopmode -jobname=$(basename $(SRAYA_PDF)) $(SRAYA_SRC); \
-		pdflatex -interaction=nonstopmode -jobname=$(basename $(SRAYA_PDF)) $(SRAYA_SRC); \
-	else \
-		echo "No LaTeX engine found."; \
-		echo "  macOS: make setup"; \
-		exit 1; \
-	fi
-	@echo "==> Wrote $(SRAYA_PDF)"
+	$(call compile,$(SRAYA_SRC),$(SRAYA_PDF),Sraya resume)
 
-open-sraya-resume: $(SRAYA_PDF)
-	@open $(SRAYA_PDF) 2>/dev/null || xdg-open $(SRAYA_PDF) 2>/dev/null || echo "Open $(SRAYA_PDF) manually"
-
-$(BASE_PDF): $(SRC)
-	@if [ -n "$(TECTONIC)" ]; then \
-		echo "==> Building base resume with tectonic"; \
-		tectonic -o $(OUT_DIR) --keep-logs --keep-intermediates $(SRC); \
-		mv -f $(OUT_DIR)/cv.pdf $(BASE_PDF); \
-	elif [ -n "$(LATEXMK)" ]; then \
-		echo "==> Building base resume with latexmk"; \
-		latexmk -pdf -interaction=nonstopmode -jobname=$(basename $(BASE_PDF)) $(SRC); \
-	elif [ -n "$(PDFLATEX)" ]; then \
-		echo "==> Building base resume with pdflatex (2 passes)"; \
-		pdflatex -interaction=nonstopmode -jobname=$(basename $(BASE_PDF)) $(SRC); \
-		pdflatex -interaction=nonstopmode -jobname=$(basename $(BASE_PDF)) $(SRC); \
-	else \
-		echo "No LaTeX engine found."; \
-		echo "  macOS: make setup"; \
-		exit 1; \
-	fi
-	@echo "==> Wrote $(BASE_PDF)"
-
-open: $(BASE_PDF)
-	@open $(BASE_PDF) 2>/dev/null || xdg-open $(BASE_PDF) 2>/dev/null || echo "Open $(BASE_PDF) manually"
-
-# -----------------------------------------------------------------------------
-# Watch
-# -----------------------------------------------------------------------------
+open: $(LAXMAN_PDF)
+	@open $(LAXMAN_PDF) 2>/dev/null || xdg-open $(LAXMAN_PDF) 2>/dev/null \
+		|| echo "Open $(LAXMAN_PDF) manually"
 
 watch:
-	@if [ -n "$(TECTONIC)" ]; then \
-		echo "==> Watching base resume with tectonic (Ctrl+C to stop)"; \
-		tectonic -o $(OUT_DIR) --keep-logs -x watch $(SRC) 2>/dev/null \
-			|| (echo "Note: using poll loop"; \
-			    while true; do \
-			      $(MAKE) --no-print-directory base-resume; \
-			      sleep 2; \
-			    done); \
-	elif [ -n "$(LATEXMK)" ]; then \
-		echo "==> Watching base resume with latexmk (Ctrl+C to stop)"; \
-		latexmk -pdf -pvc -interaction=nonstopmode -jobname=$(basename $(BASE_PDF)) $(SRC); \
-	else \
-		echo "watch requires tectonic or latexmk. Run: make setup"; \
-		exit 1; \
-	fi
+	@echo "==> Watching $(LAXMAN_SRC) (Ctrl+C to stop)"
+	@while true; do \
+		$(MAKE) --no-print-directory -s $(LAXMAN_PDF) || true; \
+		sleep 2; \
+	done
 
 # -----------------------------------------------------------------------------
 # QA
@@ -149,33 +130,12 @@ watch:
 
 check: $(PDFS)
 	@echo "==> QA checks"
-	@for pdf in $(PDFS); do \
-		echo "    $$pdf"; \
-		if [ -n "$(PDFINFO)" ]; then \
-			PAGES=$$($(PDFINFO) "$$pdf" | awk '/^Pages:/ {print $$2}'); \
-			echo "      Pages: $$PAGES"; \
-			if [ "$$PAGES" != "2" ]; then \
-				echo "      FAIL: expected 2 pages, got $$PAGES"; \
-				exit 1; \
-			fi; \
-		elif $(PYTHON) -c "import pymupdf" 2>/dev/null; then \
-			PAGES=$$($(PYTHON) -c "import pymupdf; print(len(pymupdf.open('$$pdf')))"); \
-			echo "      Pages: $$PAGES"; \
-			if [ "$$PAGES" != "2" ]; then \
-				echo "      FAIL: expected 2 pages, got $$PAGES"; \
-				exit 1; \
-			fi; \
-		elif [ -n "$(PYTHON)" ]; then \
-			$(PYTHON) -c "import re,sys; d=open('$$pdf','rb').read(); m=re.search(rb'/Type\\s*/Pages.*?/Count\\s+(\\d+)', d, re.S); n=int(m.group(1)) if m else -1; print(f'      Pages (approx): {n}'); sys.exit(0 if n==2 else 1)" \
-				|| { echo "      FAIL: expected 2 pages"; exit 1; }; \
-		else \
-			echo "      SKIP: install poppler (pdfinfo) for page-count check"; \
-		fi; \
-		SIZE=$$(wc -c < "$$pdf" | tr -d ' '); \
-		echo "      Size: $$SIZE bytes"; \
-		if [ "$$SIZE" -lt 1000 ]; then echo "      FAIL: PDF too small"; exit 1; fi; \
-	done
-	@$(PYTHON) -c "import pathlib; t=pathlib.Path('$(SRC)').read_text(); assert t.count(r'\\textbf{') < 45; print('    PASS: bold-span limit')" 2>/dev/null || true
+	@if [ -n "$(PYTHON)" ]; then \
+		$(PYTHON) scripts/check_pdf.py $(PDFS); \
+	else \
+		echo "python3 is required for make check"; \
+		exit 1; \
+	fi
 	@echo "==> check OK"
 
 # -----------------------------------------------------------------------------
@@ -183,15 +143,13 @@ check: $(PDFS)
 # -----------------------------------------------------------------------------
 
 clean:
-	@rm -f cv.aux cv.bbl cv.bcf cv.fdb_latexmk cv.fls cv.log cv.out cv.run.xml cv.blg cv.toc cv.synctex.gz
-	@rm -f sraya_rajan_cv.aux sraya_rajan_cv.bbl sraya_rajan_cv.bcf sraya_rajan_cv.fdb_latexmk sraya_rajan_cv.fls sraya_rajan_cv.log sraya_rajan_cv.out sraya_rajan_cv.run.xml sraya_rajan_cv.blg sraya_rajan_cv.toc sraya_rajan_cv.synctex.gz
-	@rm -f $(basename $(BASE_PDF)).aux $(basename $(BASE_PDF)).bbl $(basename $(BASE_PDF)).bcf \
-		$(basename $(BASE_PDF)).fdb_latexmk $(basename $(BASE_PDF)).fls $(basename $(BASE_PDF)).log \
-		$(basename $(BASE_PDF)).out $(basename $(BASE_PDF)).run.xml $(basename $(BASE_PDF)).blg \
-		$(basename $(BASE_PDF)).toc $(basename $(BASE_PDF)).synctex.gz
-	@rm -f *.fdb_latexmk *.fls *~
+	@rm -f $(OUT_DIR)/*.aux $(OUT_DIR)/*.bbl $(OUT_DIR)/*.bcf $(OUT_DIR)/*.blg \
+		$(OUT_DIR)/*.fdb_latexmk $(OUT_DIR)/*.fls $(OUT_DIR)/*.log \
+		$(OUT_DIR)/*.out $(OUT_DIR)/*.run.xml $(OUT_DIR)/*.synctex.gz \
+		$(OUT_DIR)/*.toc $(OUT_DIR)/*.xdv
+	@rm -f *~
 	@echo "==> cleaned intermediates"
 
 distclean: clean
-	@rm -f $(PDFS) cv.pdf sraya_rajan_cv.pdf
-	@echo "==> removed generated PDFs"
+	@rm -rf $(OUT_DIR)
+	@echo "==> removed $(OUT_DIR)/"

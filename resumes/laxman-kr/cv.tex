@@ -7,20 +7,17 @@
 
 \documentclass[letterpaper,11pt]{article}
 
-\usepackage{latexsym}
 \usepackage[empty]{fullpage}
 \usepackage{titlesec}
-\usepackage{marvosym}
 \usepackage[usenames,dvipsnames]{color}
-\usepackage{verbatim}
 \usepackage{enumitem}
 \usepackage[colorlinks=true]{hyperref}
 \usepackage{fancyhdr}
 \usepackage[english]{babel}
-\usepackage{tabularx}
 \usepackage{ragged2e}
 \usepackage{setspace}
 \usepackage{graphicx}
+\graphicspath{{assets/}{../../assets/}}
 
 % Claude Certified Developer badge (header mark)
 \newcommand{\claudeBadgeSize}{1.8cm}
@@ -33,26 +30,11 @@
   \pdfgentounicode=1
 \fi
 
-% Optional icons - skip if unavailable (keeps local tectonic builds simple)
-\IfFileExists{fontawesome5.sty}{\usepackage{fontawesome5}}{}
-
 \definecolor{light-grey}{gray}{0.83}
 \definecolor{dark-grey}{gray}{0.3}
 \definecolor{text-grey}{gray}{.08}
 \definecolor{accent}{rgb}{0.12,0.31,0.47}
 \hypersetup{urlcolor=accent,linkcolor=accent,citecolor=accent}
-
-\DeclareRobustCommand{\ebseries}{\fontseries{eb}\selectfont}
-\DeclareTextFontCommand{\texteb}{\ebseries}
-
-\usepackage{contour}
-\usepackage[normalem]{ulem}
-\renewcommand{\ULdepth}{1.8pt}
-\contourlength{0.8pt}
-\newcommand{\myuline}[1]{%
-  \uline{\phantom{#1}}%
-  \llap{\contour{white}{#1}}%
-}
 
 \usepackage{fontspec}
 \setmainfont{Inter-Regular.otf}[
@@ -79,7 +61,7 @@
 \renewcommand{\footrulewidth}{0pt}
 \setlength{\footskip}{4.1pt}
 
-% Margins: readable one-page fit without extreme compression
+% Margins: readable two-page fit without extreme compression
 \addtolength{\oddsidemargin}{-0.5in}
 \addtolength{\evensidemargin}{0in}
 \addtolength{\textwidth}{1in}
@@ -102,6 +84,10 @@
 
 %-------------------------
 % Custom commands
+
+% Bullet style for the nested (second-level) lists
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+
 \newcommand{\resumeItem}[1]{
 \item\small{
     {#1 \vspace{0pt}}
@@ -117,27 +103,9 @@
   \end{tabular*}\vspace{-2pt}
 }
 
-\newcommand{\resumeSubSubheading}[2]{
-\item
-  \begin{tabular*}{\textwidth}{l@{\extracolsep{\fill}}r}
-    \textit{\small#1} & \textit{\small #2} \\
-  \end{tabular*}\vspace{-3pt}
-}
-
-\newcommand{\resumeProjectHeading}[2]{
-\item
-  \begin{tabular*}{\textwidth}{l@{\extracolsep{\fill}}r}
-    #1 & {\color{dark-grey}} \\
-  \end{tabular*}\vspace{-1pt}
-}
-
-\newcommand{\resumeSubItem}[1]{\resumeItem{#1}\vspace{-1pt}}
-
 \newcommand{\resumeProjectCategory}[1]{
 \item[]\vspace{2pt}\textbf{\small #1}\vspace{-4pt}
 }
-
-\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
 
 \newcommand{\resumeSubHeadingListStart}{
 \begin{itemize}[leftmargin=0in, label={}]}

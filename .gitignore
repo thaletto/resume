@@ -10,6 +10,14 @@
 *.run.xml
 *.synctex.gz
 *.toc
+*.xdv
 
-# Generated resume PDFs (built locally or by CI, never committed)
+# Build output and generated PDFs (built locally or by CI, never committed)
+dist/
+github_artifacts/
+github_deploy/
 *.pdf
+
+# Editor and OS noise
+.DS_Store
+*~
