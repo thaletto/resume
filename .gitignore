@@ -21,3 +21,13 @@ github_deploy/
 # Editor and OS noise
 .DS_Store
 *~
+
+# Local job-search profiles, documents, trackers, and reports
+/job-search/workspaces/
+node_modules/
+.env
+.env.*
+.claude/settings.local.json
+.tanstack/
+.vite/
+.cache/

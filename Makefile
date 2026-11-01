@@ -3,7 +3,7 @@
 # =============================================================================
 # Usage:
 #   make            Show available targets
-#   make build      Build every resume PDF into dist/
+#   make build      Build every resume PDF into dist/ using Bun
 #   make laxman     Build dist/Laxman_KR_Resume.pdf
 #   make sraya      Build dist/Sraya_Rajan_Resume.pdf
 #   make open       Build and open the Laxman resume
@@ -29,7 +29,7 @@ ASSETS     := assets/claude-certified-developer-foundations.png
 TECTONIC := $(shell command -v tectonic 2>/dev/null)
 LATEXMK  := $(shell command -v latexmk 2>/dev/null)
 PDFLATEX := $(shell command -v pdflatex 2>/dev/null)
-PYTHON   := $(shell command -v python3 2>/dev/null)
+BUN      := $(shell command -v bun 2>/dev/null)
 
 .DEFAULT_GOAL := help
 .PHONY: all build help laxman sraya open watch check doctor setup clean distclean
@@ -101,11 +101,14 @@ setup:
 
 all: build
 
-build: $(PDFS)
+build:
+	bun run build:resumes
 
-laxman: $(LAXMAN_PDF)
+laxman:
+	bun scripts/resumes.ts build laxman
 
-sraya: $(SRAYA_PDF)
+sraya:
+	bun scripts/resumes.ts build sraya
 
 $(LAXMAN_PDF): $(LAXMAN_SRC) $(ASSETS)
 	$(call compile,$(LAXMAN_SRC),$(LAXMAN_PDF),Laxman resume)
@@ -130,10 +133,10 @@ watch:
 
 check: $(PDFS)
 	@echo "==> QA checks"
-	@if [ -n "$(PYTHON)" ]; then \
-		$(PYTHON) scripts/check_pdf.py $(PDFS); \
+	@if [ -n "$(BUN)" ]; then \
+		$(BUN) scripts/resumes.ts check $(PDFS); \
 	else \
-		echo "python3 is required for make check"; \
+		echo "Bun is required for make check"; \
 		exit 1; \
 	fi
 	@echo "==> check OK"
