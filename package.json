@@ -5,14 +5,14 @@
   "scripts": {
     "dev": "bun --bun vite dev",
     "build": "bun --bun vite build",
-    "start": "bun job-search/src/serve.ts",
-    "job-search": "bun job-search/src/cli.ts",
+    "start": "bun job-search/server/server.ts",
+    "job-search": "bun job-search/cli/main.ts",
     "build:resumes": "bun scripts/resumes.ts build",
     "check:pdf": "bun scripts/resumes.ts check",
-    "test": "bun test job-search",
+    "test": "bun --bun vitest run",
     "typecheck": "tsc --noEmit",
     "format": "oxfmt",
-    "lint": "oxlint job-search/app"
+    "lint": "oxlint job-search scripts"
   },
   "dependencies": {
     "@effect/platform-browser": "4.1.0",

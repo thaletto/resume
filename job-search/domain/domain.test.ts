@@ -5,8 +5,8 @@ import { describe, expect, it } from '@effect/vitest'
 import {
   ApplicationInput,
   DiscoverQuery,
-  Person,
   JobSearchRpcs,
+  Person,
   PreferencesInput,
   SaveApplication,
   StatusUpdate,

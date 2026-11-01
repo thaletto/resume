@@ -5,25 +5,27 @@
 This app implements the useful ideas from `ai-job-search` without carrying its
 code, slash commands, templates, release system, or compatibility contracts.
 
-| Component | Responsibility |
-| --- | --- |
-| `src/store.ts` | Candidate isolation, validated JSON storage, status history, draft folders |
-| `src/server.ts` | Bun HTTP server, local dashboard and API |
-| `src/discovery.ts` | Small adapter to freehire.me's public jobs API |
-| `src/cli.ts` | Agent launcher and application management commands |
-| `app/` | Officially scaffolded Foldkit SPA: Schema model, messages, Effect commands and Foldkit UI |
-| `WORKFLOWS.md` | Repo-specific AI workflow for evaluation, drafting and interviews |
-| `../scripts/resumes.ts` | LaTeX compilation and PDF checks |
+| Component               | Responsibility                                                                                                                                                                                 |
+| ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `domain/`               | Browser-safe Schemas, tagged errors and the `JobSearchRpcs` RPC contract shared by server, CLI and UI                                                                                          |
+| `server/`               | Effect services: `WorkspaceConfig`, `Store` (candidate isolation, validated JSON storage, status history, draft folders), `JobSource` (freehire.me adapter), RPC handlers and the Bun HTTP app |
+| `cli/main.ts`           | `effect/cli` agent launcher and application management commands                                                                                                                                |
+| `app/`                  | Officially scaffolded Foldkit SPA: Schema model, messages, Effect commands and Foldkit UI                                                                                                      |
+| `WORKFLOWS.md`          | Repo-specific AI workflow for evaluation, drafting and interviews                                                                                                                              |
+| `../scripts/resumes.ts` | LaTeX compilation and PDF checks                                                                                                                                                               |
 
 The frontend uses Foldkit 0.170.0 and Effect 4.1.0 from the official scaffolder.
 See [SCAFFOLD.md](SCAFFOLD.md) for the command and baseline. Its accessible Button
 and Input helpers are styled with the active `public-site` light/dark theme from
 `thaletto/thaletto`, using locally bundled Inter, JetBrains Mono and Libre Baskerville.
 
-Backend operations return Effects, with Schema-validated persisted state, typed
-application errors, per-candidate semaphores, cancellable discovery requests and
-atomic writes with temporary-file cleanup. Bun HTTP and process callbacks execute
-Effects at the runtime boundary.
+Backend operations are Effect services with Schema-validated persisted state, typed
+tagged errors, per-candidate semaphores, a 20 second discovery timeout and atomic
+writes with temporary-file cleanup. The UI calls the server through a typed Effect
+RPC contract (`domain/rpc.ts`) served at `/rpc` with JSON serialization over HTTP POST.
+A security middleware rejects non-loopback `Host` headers, cross-origin or non-JSON
+POSTs and bodies over 150000 bytes. `BunRuntime.runMain` and the Vite middleware
+execute Effects at the runtime boundary.
 
 There is no Python, copied job-search framework, CSV contract or upstream update mechanism.
 Application IDs are UUIDs rather than company/title filenames: distinct openings
@@ -37,9 +39,10 @@ bun install
 bun run dev
 ```
 
-Open `http://127.0.0.1:8765`. Vite serves the Foldkit frontend and local API during
-development. For production, use `bun run build` followed by `bun start`.
-Use `bun run job-search serve --port 9000` to serve a built app on another port.
+Open `http://127.0.0.1:8765`. Vite serves the Foldkit frontend during development
+and forwards `/rpc` to the same Effect handlers (`server/web-handler.ts`). For production, use `bun run build` followed by `bun start`.
+Use `bun run job-search serve --port 9000` (or `PORT=9000 bun start`) to serve a built app on another port.
+Both candidate workspaces are initialized when the server starts; reading a workspace never writes.
 The server listens only on loopback; both candidates are available
 to the local user. Profile separation is not multi-user authentication.
 
@@ -54,7 +57,9 @@ AGENTS.md / CLAUDE.md       # Candidate-scoped entry points
 applications/<id>/         # Posting, brief, evaluation, drafts and interview notes
 ```
 
-Initialization preserves existing evidence and application state. Profiles start
+Initialization preserves existing evidence and application state. It also rewrites the old
+`bun ../../src/cli.ts` command in existing `AGENTS.md`/`CLAUDE.md` files to `bun ../../cli/main.ts`;
+nothing else in those files changes. Profiles start
 with blank preferences: fill in target roles, location, languages, compensation
 and deal-breakers in the dashboard. No salary, language proficiency, relocation
 or other preference is inferred from a resume.
@@ -102,8 +107,20 @@ bun run job-search doctor
 An application JSON needs `company`, `role`, and `status`; optional fields are
 `id`, `date`, `deadline`, `source`, `location`, `posting`, and `notes`.
 Include `id` to edit; omitting it creates a new record. Edits preserve omitted fields.
-The CLI and browser use the same Effect storage implementation. Avoid concurrent writes
+The CLI and browser use the same Effect `Store` service. Personal workspaces can be redirected with
+`JOB_SEARCH_WORKSPACES=<directory>` (used by the tests). Avoid concurrent writes
 from separate CLI/server processes; the server serializes its own per-candidate writes.
+
+## Tests
+
+```sh
+bun run test      # vitest + @effect/vitest (domain, server, CLI, Foldkit stories and scenes)
+bun run lint
+bun run typecheck
+```
+
+Server tests use a temporary workspace directory and a fake `HttpClient`; they never read
+`job-search/workspaces/` or reach the network.
 
 ## Resume tooling
 

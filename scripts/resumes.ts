@@ -1,48 +1,216 @@
-import { PDFDocument } from "pdf-lib";
-import { mkdir, readFile, copyFile } from "node:fs/promises";
-import { basename, dirname, join, resolve } from "node:path";
-import { Effect } from "effect";
-import { ROOT, profiles, PEOPLE, person } from "../job-search/src/store.ts";
-import { AppError, io, attempt } from "../job-search/src/errors.ts";
+import {
+  Array,
+  Console,
+  Effect,
+  FileSystem,
+  Option,
+  Path,
+  Schema,
+} from 'effect'
+import { Argument, Command } from 'effect/cli'
+import { ChildProcess, ChildProcessSpawner } from 'effect/process'
+import { PDFDocument } from 'pdf-lib'
 
-export const checkPDF = Effect.fn("checkPDF")(function* (path: string, expected = 2) {
-  const contents = yield* io(() => readFile(path));
-  if (contents.length < 1000) { return yield* Effect.fail(new AppError({ message: `Empty PDF: ${path}`, code: "pdf" })); }
-  const document = yield* io(() => PDFDocument.load(contents), "pdf");
-  if (document.getPageCount() !== expected) { return yield* Effect.fail(new AppError({ message: `${path}: expected ${expected} pages, got ${document.getPageCount()}`, code: "pdf" })); }
-  yield* Effect.log(`${path}: ${expected} pages, ${contents.length} bytes`);
-});
+import { BunRuntime, BunServices } from '@effect/platform-bun'
 
-export const compile = Effect.fn("compileResume")(function* (source: string, output = dirname(resolve(source))) {
-  const engine = yield* Effect.sync(() => ["xelatex", "lualatex", "tectonic"].find(engine => Bun.which(engine)));
-  if (!engine) { return yield* Effect.fail(new AppError({ message: "Install XeLaTeX, LuaLaTeX or Tectonic to compile fontspec resumes", code: "latex" })); }
-  yield* io(() => readFile(source));
-  yield* io(() => mkdir(output, { recursive: true }));
-  const command = engine === "tectonic" ? [engine, "-o", output, resolve(source)]
-    : [engine, "-no-shell-escape", "-halt-on-error", "-interaction=nonstopmode", `-output-directory=${output}`, resolve(source)];
-  yield* Effect.forEach(engine === "tectonic" ? [1] : [1, 2], () => Effect.acquireUseRelease(
-    attempt(() => Bun.spawn(command, { cwd: ROOT, stdout: "inherit", stderr: "inherit" }), "latex"),
-    process => io(() => process.exited, "latex").pipe(Effect.flatMap(code => code ? Effect.fail(new AppError({ message: `LaTeX compilation failed (${code})`, code: "latex" })) : Effect.void)),
-    process => Effect.sync(() => { if (process.exitCode === null) { process.kill(); } }),
-  ));
-  return join(output, basename(source, ".tex") + ".pdf");
-});
+import { PEOPLE } from '../job-search/domain/index.ts'
+import { findExecutable } from '../job-search/server/executables.ts'
+import { WorkspaceConfig } from '../job-search/server/workspace-config.ts'
 
-const main = Effect.gen(function* () {
-  const [command, ...files] = Bun.argv.slice(2);
-  if (command === "check") {
-    yield* Effect.forEach(files.length ? files : PEOPLE.map(p => join(ROOT, "dist", profiles[p].pdf)), path => checkPDF(path));
-  } else if (command === "compile" && files[0]) {
-    yield* Effect.log(yield* compile(files[0]));
-  } else if (command === "build") {
-    const candidates = files[0] ? [yield* person(files[0])] : PEOPLE;
-    yield* Effect.forEach(candidates, candidate => Effect.gen(function* () {
-      const pdf = yield* compile(join(ROOT, profiles[candidate].resume), join(ROOT, "dist"));
-      const target = join(ROOT, "dist", profiles[candidate].pdf);
-      yield* io(() => copyFile(pdf, target));
-      yield* checkPDF(target);
-    }));
-  } else { yield* Effect.fail(new AppError({ message: "Use bun scripts/resumes.ts build | check [pdf…] | compile <source.tex>", code: "validation" })); }
-});
+export class ResumeError extends Schema.TaggedError<ResumeError>()(
+  'ResumeError',
+  { message: Schema.String },
+) {}
 
-if (import.meta.main) { Effect.runPromise(main.pipe(Effect.catch(error => Effect.gen(function* () { yield* Effect.logError(error.message); yield* Effect.sync(() => { process.exitCode = 1; }); })))); }
+const LATEX_ENGINES = ['xelatex', 'lualatex', 'tectonic'] as const
+const EXPECTED_PAGES = 2
+const MINIMUM_PDF_BYTES = 1000
+
+const resumeError = (error: { readonly message: string }) =>
+  new ResumeError({ message: error.message })
+
+export const checkPdf = Effect.fn('checkPdf')(function* (
+  target: string,
+  expected = EXPECTED_PAGES,
+) {
+  const fileSystem = yield* FileSystem.FileSystem
+  const contents = yield* fileSystem
+    .readFile(target)
+    .pipe(Effect.mapError(resumeError))
+  if (contents.length < MINIMUM_PDF_BYTES) {
+    return yield* new ResumeError({ message: `Empty PDF: ${target}` })
+  }
+  const document = yield* Effect.tryPromise({
+    try: () => PDFDocument.load(contents),
+    catch: cause =>
+      new ResumeError({
+        message: cause instanceof Error ? cause.message : String(cause),
+      }),
+  })
+  const pages = document.getPageCount()
+  if (pages !== expected) {
+    return yield* new ResumeError({
+      message: `${target}: expected ${expected} pages, got ${pages}`,
+    })
+  }
+  yield* Console.log(`${target}: ${expected} pages, ${contents.length} bytes`)
+})
+
+const findEngine = Effect.fn('findEngine')(function* () {
+  const found = yield* Effect.forEach(LATEX_ENGINES, engine =>
+    findExecutable(engine).pipe(
+      Effect.map(maybePath => Option.map(maybePath, () => engine)),
+    ),
+  )
+  return yield* Option.match(Array.findFirst(found, Option.isSome), {
+    onNone: () =>
+      Effect.fail(
+        new ResumeError({
+          message:
+            'Install XeLaTeX, LuaLaTeX or Tectonic to compile fontspec resumes',
+        }),
+      ),
+    onSome: maybeEngine => Effect.succeed(maybeEngine.value),
+  })
+})
+
+const compileArguments = (
+  engine: (typeof LATEX_ENGINES)[number],
+  source: string,
+  output: string,
+): ReadonlyArray<string> =>
+  engine === 'tectonic'
+    ? ['-o', output, source]
+    : [
+        '-no-shell-escape',
+        '-halt-on-error',
+        '-interaction=nonstopmode',
+        `-output-directory=${output}`,
+        source,
+      ]
+
+export const compileResume = Effect.fn('compileResume')(function* (
+  source: string,
+  maybeOutput: Option.Option<string> = Option.none(),
+) {
+  const config = yield* WorkspaceConfig
+  const fileSystem = yield* FileSystem.FileSystem
+  const path = yield* Path.Path
+  const spawner = yield* ChildProcessSpawner.ChildProcessSpawner
+  const engine = yield* findEngine()
+  const absoluteSource = path.resolve(source)
+  const output = Option.getOrElse(maybeOutput, () =>
+    path.dirname(absoluteSource),
+  )
+  yield* fileSystem.readFile(absoluteSource).pipe(Effect.mapError(resumeError))
+  yield* fileSystem
+    .makeDirectory(output, { recursive: true })
+    .pipe(Effect.mapError(resumeError))
+  const command = ChildProcess.make(
+    engine,
+    compileArguments(engine, absoluteSource, output),
+    {
+      cwd: config.root,
+      stdin: 'ignore',
+      stdout: 'inherit',
+      stderr: 'inherit',
+    },
+  )
+  const passes = engine === 'tectonic' ? 1 : 2
+  yield* Effect.forEach(
+    Array.makeBy(passes, pass => pass),
+    () =>
+      spawner.exitCode(command).pipe(
+        Effect.mapError(resumeError),
+        Effect.flatMap(code =>
+          code === 0
+            ? Effect.void
+            : Effect.fail(
+                new ResumeError({
+                  message: `LaTeX compilation failed (${code})`,
+                }),
+              ),
+        ),
+      ),
+  )
+  return path.join(output, `${path.basename(absoluteSource, '.tex')}.pdf`)
+})
+
+const buildResumes = Effect.fn('buildResumes')(function* (
+  selected: ReadonlyArray<(typeof PEOPLE)[number]>,
+) {
+  const config = yield* WorkspaceConfig
+  const fileSystem = yield* FileSystem.FileSystem
+  const path = yield* Path.Path
+  yield* Effect.forEach(selected, candidate =>
+    Effect.gen(function* () {
+      const profile = config.profiles[candidate]
+      const dist = path.join(config.root, 'dist')
+      const pdf = yield* compileResume(
+        path.join(config.root, profile.resume),
+        Option.some(dist),
+      )
+      const target = path.join(dist, profile.pdf)
+      yield* fileSystem.copyFile(pdf, target).pipe(Effect.mapError(resumeError))
+      yield* checkPdf(target)
+    }),
+  )
+})
+
+const buildCommand = Command.make(
+  'build',
+  {
+    person: Argument.Literals('person', PEOPLE).pipe(Argument.optional),
+  },
+  ({ person }) =>
+    buildResumes(
+      Option.match(person, {
+        onNone: () => PEOPLE,
+        onSome: candidate => [candidate],
+      }),
+    ),
+).pipe(Command.withDescription('Compile master resumes into dist/'))
+
+const checkCommand = Command.make(
+  'check',
+  {
+    files: Argument.String('pdf').pipe(Argument.variadic()),
+  },
+  ({ files }) =>
+    Effect.gen(function* () {
+      const config = yield* WorkspaceConfig
+      const path = yield* Path.Path
+      const targets = Array.match(files, {
+        onEmpty: () =>
+          Array.map(PEOPLE, candidate =>
+            path.join(config.root, 'dist', config.profiles[candidate].pdf),
+          ),
+        onNonEmpty: given => given,
+      })
+      yield* Effect.forEach(targets, target => checkPdf(target))
+    }),
+).pipe(Command.withDescription('Verify PDFs are non-empty and two pages'))
+
+const compileCommand = Command.make(
+  'compile',
+  { source: Argument.String('source') },
+  ({ source }) =>
+    compileResume(source).pipe(Effect.flatMap(pdf => Console.log(pdf))),
+).pipe(Command.withDescription('Compile one .tex file beside its source'))
+
+const root = Command.make('resumes').pipe(
+  Command.withDescription('Build and check resume PDFs'),
+  Command.withSubcommands([buildCommand, checkCommand, compileCommand]),
+)
+
+export const program = Command.run(root, { version: '1.0.0' }).pipe(
+  Effect.tapError(error =>
+    Schema.is(ResumeError)(error) ? Console.error(error.message) : Effect.void,
+  ),
+  Effect.provide(WorkspaceConfig.layer),
+  Effect.provide(BunServices.layer),
+)
+
+if (import.meta.main) {
+  BunRuntime.runMain(program, { disableErrorReporting: true })
+}

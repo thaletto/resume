@@ -4,7 +4,9 @@ This is a TypeScript/Bun job-search app plus two public LaTeX master resumes.
 The frontend was generated with create-foldkit-app and uses Foldkit + Effect.
 Read FOLDKIT.md for framework conventions and job-search/SCAFFOLD.md for provenance.
 Use Effect for backend operations and execute at HTTP/CLI runtime boundaries.
-Use `bun install`, `bun run dev`, `bun run typecheck`, and `bun test`.
+Layout: `job-search/domain` (shared Schemas and RPC contract), `job-search/server` (Effect services, RPC handlers, HTTP),
+`job-search/cli` (`effect/cli` entry `main.ts`), `job-search/app` (Foldkit UI). The UI talks to the server only through the RPC contract at `/rpc`.
+Use `bun install`, `bun run dev`, `bun run typecheck`, and `bun run test`.
 Do not add Python or vendor the upstream ai-job-search framework.
 
 Master resumes are `resumes/laxman-kr/cv.tex` and `resumes/sraya-rajan/cv.tex`.

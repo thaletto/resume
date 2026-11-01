@@ -54,7 +54,7 @@ drafts are not part of the published site.
 ```sh
 bun run typecheck
 bun run lint
-bun test
+bun run test
 bun run build
 ```
 
