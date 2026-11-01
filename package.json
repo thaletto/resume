@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@effect/platform-browser": "4.1.0",
+    "@effect/platform-bun": "4.1.0",
     "@foldkit/ui": "^0.170.0",
     "@fontsource-variable/inter": "^5.3.0",
     "@fontsource-variable/jetbrains-mono": "^5.3.0",
@@ -25,6 +26,7 @@
     "pdf-lib": "^1.17.1"
   },
   "devDependencies": {
+    "@effect/vitest": "4.1.0",
     "@foldkit/devtools": "0.170.0",
     "@foldkit/oxlint-plugin": "0.15.4",
     "@foldkit/vite-plugin": "^0.29.0",

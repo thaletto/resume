@@ -12,5 +12,5 @@
     "skipLibCheck": true,
     "allowImportingTsExtensions": true
   },
-  "include": ["job-search/src/**/*.ts", "job-search/app/**/*.ts", "job-search/app/**/*.tsx", "job-search/tests/**/*.ts", "scripts/**/*.ts", "vite.config.ts"]
+  "include": ["job-search/domain/**/*.ts", "vitest.config.ts", "job-search/src/**/*.ts", "job-search/app/**/*.ts", "job-search/app/**/*.tsx", "job-search/tests/**/*.ts", "scripts/**/*.ts", "vite.config.ts"]
 }
