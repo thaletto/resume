@@ -3,12 +3,13 @@
 # =============================================================================
 # Usage:
 #   make            Show available targets
-#   make build      Build every resume PDF into dist/ using Bun
+#   make build      Build every resume PDF into dist/
 #   make laxman     Build dist/Laxman_KR_Resume.pdf
 #   make sraya      Build dist/Sraya_Rajan_Resume.pdf
 #   make open       Build and open the Laxman resume
 #   make watch      Rebuild the Laxman resume on save
-#   make check      Verify PDFs are non-empty and two pages
+#   make check      Verify both PDFs are exactly two pages (needs pdfinfo)
+#   make skills     Sync .agents/skills to Claude Code and opencode
 #   make doctor     Show sources and detected LaTeX engines
 #   make setup      Install tectonic via Homebrew (macOS)
 #   make clean      Remove build intermediates (keeps PDFs)
@@ -25,14 +26,15 @@ SRAYA_PDF  := $(OUT_DIR)/Sraya_Rajan_Resume.pdf
 PDFS       := $(LAXMAN_PDF) $(SRAYA_PDF)
 ASSETS     := assets/claude-certified-developer-foundations.png
 
-# Detect available engines (tectonic preferred — single binary, auto-fetches packages)
+# Detect available engines. The resumes use fontspec, so only engines that
+# support it are listed: tectonic (single binary) first, then XeLaTeX.
 TECTONIC := $(shell command -v tectonic 2>/dev/null)
 LATEXMK  := $(shell command -v latexmk 2>/dev/null)
-PDFLATEX := $(shell command -v pdflatex 2>/dev/null)
-BUN      := $(shell command -v bun 2>/dev/null)
+XELATEX  := $(shell command -v xelatex 2>/dev/null)
+PDFINFO  := $(shell command -v pdfinfo 2>/dev/null)
 
 .DEFAULT_GOAL := help
-.PHONY: all build help laxman sraya open watch check doctor setup clean distclean
+.PHONY: all build help laxman sraya open watch check skills doctor setup clean distclean
 
 # Compile $(1) with whichever engine is installed, then move the result to $(2).
 # $(3) is the label used in progress output.
@@ -42,15 +44,15 @@ define compile
 		echo "==> $(3): tectonic"; \
 		tectonic -o $(OUT_DIR) --keep-logs $(1); \
 		mv -f $(OUT_DIR)/$(basename $(notdir $(1))).pdf $(2); \
-	elif [ -n "$(LATEXMK)" ]; then \
-		echo "==> $(3): latexmk"; \
-		latexmk -pdf -interaction=nonstopmode -outdir=$(OUT_DIR) \
+	elif [ -n "$(LATEXMK)" ] && [ -n "$(XELATEX)" ]; then \
+		echo "==> $(3): latexmk -xelatex"; \
+		latexmk -xelatex -interaction=nonstopmode -outdir=$(OUT_DIR) \
 			-jobname=$(basename $(notdir $(2))) $(1); \
-	elif [ -n "$(PDFLATEX)" ]; then \
-		echo "==> $(3): pdflatex (2 passes)"; \
-		pdflatex -interaction=nonstopmode -output-directory=$(OUT_DIR) \
+	elif [ -n "$(XELATEX)" ]; then \
+		echo "==> $(3): xelatex (2 passes)"; \
+		xelatex -interaction=nonstopmode -output-directory=$(OUT_DIR) \
 			-jobname=$(basename $(notdir $(2))) $(1) >/dev/null; \
-		pdflatex -interaction=nonstopmode -output-directory=$(OUT_DIR) \
+		xelatex -interaction=nonstopmode -output-directory=$(OUT_DIR) \
 			-jobname=$(basename $(notdir $(2))) $(1) >/dev/null; \
 	else \
 		echo "No LaTeX engine found. macOS: make setup"; \
@@ -70,7 +72,8 @@ help:
 	@echo "  make sraya       Build $(SRAYA_PDF)"
 	@echo "  make open        Build and open the Laxman resume"
 	@echo "  make watch       Rebuild the Laxman resume on save"
-	@echo "  make check       Verify PDFs are non-empty and two pages"
+	@echo "  make check       Verify both PDFs are exactly two pages (needs pdfinfo)"
+	@echo "  make skills      Sync .agents/skills to Claude Code and opencode"
 	@echo "  make doctor      Show sources and detected LaTeX engines"
 	@echo "  make setup       Install tectonic via Homebrew (macOS)"
 	@echo "  make clean       Remove build intermediates (keeps PDFs)"
@@ -83,8 +86,9 @@ doctor:
 	@echo "Outputs:       $(PDFS)"
 	@echo "tectonic: $(if $(TECTONIC),$(TECTONIC),not found)"
 	@echo "latexmk:  $(if $(LATEXMK),$(LATEXMK),not found)"
-	@echo "pdflatex: $(if $(PDFLATEX),$(PDFLATEX),not found)"
-	@if [ -z "$(TECTONIC)$(LATEXMK)$(PDFLATEX)" ]; then \
+	@echo "xelatex:  $(if $(XELATEX),$(XELATEX),not found)"
+	@echo "pdfinfo:  $(if $(PDFINFO),$(PDFINFO),not found)"
+	@if [ -z "$(TECTONIC)$(XELATEX)" ]; then \
 		echo ""; \
 		echo "No LaTeX engine found. Run: make setup"; \
 		exit 1; \
@@ -101,14 +105,11 @@ setup:
 
 all: build
 
-build:
-	bun run build:resumes
+build: $(PDFS)
 
-laxman:
-	bun scripts/resumes.ts build laxman
+laxman: $(LAXMAN_PDF)
 
-sraya:
-	bun scripts/resumes.ts build sraya
+sraya: $(SRAYA_PDF)
 
 $(LAXMAN_PDF): $(LAXMAN_SRC) $(ASSETS)
 	$(call compile,$(LAXMAN_SRC),$(LAXMAN_PDF),Laxman resume)
@@ -133,13 +134,19 @@ watch:
 
 check: $(PDFS)
 	@echo "==> QA checks"
-	@if [ -n "$(BUN)" ]; then \
-		$(BUN) scripts/resumes.ts check $(PDFS); \
-	else \
-		echo "Bun is required for make check"; \
+	@if [ -z "$(PDFINFO)" ]; then \
+		echo "pdfinfo (poppler) is required for make check"; \
 		exit 1; \
 	fi
+	@for pdf in $(PDFS); do \
+		pages=$$($(PDFINFO) "$$pdf" | sed -n 's/^Pages:[[:space:]]*//p'); \
+		echo "$$pdf: $$pages pages"; \
+		[ "$$pages" = "2" ] || { echo "$$pdf must be exactly 2 pages"; exit 1; }; \
+	done
 	@echo "==> check OK"
+
+skills:
+	@sh scripts/sync-skills.sh
 
 # -----------------------------------------------------------------------------
 # Clean
