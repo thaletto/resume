@@ -3,9 +3,9 @@ import { Command } from 'effect/cli'
 
 import { describe, expect, it } from '@effect/vitest'
 
-import { Store } from '../server/store.ts'
-import { TestStore } from '../server/testing.ts'
-import { WorkspaceConfig } from '../server/workspace-config.ts'
+import { Store } from '../state/store.ts'
+import { TestStore } from '../state/testing.ts'
+import { WorkspaceConfig } from '../state/workspace-config.ts'
 import { root } from './main.ts'
 
 const runCli = (args: ReadonlyArray<string>) =>
@@ -125,17 +125,18 @@ describe('job-search CLI', () => {
     }).pipe(Effect.scoped, Effect.provide(TestStore)),
   )
 
-  it.effect('rejects unknown candidates and agents at parse time', () =>
+  it.effect('rejects unknown candidates and statuses at parse time', () =>
     Effect.gen(function* () {
       const person = yield* runCli(['list', 'nobody']).pipe(Effect.flip)
       expect(person._tag).toBe('ShowHelp')
-      const agent = yield* runCli([
-        'launch',
+      const status = yield* runCli([
+        'status',
         'laxman',
-        '--agent',
+        'some-id',
+        '--status',
         'bogus',
       ]).pipe(Effect.flip)
-      expect(agent._tag).toBe('ShowHelp')
+      expect(status._tag).toBe('ShowHelp')
     }).pipe(Effect.provide(TestStore)),
   )
 })

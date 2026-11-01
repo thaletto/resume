@@ -14,8 +14,8 @@ import { PDFDocument } from 'pdf-lib'
 import { BunRuntime, BunServices } from '@effect/platform-bun'
 
 import { PEOPLE } from '../job-search/domain/index.ts'
-import { findExecutable } from '../job-search/server/executables.ts'
-import { WorkspaceConfig } from '../job-search/server/workspace-config.ts'
+import { findExecutable } from '../job-search/state/executables.ts'
+import { WorkspaceConfig } from '../job-search/state/workspace-config.ts'
 
 export class ResumeError extends Schema.TaggedError<ResumeError>()(
   'ResumeError',

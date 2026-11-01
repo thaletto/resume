@@ -1,14 +1,11 @@
-import { Effect, Schema } from 'effect'
+import { Effect } from 'effect'
 
 import { describe, expect, it } from '@effect/vitest'
 
 import {
   ApplicationInput,
-  DiscoverQuery,
-  JobSearchRpcs,
   Person,
   PreferencesInput,
-  SaveApplication,
   StatusUpdate,
   ValidationError,
   decodeInput,
@@ -150,46 +147,6 @@ describe('PreferencesInput', () => {
   )
 })
 
-describe('DiscoverQuery', () => {
-  const decodeQuery = decodeInput(DiscoverQuery)
-
-  it.effect('uppercases the country and trims the query', () =>
-    Effect.gen(function* () {
-      const result = yield* decodeQuery({
-        query: ' typescript ',
-        country: 'in',
-        workMode: 'remote',
-      })
-      expect(result).toEqual({
-        query: 'typescript',
-        country: 'IN',
-        workMode: 'remote',
-      })
-    }),
-  )
-
-  it.effect('rejects bad queries, countries and work modes', () =>
-    Effect.gen(function* () {
-      const empty = yield* failureMessage(
-        decodeQuery({ query: '  ', country: '', workMode: '' }),
-      )
-      const long = yield* failureMessage(
-        decodeQuery({ query: 'q'.repeat(251), country: '', workMode: '' }),
-      )
-      const country = yield* failureMessage(
-        decodeQuery({ query: 'dev', country: 'IND', workMode: '' }),
-      )
-      const mode = yield* failureMessage(
-        decodeQuery({ query: 'dev', country: '', workMode: 'office' }),
-      )
-      expect(empty).toContain('Enter a job title or skill')
-      expect(long).toContain('at most 250')
-      expect(country).toContain('two-letter code')
-      expect(mode).toContain('valid work mode')
-    }),
-  )
-})
-
 describe('Person and StatusUpdate', () => {
   it.effect('accepts only the two candidates', () =>
     Effect.gen(function* () {
@@ -209,32 +166,6 @@ describe('Person and StatusUpdate', () => {
       expect(result.id).toBe('abc')
       expect(result.notes).toBeUndefined()
       expect(statusLabel(result.status)).toBe('Applied')
-    }),
-  )
-})
-
-describe('JobSearchRpcs', () => {
-  it.effect('round-trips a validated payload through the RPC schema', () =>
-    Effect.gen(function* () {
-      const application = yield* decodeApplication({
-        ...baseApplication,
-        source: 'https://example.com/a',
-      })
-      const encoded = yield* Schema.encodeEffect(SaveApplication.payloadSchema)(
-        { person: 'laxman', application },
-      )
-      const decoded = yield* Schema.decodeUnknownEffect(
-        SaveApplication.payloadSchema,
-      )(encoded)
-      expect(decoded.application.source).toBe('https://example.com/a')
-      expect([...JobSearchRpcs.requests.keys()]).toEqual([
-        'GetWorkspace',
-        'SaveApplication',
-        'UpdateApplicationStatus',
-        'SavePreferences',
-        'PrepareApplication',
-        'DiscoverJobs',
-      ])
     }),
   )
 })

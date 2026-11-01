@@ -1,5 +1,0 @@
-export { Message, OutMessage } from './message.ts'
-export { Model } from './model.ts'
-export { init, update } from './update.ts'
-export { view } from './view.ts'
-export type { ViewInputs } from './view.ts'

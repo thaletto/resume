@@ -1,25 +1,22 @@
 import { Console, Effect, FileSystem, Option, Schema } from 'effect'
 import { Argument, Command, Flag } from 'effect/cli'
-import { ChildProcess, ChildProcessSpawner } from 'effect/process'
 
 import { BunRuntime, BunServices } from '@effect/platform-bun'
 
 import {
-  Agent,
   ApplicationInput,
   JobSearchError,
   PEOPLE,
   type Person,
+  PreferencesInput,
   STATUSES,
   StatusUpdate,
-  StorageError,
   ValidationError,
   decodeInput,
 } from '../domain/index.ts'
-import { findExecutable } from '../server/executables.ts'
-import { DEFAULT_PORT, serverLayer } from '../server/server.ts'
-import { ServicesLive } from '../server/services.ts'
-import { Store } from '../server/store.ts'
+import { findExecutable } from '../state/executables.ts'
+import { ServicesLive } from '../state/services.ts'
+import { Store } from '../state/store.ts'
 
 const DOCTOR_TOOLS = [
   'bun',
@@ -61,74 +58,6 @@ const initCommand = Command.make(
   { selected: optionalPersonArgument },
   ({ selected }) => initializeSelected(selected),
 ).pipe(Command.withDescription('Create candidate workspaces'))
-
-const serveCommand = Command.make(
-  'serve',
-  {
-    port: Flag.Int('port').pipe(
-      Flag.withDescription('Loopback port to listen on'),
-      Flag.withDefault(DEFAULT_PORT),
-    ),
-  },
-  ({ port }) =>
-    Effect.gen(function* () {
-      yield* initializeSelected(Option.none())
-      yield* Console.log(`Job search: http://127.0.0.1:${port}`)
-      return yield* Effect.never.pipe(Effect.provide(serverLayer(port)))
-    }),
-).pipe(Command.withDescription('Serve the built dashboard'))
-
-const resolveAgent = (agent: Agent) =>
-  findExecutable(agent).pipe(
-    Effect.flatMap(
-      Option.match({
-        onNone: () =>
-          Effect.fail(
-            new ValidationError({
-              message: `${agent} is not installed or on PATH`,
-            }),
-          ),
-        onSome: Effect.succeed,
-      }),
-    ),
-  )
-
-const launchCommand = Command.make(
-  'launch',
-  {
-    person: personArgument,
-    agent: Flag.Literals('agent', Agent.literals).pipe(
-      Flag.withDescription('Agent CLI to start in the workspace'),
-      Flag.withDefault('opencode'),
-    ),
-  },
-  ({ person, agent }) =>
-    Effect.gen(function* () {
-      const store = yield* Store
-      const spawner = yield* ChildProcessSpawner.ChildProcessSpawner
-      const directory = yield* store.initialize(person)
-      const executable = yield* resolveAgent(agent)
-      const exitCode = yield* spawner
-        .spawn(
-          ChildProcess.make(executable, [], {
-            cwd: directory,
-            stdin: 'inherit',
-            stdout: 'inherit',
-            stderr: 'inherit',
-          }),
-        )
-        .pipe(
-          Effect.flatMap(handle => handle.exitCode),
-          Effect.scoped,
-          Effect.mapError(
-            error => new StorageError({ message: error.message }),
-          ),
-        )
-      yield* Effect.sync(() => {
-        process.exitCode = exitCode
-      })
-    }),
-).pipe(Command.withDescription('Start an agent in a candidate workspace'))
 
 const listCommand = Command.make(
   'list',
@@ -174,6 +103,25 @@ const saveCommand = Command.make(
       yield* printJson(saved.application)
     }),
 ).pipe(Command.withDescription('Create or edit an application'))
+
+const preferencesCommand = Command.make(
+  'preferences',
+  {
+    person: personArgument,
+    file: Flag.String('file').pipe(
+      Flag.withDescription('Preferences JSON file'),
+    ),
+  },
+  ({ person, file }) =>
+    Effect.gen(function* () {
+      const store = yield* Store
+      const input = yield* readJsonFile(file).pipe(
+        Effect.flatMap(decodeInput(PreferencesInput)),
+      )
+      const workspace = yield* store.savePreferences(person, input)
+      yield* printJson(workspace.preferences)
+    }),
+).pipe(Command.withDescription('Replace confirmed candidate preferences'))
 
 const statusCommand = Command.make(
   'status',
@@ -229,10 +177,9 @@ export const root = Command.make('job-search').pipe(
   Command.withDescription('Candidate job search workspace'),
   Command.withSubcommands([
     initCommand,
-    serveCommand,
-    launchCommand,
     listCommand,
     saveCommand,
+    preferencesCommand,
     statusCommand,
     prepareCommand,
     doctorCommand,

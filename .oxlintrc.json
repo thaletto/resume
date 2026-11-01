@@ -1,6 +1,5 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "extends": ["./node_modules/@foldkit/oxlint-plugin/recommended.json"],
   "plugins": ["typescript"],
   "categories": {
     "correctness": "off"
@@ -28,9 +27,7 @@
   "ignorePatterns": [
     "dist/",
     "node_modules/",
-    "repos/",
     "**/*.d.ts",
-    "vite.config.ts",
     "vitest.config.ts",
     "**/*.config.js",
     "**/*.config.mjs"

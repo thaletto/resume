@@ -1,139 +1,92 @@
-# Native job-search app
+# Job search
 
-## Architecture
+Agent-driven job search for Laxman and Sraya, built from three parts:
 
-This app implements the useful ideas from `ai-job-search` without carrying its
-code, slash commands, templates, release system, or compatibility contracts.
+| Part   | Where                                        | Job                                                                   |
+| ------ | -------------------------------------------- | --------------------------------------------------------------------- |
+| Skills | `../.agents/skills/` (8 slash commands)      | The workflow, run from any agent: Claude Code, opencode or Codex      |
+| State  | `workspaces/<person>/state.json` via `cli/`  | Preferences, applications and status history, written only by the CLI |
+| MCP    | freehire at `https://freehire.me/api/v1/mcp` | Job discovery, full postings, open checks, salary and market data     |
 
-| Component               | Responsibility                                                                                                                                                                                 |
-| ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `domain/`               | Browser-safe Schemas, tagged errors and the `JobSearchRpcs` RPC contract shared by server, CLI and UI                                                                                          |
-| `server/`               | Effect services: `WorkspaceConfig`, `Store` (candidate isolation, validated JSON storage, status history, draft folders), `JobSource` (freehire.me adapter), RPC handlers and the Bun HTTP app |
-| `cli/main.ts`           | `effect/cli` agent launcher and application management commands                                                                                                                                |
-| `app/`                  | Officially scaffolded Foldkit SPA: Schema model, messages, Effect commands and Foldkit UI                                                                                                      |
-| `WORKFLOWS.md`          | Repo-specific AI workflow for evaluation, drafting and interviews                                                                                                                              |
-| `../scripts/resumes.ts` | LaTeX compilation and PDF checks                                                                                                                                                               |
+There is no server, dashboard or API key. The agent you already use does the work.
 
-The frontend uses Foldkit 0.170.0 and Effect 4.1.0 from the official scaffolder.
-See [SCAFFOLD.md](SCAFFOLD.md) for the command and baseline. Its accessible Button
-and Input helpers are styled with the active `public-site` light/dark theme from
-`thaletto/thaletto`, using locally bundled Inter, JetBrains Mono and Libre Baskerville.
+## Commands
 
-Backend operations are Effect services with Schema-validated persisted state, typed
-tagged errors, per-candidate semaphores, a 20 second discovery timeout and atomic
-writes with temporary-file cleanup. The UI calls the server through a typed Effect
-RPC contract (`domain/rpc.ts`) served at `/rpc` with JSON serialization over HTTP POST.
-A security middleware rejects non-loopback `Host` headers, cross-origin or non-JSON
-POSTs and bodies over 150000 bytes. `BunRuntime.runMain` and the Vite middleware
-execute Effects at the runtime boundary.
-
-There is no Python, copied job-search framework, CSV contract or upstream update mechanism.
-Application IDs are UUIDs rather than company/title filenames: distinct openings
-at the same company remain distinct. Duplicate source URLs are rejected per person.
-Status history is retained even after an interview ends in rejection.
-
-## Start
-
-```sh
-bun install
-bun run dev
-```
-
-Open `http://127.0.0.1:8765`. Vite serves the Foldkit frontend during development
-and forwards `/rpc` to the same Effect handlers (`server/web-handler.ts`). For production, use `bun run build` followed by `bun start`.
-Use `bun run job-search serve --port 9000` (or `PORT=9000 bun start`) to serve a built app on another port.
-Both candidate workspaces are initialized when the server starts; reading a workspace never writes.
-The server listens only on loopback; both candidates are available
-to the local user. Profile separation is not multi-user authentication.
-
-## Candidate setup
-
-The first run creates `workspaces/laxman/` and `workspaces/sraya/`, each containing:
+Open your agent in the repository root, then:
 
 ```text
-master.tex                 # Snapshot of that person's public resume
-state.json                 # Preferences, applications and status history
-AGENTS.md / CLAUDE.md       # Candidate-scoped entry points
-applications/<id>/         # Posting, brief, evaluation, drafts and interview notes
+/job-search laxman          choose the candidate for this session
+/preferences                record confirmed target roles, location, salary, constraints
+/find-jobs backend, IN      search freehire, shortlist, check open, save picks
+/evaluate <id>              evaluation.md: evidence vs requirements, pursue/clarify/skip
+/tailor <id>                cv.tex + review.md from master.tex evidence
+/cover-letter <id>          one-page cover-letter.tex
+/status <id> applied        record a status change (applied/hired need your confirmation)
+/interview <id>             interview.md: topics, STAR stories, gap answers
 ```
 
-Initialization preserves existing evidence and application state. It also rewrites the old
-`bun ../../src/cli.ts` command in existing `AGENTS.md`/`CLAUDE.md` files to `bun ../../cli/main.ts`;
-nothing else in those files changes. Profiles start
-with blank preferences: fill in target roles, location, languages, compensation
-and deal-breakers in the dashboard. No salary, language proficiency, relocation
-or other preference is inferred from a resume.
+Skill and MCP discovery per agent:
 
-The snapshot is not silently refreshed when a master changes. Update `master.tex`
-deliberately when the candidate confirms new evidence. Tailored documents stay
-local; publishing a tailored version requires explicitly updating the public master.
+| Agent       | Skills                                    | MCP config           | Invoke        |
+| ----------- | ----------------------------------------- | -------------------- | ------------- |
+| Claude Code | `.claude/skills/` (synced copy)           | `.mcp.json`          | `/job-search` |
+| opencode    | `.opencode/command/` (generated wrappers) | `opencode.json`      | `/job-search` |
+| Codex       | `.agents/skills/`                         | `.codex/config.toml` | `$job-search` |
 
-## Discovery and tracking
+`.agents/skills/` is the source of truth. After editing a skill there, run
+`bun run skills:sync` to refresh the Claude Code copies and opencode wrappers
+(`bun install` runs it too; both outputs are Git-ignored).
 
-Search by keyword, optional two-letter country code (`IN`, `GB`, `US`) and work mode.
-Discovery reads the freehire.me public API; it needs no login or API key. Failures
-are reported in the interface. Save a result or paste a posting manually. Search
-results are not AI-ranked; ask your agent to evaluate saved postings against evidence.
+## State
 
-Statuses: saved, drafted, applied, interview, offer, hired, rejected, no response,
-offer declined and withdrawn. A status change appends an event; editing notes does
-not create a false stage transition. Counts show current statuses. Use Applied only
-after actual submission. The application never sends submissions or outreach.
-
-Select **Prepare drafts** to create the application's posting and agent brief.
-These files are created only if missing, preserving candidate edits and previous drafts.
-
-## Agent integration
-
-```sh
-bun run job-search launch laxman --agent opencode
-bun run job-search launch sraya --agent claude
+```text
+workspaces/<person>/
+  master.tex          snapshot of the public resume; the only evidence source
+  state.json          preferences, applications, status history
+  AGENTS.md CLAUDE.md candidate-scoped entry points
+  applications/<id>/  posting.md, brief.md, evaluation.md, drafts, interview notes
 ```
 
-OpenCode, Claude Code and Codex can be launched when installed. The app uses your
-agent's existing login/configuration rather than embedding an LLM provider or API key.
-Ask it to follow [WORKFLOWS.md](WORKFLOWS.md) for a saved application's ID.
-
-CLI commands (from the repository root):
+`workspaces/` is Git-ignored. Write state only through the CLI, which validates
+every field, keeps status history and writes atomically:
 
 ```sh
-bun run job-search list laxman
-bun run job-search prepare laxman <application-id>
-bun run job-search save laxman --file application.json
-bun run job-search status laxman <application-id> --status interview --notes "Technical round scheduled"
+bun run job-search init [laxman|sraya|all]
+bun run job-search list <person>
+bun run job-search save <person> --file application.json
+bun run job-search preferences <person> --file preferences.json
+bun run job-search status <person> <id> --status interview --notes "Round 1"
+bun run job-search prepare <person> <id>
 bun run job-search doctor
 ```
 
-An application JSON needs `company`, `role`, and `status`; optional fields are
-`id`, `date`, `deadline`, `source`, `location`, `posting`, and `notes`.
-Include `id` to edit; omitting it creates a new record. Edits preserve omitted fields.
-The CLI and browser use the same Effect `Store` service. Personal workspaces can be redirected with
-`JOB_SEARCH_WORKSPACES=<directory>` (used by the tests). Avoid concurrent writes
-from separate CLI/server processes; the server serializes its own per-candidate writes.
+An application JSON needs `company`, `role` and `status`; optional fields are
+`id`, `date`, `deadline`, `source`, `location`, `posting` and `notes`. Include
+`id` to edit; omitted fields keep their saved values. Duplicate source URLs are
+rejected per candidate. `JOB_SEARCH_WORKSPACES=<dir>` redirects storage (tests use it).
 
-## Tests
+## Code
+
+| Path           | Contents                                                        |
+| -------------- | --------------------------------------------------------------- |
+| `domain/`      | Effect Schemas for state, inputs and tagged errors              |
+| `state/`       | `WorkspaceConfig` and `Store` Effect services, rules, templates |
+| `cli/main.ts`  | `effect/cli` commands over the `Store`                          |
+| `WORKFLOWS.md` | Evaluation, drafting and interview rules the skills point to    |
 
 ```sh
-bun run test      # vitest + @effect/vitest (domain, server, CLI, Foldkit stories and scenes)
+bun run test       # vitest + @effect/vitest, temp workspaces only
 bun run lint
 bun run typecheck
 ```
 
-Server tests use a temporary workspace directory and a fake `HttpClient`; they never read
-`job-search/workspaces/` or reach the network.
-
-## Resume tooling
+## Resumes
 
 ```sh
 bun run build:resumes
 bun run check:pdf
-bun scripts/resumes.ts compile job-search/workspaces/laxman/applications/<id>/cv.tex
+bun scripts/resumes.ts compile job-search/workspaces/<person>/applications/<id>/cv.tex
 ```
 
-Compile runs from the repository root so the existing `assets/` paths work. Keep the
-article/Inter style from the master. XeLaTeX is preferred, then LuaLaTeX or Tectonic.
-No LaTeX engine is bundled. PDF checks use `pdf-lib` and enforce two pages for resumes.
-
-The existing GitHub Pages workflow continues to publish only the two master PDFs.
-Hosting the app remotely would require a backend deployment and authentication;
-GitHub Pages cannot run a Bun server.
+XeLaTeX is preferred, then LuaLaTeX or Tectonic; none is bundled. Compile from the
+repository root so `assets/` paths resolve.

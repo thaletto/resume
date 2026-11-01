@@ -4,7 +4,7 @@
     "module": "Preserve",
     "moduleResolution": "Bundler",
     "types": ["bun"],
-    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "lib": ["ESNext"],
     "strict": true,
     "exactOptionalPropertyTypes": true,
     "isolatedModules": true,
@@ -12,5 +12,5 @@
     "skipLibCheck": true,
     "allowImportingTsExtensions": true
   },
-  "include": ["job-search/domain/**/*.ts", "job-search/server/**/*.ts", "job-search/cli/**/*.ts", "job-search/app/**/*.ts", "job-search/app/**/*.tsx", "scripts/**/*.ts", "vitest.config.ts", "vite.config.ts"]
+  "include": ["job-search/**/*.ts", "scripts/**/*.ts", "vitest.config.ts"]
 }

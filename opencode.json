@@ -1,0 +1,10 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "freehire": {
+      "type": "remote",
+      "url": "https://freehire.me/api/v1/mcp",
+      "enabled": true
+    }
+  }
+}
