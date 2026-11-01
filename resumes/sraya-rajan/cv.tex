@@ -81,29 +81,39 @@
 
 \newcommand{\resumeItem}[1]{
 \item\small{
-    {#1 \vspace{0pt}}
+    {#1}
   }
 }
 
+% A category label forbids a page break before the next entry; each entry
+% restores the default so pages can still break between entries.
+\makeatletter
 \newcommand{\resumeSubheading}[4]{
   \vspace{2pt}
-\item
+\item\@itempenalty=-\@lowpenalty
   \begin{tabular*}{\textwidth}[t]{l@{\extracolsep{\fill}}r}
     \textbf{#1} & {\color{dark-grey}\small #2}\vspace{0pt}\\
     \textit{#3} & {\color{dark-grey} \small #4}\\
-  \end{tabular*}\vspace{-2pt}
+  \end{tabular*}\nopagebreak\vspace{-2pt}
 }
 
 \newcommand{\resumeProjectCategory}[1]{
-\item[]\vspace{2pt}\textbf{\small #1}\vspace{-4pt}
+\item[]\vspace{2pt}\textbf{\small #1}\nopagebreak\vspace{-4pt}\nopagebreak\@itempenalty=10000
 }
+\makeatother
 
 \newcommand{\resumeSubHeadingListStart}{
 \begin{itemize}[leftmargin=0in, label={}]}
 \newcommand{\resumeSubHeadingListEnd}{
   \end{itemize}\vspace{-2pt}}
+% Keep each entry's bullets with its heading and with each other, so a page
+% break falls only between entries.
+\makeatletter
 \newcommand{\resumeItemListStart}{
-\begin{itemize}[leftmargin=0.15in, itemsep=2pt, parsep=0pt, topsep=1pt]}
+\@beginparpenalty=10000
+\begin{itemize}[leftmargin=0.15in, itemsep=2pt, parsep=0pt, topsep=1pt]
+\@itempenalty=10000 \interlinepenalty=10000}
+\makeatother
 \newcommand{\resumeItemListEnd}{
   \end{itemize}\vspace{-1pt}}
 
@@ -127,7 +137,7 @@
 \section{SUMMARY}
 \begin{justify}
 \small{
-Full-stack engineer specializing in \textbf{Python} backends and \textbf{Angular/React} front-ends, with \textbf{2+ years} shipping for a regulated financial platform at Bank of America. Delivered REST APIs, workflow-automation logic, and large-scale regulatory issue-management UIs, plus reporting automation that saved a 9-person team $\sim$45 hours/week. Comfortable owning a feature end-to-end, from backend data models and APIs to the UI people use daily.
+Software engineer with two years at Bank of America building \textbf{Python} and \textbf{Flask} services and \textbf{Angular} interfaces for regulatory reporting and issue management. Ships backward-compatible features end to end, from \textbf{REST APIs} and data models to the screens internal teams use daily, and automates reporting and validation with \textbf{SQL} and Python.
 }
 \end{justify}
 
@@ -137,11 +147,11 @@ Full-stack engineer specializing in \textbf{Python} backends and \textbf{Angular
     \small{
       \item{
         \textbf{Languages}{: Python, TypeScript, JavaScript, SQL}\vspace{2pt} \\
-        \textbf{Backend \& APIs}{: FastAPI, Flask, Django, Node.js, REST API Design, Microservices, Event-Driven Architecture}\vspace{2pt} \\
-        \textbf{Frontend}{: React.js, Next.js, Angular, HTML5, CSS, Progressive Web Apps}\vspace{2pt} \\
-        \textbf{Data \& Analytics}{: MySQL, SQL Server, Power BI, DAX, Data Visualization, Apache Spark, Hadoop}\vspace{2pt} \\
-        \textbf{Cloud \& AI}{: AWS, Google Cloud, Machine Learning, LLMs, Text Embeddings, Retrieval-Augmented Generation (RAG)}\vspace{2pt} \\
-        \textbf{Tools}{: Git, Jira, Unit Testing}
+        \textbf{Backend}{: Flask, FastAPI, Django, Node.js, REST APIs, Microservices, Event-Driven Architecture}\vspace{2pt} \\
+        \textbf{Frontend}{: Angular, React, Next.js, HTML5, CSS, Progressive Web Apps}\vspace{2pt} \\
+        \textbf{Data \& Reporting}{: SQL Server, MySQL, Power BI, DAX, Apache Spark, Hadoop}\vspace{2pt} \\
+        \textbf{Cloud \& AI}{: AWS, Google Cloud, Machine Learning, LLMs, Embeddings, RAG}\vspace{2pt} \\
+        \textbf{Testing \& Tools}{: Unit Testing, Regression Testing, CI Pipelines, Git, Jira}
       }
     }
 \end{itemize}
@@ -154,85 +164,83 @@ Full-stack engineer specializing in \textbf{Python} backends and \textbf{Angular
 {Bank of America}{Aug 2024 -- Present}
 {Software Engineer}{Chennai, India}
 \resumeItemListStart
-\resumeItem{Cut manual effort for issue batches by 56\% across 5 task types, replacing per-issue handling with one-shot bulk runs.}
-\resumeItem{Extended a core registry framework to add \textbf{bulk actions} for regulatory issue management, letting users clear multiple issues in one batch action instead of one by one, shipped to the live platform with zero breaking changes.}
-\resumeItem{Delivered exception reassignment for the \textbf{PTE} board covering $\sim$20 reassignments per week, replacing three fragmented move flows with one consistent user experience, now in regular use by internal teams.}
-\resumeItem{Automated reporting with \textbf{SQL and Python} for a 9-person team, saving approximately 45 hours per week in manual processing.}
-\resumeItem{Kept releases safe on the legacy platform: coverage from 87\% to 94\%, 6 flaky pipeline failures eliminated, zero breaking changes in production.}
-\resumeItem{De-risked the South Korea (\textbf{KRX}) reporting go-live, validating transactions with a 3-person team for a zero-error launch.}
-\resumeItem{De-risked \textbf{RBI-CCIL} filings with a Python pre-submission validation workflow used daily with zero reported errors.}
+\resumeItem{Cut manual effort on issue batches by 56\% across five task types by adding \textbf{bulk actions} to the regulatory issue-management registry, released with zero breaking changes.}
+\resumeItem{Unified three separate exception-move flows on the \textbf{PTE} board into one reassignment experience, now handling $\sim$20 reassignments a week for internal teams.}
+\resumeItem{Automated recurring reports with \textbf{SQL and Python} for a nine-person team, saving about 45 hours of manual work each week.}
+\resumeItem{Built a pre-submission validation workflow for \textbf{RBI-CCIL} regulatory filings that runs daily with zero reported errors.}
+\resumeItem{Validated transactions with a three-person team for the South Korea (\textbf{KRX}) reporting go-live, which launched with zero errors.}
+\resumeItem{Raised test coverage on the legacy platform from 87\% to 94\% and eliminated six recurring flaky pipeline failures.}
 \resumeItemListEnd
 
 \resumeSubheading
 {Almoayyed Computers Middle East}{Jun 2024 -- Aug 2024}
 {Data Analytics Intern}{}
 \resumeItemListStart
-\resumeItem{Gave 10+ sales users self-serve visibility into performance and customer trends with 4 \textbf{Power BI dashboards}, delivered end-to-end from requirements gathering.}
-\resumeItem{Backed all 4 dashboards with reusable \textbf{SQL} extracts over 26 columns of sales and customer data, and answered 50+ ad-hoc business questions per week.}
+\resumeItem{Delivered four \textbf{Power BI dashboards} end to end, from requirements to release, giving 10+ sales users self-serve views of performance and customer trends.}
+\resumeItem{Wrote reusable \textbf{SQL} extracts over 26 columns of sales and customer data behind the dashboards, and answered 50+ ad-hoc business questions a week.}
 \resumeItemListEnd
 
 \resumeSubHeadingListEnd
 
+%-----------EDUCATION-----------
+\section{EDUCATION}
+\resumeSubHeadingListStart
+\resumeSubheading
+{Amrita Vishwa Vidyapeetham}{2020 -- 2024}
+{B.Tech, Computer Science and Engineering}{Coimbatore, India}
+\resumeItemListStart
+\resumeItem{CGPA: 7.04/10}
+\resumeItemListEnd
+\resumeSubHeadingListEnd
+
 %-----------PROJECTS-----------
+% Projects cannot fit below Education, so they open page 2.
 \newpage
 \section{PROJECTS}
 \resumeSubHeadingListStart
 
 \resumeProjectCategory{PROFESSIONAL}
 \resumeSubheading
-{Bulk Transition-Orchestration APIs}{Apr 2026 -- Oct 2026}
+{Bulk Transition Orchestration API}{Apr 2026 -- Oct 2026}
 {Python, Flask, REST APIs}{}
 \resumeItemListStart
-\resumeItem{Built transition-orchestration logic in \textbf{Python/Flask}: a \textbf{dynamic task-to-transition map} routes each bulk job to the right transition across 5 task types, processing multiple issues per batch run.}
-\resumeItem{Extended the registry framework's action model with additive \textbf{bulk operations}, keeping the change backward compatible so the live system shipped with zero breaking changes.}
-\resumeItem{Verified transitions for all 5 task types across mixed-success and failure scenarios, with per-issue error reporting and regression tests on single-issue closure.}
+\resumeItem{Designed a \textbf{task-to-transition map} in Python and Flask that routes each bulk job to the correct workflow transition for five task types and processes many issues in a single run.}
+\resumeItem{Extended the registry framework's action model with additive \textbf{bulk operations}, so existing single-issue actions kept working unchanged.}
+\resumeItem{Tested every task type across mixed-success and failure batches, with per-issue error reporting and regression tests for single-issue closure.}
 \resumeItemListEnd
 
 \resumeSubheading
-{RBI-CCIL Transaction-Override Validation}{Jan 2025 -- Mar 2026}
+{RBI-CCIL Transaction Override Validation}{Jan 2025 -- Mar 2026}
 {Python}{}
 \resumeItemListStart
-\resumeItem{Built a Python pre-submission \textbf{validation workflow} that checks transaction fields against business rules and reference data, flags invalid values, and creates an overriding transaction when the original is valid.}
-\resumeItem{Surfaced ACK/NACK status with rejection messages; on ACK the acknowledged event ID goes to a downstream team, on NACK the workflow stops for correction. Used daily in production with zero reported errors.}
+\resumeItem{Validated transaction fields against business rules and reference data, flagged invalid values, and generated an \textbf{overriding transaction} when the original passed.}
+\resumeItem{Reported \textbf{ACK/NACK} status with rejection reasons, forwarding acknowledged event IDs downstream and stopping rejected submissions for correction.}
 \resumeItemListEnd
 
 \resumeSubheading
 {PTE Exception Reassignment}{Aug 2024 -- Dec 2024}
 {Python, Flask, Angular, REST APIs}{}
 \resumeItemListStart
-\resumeItem{Collapsed the 3-step closure flow into a single UI action that performs the full sequence in one go.}
-\resumeItem{Built a Flask \textbf{ID-resolution API} fronted by an Angular integration: one reassignment contract serving move-selected, move-filtered, and move-all flows at $\sim$20 reassignments per week.}
-\resumeItem{Tested valid, missing, and invalid IDs across all three flows with regression coverage; deployed with a zero-error release.}
+\resumeItem{Built a Flask \textbf{ID-resolution API} and Angular integration that serve move-selected, move-filtered and move-all through one reassignment contract.}
+\resumeItem{Collapsed a three-step closure flow into a single UI action.}
+\resumeItem{Covered valid, missing and invalid IDs in all three flows with \textbf{regression tests} before a zero-error release.}
 \resumeItemListEnd
 
 \resumeProjectCategory{PERSONAL}
 \resumeSubheading
 {SoundBridge}{Sep 2023 -- Jan 2024}
-{React.js, Next.js, TypeScript, Progressive Web App}{\href{https://srayarajan-sampleprotfolio.netlify.app/sound-bridge-demo/}{Demo}}
+{React, Next.js, TypeScript, Progressive Web App}{\href{https://srayarajan-sampleprotfolio.netlify.app/sound-bridge-demo/}{Demo}}
 \resumeItemListStart
-\resumeItem{Built an accessibility-first PWA delivering real-time alarm detection (30 ms) via the Web Audio API plus speech-to-text/text-to-speech via the Web Speech API for deaf and hard-of-hearing users, across 10 sound categories.}
+\resumeItem{Built an accessibility-first \textbf{PWA} for deaf and hard-of-hearing users that detects alarms in 30 ms across 10 sound categories with the Web Audio API, and converts between speech and text with the Web Speech API.}
 \resumeItemListEnd
 
-\resumeSubHeadingListEnd
-
-%-----------EDUCATION-----------
-\vspace{-8pt}
-\section{EDUCATION}
-\resumeSubHeadingListStart
-\resumeSubheading
-{Amrita Vishwa Vidyapeetham}{2020 -- 2024}
-{BTech, Computer Science and Engineering}{Coimbatore, India}
-\resumeItemListStart
-\resumeItem{CGPA: 7.04/10}
-\resumeItemListEnd
 \resumeSubHeadingListEnd
 
 %-----------CERTIFICATIONS-----------
-\vspace{-8pt}
 \section{CERTIFICATIONS}
 \resumeItemListStart
 \resumeItem{\textbf{IBM:} Introduction to Big Data with Spark and Hadoop.}
-\resumeItem{\textbf{Google Cloud Computing Foundations:} Data, ML, and AI in Google Cloud (Credential ID: 6059269).}
+\resumeItem{\textbf{Google Cloud:} Computing Foundations: Data, ML, and AI in Google Cloud (Credential ID: 6059269).}
 \resumeItemListEnd
 
 \end{document}
