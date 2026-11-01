@@ -13,7 +13,11 @@ import { describe, expect, test } from 'vitest'
 
 import { makeApplication, makeWorkspace } from '../fixtures.ts'
 import { Submission } from '../submission.ts'
-import { PrepareApplication, SaveApplication } from './commands.ts'
+import {
+  FocusEditorField,
+  PrepareApplication,
+  SaveApplication,
+} from './commands.ts'
 import { Message, OutMessage } from './message.ts'
 import { Editor, Preparation, blankDraft } from './model.ts'
 import { init, update } from './update.ts'
@@ -28,6 +32,7 @@ describe('applications story', () => {
       update,
       given(init('laxman')),
       message(Message.ClickedAddApplication()),
+      Command.resolve(FocusEditorField, Message.CompletedFocusEditorField()),
       message(Message.UpdatedCompany({ value: 'Acme' })),
       message(Message.SelectedStatus({ value: 'applied' })),
       message(Message.SelectedStatus({ value: 'nonsense' })),
@@ -46,6 +51,7 @@ describe('applications story', () => {
       update,
       given(init('laxman')),
       message(Message.ClickedAddApplication()),
+      Command.resolve(FocusEditorField, Message.CompletedFocusEditorField()),
       message(Message.UpdatedCompany({ value: 'Acme' })),
       message(Message.SubmittedApplication()),
       expectOutMessage(OutMessage.StartedRequest()),
@@ -62,25 +68,29 @@ describe('applications story', () => {
     )
   })
 
-  test('keeps the editor open when saving fails', () => {
+  test('keeps the editor open and focuses the first invalid field when saving fails', () => {
+    const fieldErrors = [{ field: 'role', message: 'Role is required' }]
     story(
       update,
       given(init('laxman')),
       message(Message.ClickedEditApplication({ application })),
+      Command.resolve(FocusEditorField, Message.CompletedFocusEditorField()),
       message(Message.SubmittedApplication()),
       Command.resolve(
         SaveApplication,
         Message.FailedSaveApplication({
           person: 'laxman',
-          message: 'Company is required',
+          message: 'Role is required',
+          fieldErrors,
         }),
       ),
-      expectOutMessage(
-        OutMessage.FailedRequest({ message: 'Company is required' }),
-      ),
+      Command.expectExact(FocusEditorField({ id: 'application-role' })),
+      Command.resolve(FocusEditorField, Message.CompletedFocusEditorField()),
       model(current => {
         expect(current.editor._tag).toBe('Editing')
-        expect(current.submission._tag).toBe('SubmitFailed')
+        expect(current.submission).toStrictEqual(
+          Submission.SubmitFailed({ message: 'Role is required', fieldErrors }),
+        )
       }),
     )
   })
@@ -90,6 +100,7 @@ describe('applications story', () => {
       update,
       given(init('laxman')),
       message(Message.ClickedEditApplication({ application })),
+      Command.resolve(FocusEditorField, Message.CompletedFocusEditorField()),
       message(Message.SubmittedApplication()),
       Command.resolve(
         SaveApplication,

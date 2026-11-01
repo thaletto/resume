@@ -1,7 +1,12 @@
 import { Schema } from 'effect'
 import { defineMessageUnion } from 'foldkit/message'
 
-import { Application, Person, Workspace } from '../../domain/index.ts'
+import {
+  Application,
+  FieldIssue,
+  Person,
+  Workspace,
+} from '../../domain/index.ts'
 
 // MESSAGE
 
@@ -23,7 +28,12 @@ export const Message = defineMessageUnion({
   UpdatedNotes: { value: Schema.String },
   SubmittedApplication: {},
   SucceededSaveApplication: { person: Person, workspace: Workspace },
-  FailedSaveApplication: { person: Person, message: Schema.String },
+  FailedSaveApplication: {
+    person: Person,
+    message: Schema.String,
+    fieldErrors: Schema.Array(FieldIssue),
+  },
+  CompletedFocusEditorField: {},
   ClickedPrepareApplication: { id: Schema.String },
   SucceededPrepareApplication: {
     person: Person,

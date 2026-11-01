@@ -1,8 +1,9 @@
-import { Effect } from 'effect'
-import { Command } from 'foldkit'
+import { Effect, Schema } from 'effect'
+import { Command, Dom } from 'foldkit'
 
 import { Person } from '../../domain/index.ts'
 import {
+  failureFields,
   failureMessage,
   makeClient,
   provideServer,
@@ -48,9 +49,20 @@ export const SaveApplication = Command.define('SaveApplication', {
           Message.FailedSaveApplication({
             person,
             message: failureMessage(error),
+            fieldErrors: failureFields(error),
           }),
         ),
       ),
+    ),
+})
+
+export const FocusEditorField = Command.define('FocusEditorField', {
+  args: { id: Schema.String },
+  messages: [Message.CompletedFocusEditorField],
+  execute: ({ id }) =>
+    Dom.focus(`#${id}`, { makeFocusable: true }).pipe(
+      Effect.ignore,
+      Effect.as(Message.CompletedFocusEditorField()),
     ),
 })
 

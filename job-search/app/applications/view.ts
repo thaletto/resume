@@ -8,15 +8,17 @@ import {
   type Status,
   statusLabel,
 } from '../../domain/index.ts'
-import { isSubmitting } from '../submission.ts'
+import { isSubmitting, maybeFieldError, maybeFormError } from '../submission.ts'
 import {
   type Choice,
   button,
+  formError,
   select,
   submitButton,
   textArea,
   textInput,
 } from '../ui.ts'
+import { agentFlowSvg, agentSteps } from './agent-flow.ts'
 import { Message } from './message.ts'
 import { type Draft, Editor, type Model, Preparation } from './model.ts'
 
@@ -72,6 +74,7 @@ const newestFirst = Order.flip(
 const applicationForm = (draft: Draft, model: Model, h: H): Html => {
   const isWorking = isSubmitting(model.submission)
   const heading = draft.id === '' ? 'New application' : 'Edit application'
+  const errorFor = (field: string) => maybeFieldError(model.submission, field)
   return h.aside(
     [h.Class('editor panel')],
     [
@@ -91,6 +94,8 @@ const applicationForm = (draft: Draft, model: Model, h: H): Html => {
             draft.company,
             value => Message.UpdatedCompany({ value }),
             h,
+            'text',
+            errorFor('company'),
           ),
           textInput(
             'Role',
@@ -98,6 +103,8 @@ const applicationForm = (draft: Draft, model: Model, h: H): Html => {
             draft.role,
             value => Message.UpdatedRole({ value }),
             h,
+            'text',
+            errorFor('role'),
           ),
           select(
             'Status',
@@ -106,6 +113,7 @@ const applicationForm = (draft: Draft, model: Model, h: H): Html => {
             statusChoices,
             value => Message.SelectedStatus({ value }),
             h,
+            errorFor('status'),
           ),
           h.p(
             [h.Class('hint')],
@@ -121,6 +129,7 @@ const applicationForm = (draft: Draft, model: Model, h: H): Html => {
                 value => Message.UpdatedDate({ value }),
                 h,
                 'date',
+                errorFor('date'),
               ),
               textInput(
                 'Deadline',
@@ -129,6 +138,7 @@ const applicationForm = (draft: Draft, model: Model, h: H): Html => {
                 value => Message.UpdatedDeadline({ value }),
                 h,
                 'date',
+                errorFor('deadline'),
               ),
             ],
           ),
@@ -139,6 +149,7 @@ const applicationForm = (draft: Draft, model: Model, h: H): Html => {
             value => Message.UpdatedSource({ value }),
             h,
             'url',
+            errorFor('source'),
           ),
           textInput(
             'Location',
@@ -146,6 +157,8 @@ const applicationForm = (draft: Draft, model: Model, h: H): Html => {
             draft.location,
             value => Message.UpdatedLocation({ value }),
             h,
+            'text',
+            errorFor('location'),
           ),
           textArea(
             'Job description',
@@ -153,6 +166,7 @@ const applicationForm = (draft: Draft, model: Model, h: H): Html => {
             draft.posting,
             value => Message.UpdatedPosting({ value }),
             h,
+            errorFor('posting'),
           ),
           textArea(
             'Notes',
@@ -160,6 +174,12 @@ const applicationForm = (draft: Draft, model: Model, h: H): Html => {
             draft.notes,
             value => Message.UpdatedNotes({ value }),
             h,
+            errorFor('notes'),
+          ),
+          formError(
+            maybeFormError(model.submission),
+            h,
+            'application-form-error',
           ),
           submitButton('Save application', isWorking, h),
         ],
@@ -347,21 +367,43 @@ const pipelineView = (applications: ReadonlyArray<Application>, h: H): Html =>
     ),
   )
 
+const agentFlowList = (model: Model, h: H): Html =>
+  h.ol(
+    [h.Class('agent-flow')],
+    Array.map(agentSteps(model.person), step =>
+      h.li([], [h.code([], [step.command])]),
+    ),
+  )
+
+const agentFlow = (model: Model, h: H): Html =>
+  Option.match(agentFlowSvg(model.person), {
+    onNone: () => agentFlowList(model, h),
+    onSome: svg =>
+      h.div([
+        h.Class('agent-flow-diagram'),
+        h.Role('img'),
+        h.AriaLabel(
+          Array.join(
+            Array.map(agentSteps(model.person), step => step.command),
+            ', then ',
+          ),
+        ),
+        h.InnerHTML(svg),
+      ]),
+  })
+
 const agentNote = (model: Model, h: H): Html =>
   h.div(
     [h.Class('agent-note')],
     [
       h.h3([], ['Work with your agent']),
-      h.code(
-        [],
-        [`bun run job-search launch ${model.person} --agent opencode`],
-      ),
       h.p(
         [],
         [
-          'Prepare an application’s draft folder, then ask your agent to evaluate the role, tailor your CV or prepare for an interview.',
+          'Open Claude Code, opencode or Codex in this repository, then run each step as a slash command.',
         ],
       ),
+      agentFlow(model, h),
     ],
   )
 

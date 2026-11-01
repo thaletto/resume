@@ -1,0 +1,19 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "job-search-dev",
+      "runtimeExecutable": "bun",
+      "runtimeArgs": ["run", "dev"],
+      "port": 8765,
+      "url": "http://localhost:8765"
+    },
+    {
+      "name": "job-search-prod",
+      "runtimeExecutable": "bun",
+      "runtimeArgs": ["start"],
+      "port": 8765,
+      "url": "http://localhost:8765"
+    }
+  ]
+}

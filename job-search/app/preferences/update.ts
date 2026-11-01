@@ -97,7 +97,8 @@ export const update = (model: Model, message: Message): UpdateReturn =>
     FailedSavePreferences: ({ person, message: failure }) =>
       ignoreOtherPerson(model, person, () => ({
         model: modifyFields(model, {
-          submission: () => Submission.SubmitFailed({ message: failure }),
+          submission: () =>
+            Submission.SubmitFailed({ message: failure, fieldErrors: [] }),
         }),
         outMessage: OutMessage.FailedRequest({ message: failure }),
       })),

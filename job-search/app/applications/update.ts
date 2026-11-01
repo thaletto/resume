@@ -1,11 +1,15 @@
-import { Option, Schema } from 'effect'
+import { Array, Option, Schema } from 'effect'
 import type { Update } from 'foldkit'
 import { modifyFields } from 'foldkit/struct'
 
 import { Status } from '../../domain/index.ts'
-import type { Person } from '../../domain/index.ts'
+import type { FieldIssue, Person } from '../../domain/index.ts'
 import { Submission } from '../submission.ts'
-import { PrepareApplication, SaveApplication } from './commands.ts'
+import {
+  FocusEditorField,
+  PrepareApplication,
+  SaveApplication,
+} from './commands.ts'
 import { Message, OutMessage } from './message.ts'
 import {
   type Draft,
@@ -33,18 +37,31 @@ export const init = (person: Person): Model => ({
 
 const decodeStatus = Schema.decodeUnknownOption(Status)
 
+const FIRST_EDITOR_FIELD = 'application-company'
+const FORM_ERROR_ID = 'application-form-error'
+
+const editorFieldId = (field: string): string => `application-${field}`
+
 const openEditor = (model: Model, draft: Draft): UpdateReturn =>
   Submission.match<UpdateReturn>(model.submission, {
     Submitting: () => ({ model }),
     Idle: () => ({
       model: modifyFields(model, { editor: () => Editor.Editing({ draft }) }),
+      commands: [FocusEditorField({ id: FIRST_EDITOR_FIELD })],
     }),
     SubmitFailed: () => ({
       model: modifyFields(model, {
         editor: () => Editor.Editing({ draft }),
         submission: () => Submission.Idle(),
       }),
+      commands: [FocusEditorField({ id: FIRST_EDITOR_FIELD })],
     }),
+  })
+
+const firstErrorId = (fieldErrors: ReadonlyArray<FieldIssue>): string =>
+  Option.match(Array.head(fieldErrors), {
+    onNone: () => FORM_ERROR_ID,
+    onSome: found => editorFieldId(found.field),
   })
 
 const editDraft = (
@@ -165,13 +182,15 @@ export const update = (model: Model, message: Message): UpdateReturn =>
         }),
         outMessage: OutMessage.SavedApplication({ workspace }),
       })),
-    FailedSaveApplication: ({ person, message: failure }) =>
+    FailedSaveApplication: ({ person, message: failure, fieldErrors }) =>
       ignoreOtherPerson(model, person, () => ({
         model: modifyFields(model, {
-          submission: () => Submission.SubmitFailed({ message: failure }),
+          submission: () =>
+            Submission.SubmitFailed({ message: failure, fieldErrors }),
         }),
-        outMessage: OutMessage.FailedRequest({ message: failure }),
+        commands: [FocusEditorField({ id: firstErrorId(fieldErrors) })],
       })),
+    CompletedFocusEditorField: () => ({ model }),
     ClickedPrepareApplication: ({ id }) => startPreparation(model, id),
     SucceededPrepareApplication: ({ person, path, workspace }) =>
       ignoreOtherPerson(model, person, () => ({

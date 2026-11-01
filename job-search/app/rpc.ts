@@ -4,9 +4,12 @@ import { Http } from 'foldkit'
 
 import {
   ApplicationInput,
+  DuplicatePostingError,
+  type FieldIssue,
   JobSearchError,
   JobSearchRpcs,
   type Person,
+  ValidationError,
   decodeInput,
 } from '../domain/index.ts'
 
@@ -30,12 +33,24 @@ export const provideServer = <A, E, R>(effect: Effect.Effect<A, E, R>) =>
   )
 
 const isJobSearchError = Schema.is(JobSearchError)
+const isValidationError = Schema.is(ValidationError)
+const isDuplicatePostingError = Schema.is(DuplicatePostingError)
 
 export const failureMessage = (error: unknown): string => {
   if (isJobSearchError(error)) {
     return error.message
   }
   return REQUEST_FAILED_MESSAGE
+}
+
+export const failureFields = (error: unknown): ReadonlyArray<FieldIssue> => {
+  if (isValidationError(error)) {
+    return error.fields ?? []
+  }
+  if (isDuplicatePostingError(error)) {
+    return [{ field: 'source', message: error.message }]
+  }
+  return []
 }
 
 const decodeApplicationInput = decodeInput(ApplicationInput)

@@ -1,9 +1,13 @@
 import { Array, Option, String } from 'effect'
 import type { Document, Html, HtmlBuilder } from 'foldkit/html'
 
+import { Button } from '@foldkit/ui'
+import { Alert02Icon, Moon02Icon, Sun03Icon } from '@hugeicons/core-free-icons'
+
 import { PEOPLE, type Person, type Workspace } from '../domain/index.ts'
 import * as Applications from './applications/index.ts'
 import * as Discover from './discover/index.ts'
+import { icon } from './icon.ts'
 import { Message } from './message.ts'
 import {
   type Model,
@@ -39,32 +43,53 @@ const candidateName = (model: Model): string =>
   })
 
 const candidateButton = (model: Model, candidate: Person, h: H): Html => {
-  const variant: ButtonVariant =
-    model.candidate === candidate ? 'primary' : 'ghost'
+  const isSelected = model.candidate === candidate
+  const variant: ButtonVariant = isSelected ? 'primary' : 'ghost'
   return button(
     candidateLabel(candidate),
     Message.SelectedCandidate({ person: candidate }),
     h,
     variant,
+    false,
+    [h.AriaPressed(isSelected ? 'true' : 'false')],
   )
 }
 
 const sectionButton = (model: Model, section: Section, h: H): Html => {
-  const variant: ButtonVariant =
-    model.section._tag === section._tag ? 'nav-item selected' : 'nav-item'
+  const isSelected = model.section._tag === section._tag
+  const variant: ButtonVariant = isSelected ? 'nav-item selected' : 'nav-item'
   return button(
     sectionLabel(section),
     Message.SelectedSection({ section }),
     h,
     variant,
+    false,
+    isSelected ? [h.AriaCurrent('page')] : [],
   )
 }
 
-const themeButtonLabel = (model: Model): string =>
-  Theme.match(model.theme, {
-    Light: () => 'Dark theme',
-    Dark: () => 'Light theme',
+const themeToggle = (model: Model, h: H): Html => {
+  const { label, data } = Theme.match(model.theme, {
+    Light: () => ({ label: 'Switch to dark theme', data: Moon02Icon }),
+    Dark: () => ({ label: 'Switch to light theme', data: Sun03Icon }),
   })
+  return Button.view(
+    {
+      onClick: Message.ClickedToggleTheme(),
+      toView: attributes =>
+        h.button(
+          [
+            ...attributes.button,
+            h.Class('button theme-toggle'),
+            h.AriaLabel(label),
+            h.Title(label),
+          ],
+          [icon(data, h, 20)],
+        ),
+    },
+    h,
+  )
+}
 
 const sidebar = (model: Model, h: H): Html =>
   h.aside(
@@ -72,7 +97,7 @@ const sidebar = (model: Model, h: H): Html =>
     [
       h.a(
         [h.Href('/'), h.Class('brand')],
-        ['Job search', h.span([], ['Laxman & Sraya'])],
+        ['Job Search AI', h.span([], ['Laxman & Sraya'])],
       ),
       h.div(
         [
@@ -86,14 +111,7 @@ const sidebar = (model: Model, h: H): Html =>
         [h.AriaLabel('Workspace')],
         Array.map(SECTIONS, section => sectionButton(model, section, h)),
       ),
-      h.div(
-        [h.Class('sidebar-bottom')],
-        [
-          h.p([], ['Your search. Your evidence.']),
-          h.small([], ['Personal workspaces stay local.']),
-          button(themeButtonLabel(model), Message.ClickedToggleTheme(), h),
-        ],
-      ),
+      h.div([h.Class('sidebar-bottom')], [themeToggle(model, h)]),
     ],
   )
 
@@ -102,7 +120,10 @@ const noticeView = (notice: Notice, h: H): Html =>
     Info: ({ message }) =>
       h.div([h.Class('notice'), h.Role('status')], [message]),
     Error: ({ message }) =>
-      h.div([h.Class('notice error'), h.Role('alert')], [message]),
+      h.div(
+        [h.Class('notice error'), h.Role('alert')],
+        [icon(Alert02Icon, h, 18), h.span([], [message])],
+      ),
   })
 
 const maybeNoticeView = (model: Model, h: H): Html =>

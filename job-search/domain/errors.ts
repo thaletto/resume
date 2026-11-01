@@ -1,8 +1,17 @@
 import { Schema } from 'effect'
 
+export const FieldIssue = Schema.Struct({
+  field: Schema.String,
+  message: Schema.String,
+})
+export type FieldIssue = typeof FieldIssue.Type
+
 export class ValidationError extends Schema.TaggedError<ValidationError>()(
   'ValidationError',
-  { message: Schema.String },
+  {
+    message: Schema.String,
+    fields: Schema.optionalKey(Schema.Array(FieldIssue)),
+  },
 ) {}
 
 export class StorageError extends Schema.TaggedError<StorageError>()(
